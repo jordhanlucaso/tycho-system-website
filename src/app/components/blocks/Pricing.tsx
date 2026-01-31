@@ -19,7 +19,7 @@ const tiers = [
     name: 'Care',
     price: '$49',
     note: 'per month',
-    features: ['Hosting + updates', 'Monthly edits', 'Backup + security', 'Support'],
+    features: ['Hosting + updates', 'Monthly edits', 'Backup + security', 'Support', 'Advice as you grow'],
     cta: 'Ask about maintenance'
   }
 ]
