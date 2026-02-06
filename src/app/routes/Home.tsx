@@ -16,7 +16,7 @@ export function Home() {
   }, [])
 
   return (
-    <div className='min-h-screen bg-white font-sans text-neutral-900'>
+    <div className='min-h-screen font-sans'>
       <Navbar />
       <main>
         <Hero />
