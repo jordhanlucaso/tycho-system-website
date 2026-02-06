@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Home } from './routes/Home'
 import { MockupPage } from './routes/mockups/MockupPage'
+import { NotFound } from './routes/NotFound'
 
 export default function App() {
   return (
@@ -8,6 +9,7 @@ export default function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/m/:slug' element={<MockupPage />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { site } from '../../config/site'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { Hero } from '../components/blocks/Hero'
@@ -9,8 +11,12 @@ import { FAQ } from '../components/blocks/FAQ'
 import { Contact } from '../components/blocks/Contact'
 
 export function Home() {
+  useEffect(() => {
+    document.title = `${site.agencyName} — Modern Websites for Local Businesses`
+  }, [])
+
   return (
-    <div className='min-h-screen font-sans bg-white text-neutral-900'>
+    <div className='min-h-screen bg-white font-sans text-neutral-900'>
       <Navbar />
       <main>
         <Hero />

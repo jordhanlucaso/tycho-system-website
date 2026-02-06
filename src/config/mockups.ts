@@ -4,6 +4,8 @@ export type Mockup = {
   category: string
   city: string
   tagline: string
+  // Optional: URL to a screenshot image or an external preview URL
+  previewUrl?: string
 }
 
 export const mockups: Mockup[] = [
