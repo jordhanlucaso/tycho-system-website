@@ -16,6 +16,7 @@ export function Checkout() {
   const cart = useCart()
   const navigate = useNavigate()
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     document.title = 'Checkout — Tycho Systems'
@@ -28,11 +29,37 @@ export function Checkout() {
 
   if (cart.itemCount === 0) return null
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setSubmitting(true)
-    // Stripe integration will be added in Phase 3
-    setTimeout(() => setSubmitting(false), 1500)
+    setError('')
+
+    const form = new FormData(e.currentTarget)
+    const customerName = form.get('name') as string
+    const customerEmail = form.get('email') as string
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.items.map((i) => ({
+            name: i.name,
+            priceInCents: i.priceInCents,
+            recurring: i.recurring
+          })),
+          customerEmail,
+          customerName
+        })
+      })
+
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Checkout failed')
+      if (data.url) window.location.href = data.url
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong')
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -110,6 +137,12 @@ export function Checkout() {
                     <label className='block text-sm font-medium text-[var(--text-body)]'>Phone</label>
                     <input name='phone' type='tel' className={inputClass} placeholder='(555) 123-4567' />
                   </div>
+
+                  {error && (
+                    <div className='rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400'>
+                      {error}
+                    </div>
+                  )}
 
                   <button
                     type='submit'

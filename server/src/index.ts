@@ -6,6 +6,7 @@ import { authRouter } from './routes/auth.js'
 import { adminRouter } from './routes/admin.js'
 import { clientRouter } from './routes/client.js'
 import { monitoringRouter } from './routes/monitoring.js'
+import { startHealthCheckCron } from './lib/healthcheck.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -33,6 +34,8 @@ app.use('/api', monitoringRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
+  // Start health checks every 5 minutes
+  startHealthCheckCron(5 * 60 * 1000)
 })
 
 export default app

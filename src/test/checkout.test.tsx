@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { AuthProvider } from '../app/lib/auth'
 import { CartProvider, useCart } from '../app/lib/cart'
 import { ThemeProvider } from '../app/lib/theme'
 import { Checkout } from '../app/routes/Checkout'
@@ -19,12 +20,14 @@ function CartSeeder({ items }: { items: typeof tiers }) {
 function renderCheckout(items = tiers.slice(0, 2)) {
   return render(
     <MemoryRouter initialEntries={['/checkout']}>
-      <ThemeProvider>
-        <CartProvider>
-          <CartSeeder items={items} />
-          <Checkout />
-        </CartProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <CartProvider>
+            <CartSeeder items={items} />
+            <Checkout />
+          </CartProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </MemoryRouter>
   )
 }

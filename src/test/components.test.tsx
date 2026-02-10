@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from '../app/lib/auth'
 import { CartProvider } from '../app/lib/cart'
 import { ThemeProvider } from '../app/lib/theme'
 import { Navbar } from '../app/components/layout/Navbar'
@@ -18,11 +19,11 @@ import { services } from '../config/services'
 import { tiers } from '../config/pricing'
 
 function renderWithRouter(ui: React.ReactElement) {
-  return render(<BrowserRouter><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></BrowserRouter>)
+  return render(<BrowserRouter><AuthProvider><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></AuthProvider></BrowserRouter>)
 }
 
 function renderWithCart(ui: React.ReactElement) {
-  return render(<ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider>)
+  return render(<AuthProvider><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></AuthProvider>)
 }
 
 describe('Navbar', () => {
