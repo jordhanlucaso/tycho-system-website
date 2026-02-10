@@ -1,25 +1,71 @@
 @import 'tailwindcss';
 
-/* ── Grid pattern background (Tailwind-site inspired) ── */
+/* ── CSS Custom Properties (Dark = default) ── */
+:root {
+  --bg-primary: #0B1120;
+  --bg-primary-alpha: rgba(11, 17, 32, 0.8);
+  --bg-surface: rgba(255, 255, 255, 0.03);
+  --bg-surface-hover: rgba(255, 255, 255, 0.06);
+  --border-primary: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.14);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8; /* slate-400 */
+  --text-muted: #64748b; /* slate-500 */
+  --text-faint: #475569; /* slate-600 */
+  --text-body: #e2e8f0; /* slate-200 */
+  --grid-line: rgba(255, 255, 255, 0.03);
+  --glow-opacity: 0.25;
+  --gradient-from: #a78bfa;
+  --gradient-via: #818cf8;
+  --gradient-to: #22d3ee;
+  --glow-border-from: rgba(167, 139, 250, 0.15);
+  --glow-border-to: rgba(34, 211, 238, 0.15);
+}
+
+/* ── Light mode overrides ── */
+.light {
+  --bg-primary: #f8fafc;
+  --bg-primary-alpha: rgba(248, 250, 252, 0.85);
+  --bg-surface: rgba(0, 0, 0, 0.03);
+  --bg-surface-hover: rgba(0, 0, 0, 0.06);
+  --border-primary: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(0, 0, 0, 0.18);
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --text-body: #334155;
+  --grid-line: rgba(0, 0, 0, 0.04);
+  --glow-opacity: 0.12;
+  --gradient-from: #7c3aed;
+  --gradient-via: #6366f1;
+  --gradient-to: #0891b2;
+  --glow-border-from: rgba(124, 58, 237, 0.12);
+  --glow-border-to: rgba(8, 145, 178, 0.12);
+}
+
+/* ── Grid pattern background ── */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(255 255 255 / 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255 255 255 / 0.03) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
-/* ── Gradient glow orb (Vite-inspired) ── */
+/* ── Gradient glow orb ── */
 .glow-orb {
   position: absolute;
   border-radius: 9999px;
   filter: blur(80px);
-  opacity: 0.25;
+  opacity: var(--glow-opacity);
   pointer-events: none;
 }
 
 /* ── Gradient text utility ── */
 .text-gradient {
-  background: linear-gradient(135deg, #a78bfa 0%, #818cf8 30%, #22d3ee 100%);
+  background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-via) 30%, var(--gradient-to) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -27,14 +73,14 @@
 
 /* ── Glass card surface ── */
 .glass {
-  background: rgba(255 255 255 / 0.03);
-  border: 1px solid rgba(255 255 255 / 0.08);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-primary);
   backdrop-filter: blur(12px);
 }
 
 .glass-hover:hover {
-  background: rgba(255 255 255 / 0.06);
-  border-color: rgba(255 255 255 / 0.14);
+  background: var(--bg-surface-hover);
+  border-color: var(--border-hover);
 }
 
 /* ── Gradient border glow on cards ── */
@@ -46,7 +92,7 @@
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(167 139 250 / 0.15), rgba(34 211 238 / 0.15));
+  background: linear-gradient(135deg, var(--glow-border-from), var(--glow-border-to));
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s;

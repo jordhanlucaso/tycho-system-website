@@ -54,6 +54,19 @@ describe('pricing config', () => {
       expect(t.features.length).toBeGreaterThan(0)
     }
   })
+
+  it('all tiers have valid id and priceInCents', () => {
+    for (const t of tiers) {
+      expect(t.id).toBeTruthy()
+      expect(t.priceInCents).toBeGreaterThan(0)
+      expect(typeof t.recurring).toBe('boolean')
+    }
+  })
+
+  it('all tiers have unique ids', () => {
+    const ids = tiers.map((t) => t.id)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
 })
 
 describe('faq config', () => {

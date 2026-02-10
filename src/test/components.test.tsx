@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
+import { CartProvider } from '../app/lib/cart'
+import { ThemeProvider } from '../app/lib/theme'
 import { Navbar } from '../app/components/layout/Navbar'
 import { Footer } from '../app/components/layout/Footer'
 import { Hero } from '../app/components/blocks/Hero'
@@ -16,13 +18,17 @@ import { services } from '../config/services'
 import { tiers } from '../config/pricing'
 
 function renderWithRouter(ui: React.ReactElement) {
-  return render(<BrowserRouter>{ui}</BrowserRouter>)
+  return render(<BrowserRouter><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></BrowserRouter>)
+}
+
+function renderWithCart(ui: React.ReactElement) {
+  return render(<ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider>)
 }
 
 describe('Navbar', () => {
-  it('renders the agency name', () => {
+  it('renders the agency logo', () => {
     renderWithRouter(<Navbar />)
-    expect(screen.getByText(site.agencyName)).toBeInTheDocument()
+    expect(screen.getByAltText(site.agencyName)).toBeInTheDocument()
   })
 
   it('renders navigation links', () => {
@@ -35,6 +41,11 @@ describe('Navbar', () => {
   it('renders the mobile menu button', () => {
     renderWithRouter(<Navbar />)
     expect(screen.getByLabelText('Open menu')).toBeInTheDocument()
+  })
+
+  it('renders the theme toggle button', () => {
+    renderWithRouter(<Navbar />)
+    expect(screen.getByLabelText('Switch to light mode')).toBeInTheDocument()
   })
 })
 
@@ -77,7 +88,7 @@ describe('Gallery', () => {
 
 describe('Pricing', () => {
   it('renders all pricing tiers from config', () => {
-    render(<Pricing />)
+    renderWithCart(<Pricing />)
     for (const t of tiers) {
       expect(screen.getByText(t.name)).toBeInTheDocument()
       expect(screen.getByText(t.price)).toBeInTheDocument()

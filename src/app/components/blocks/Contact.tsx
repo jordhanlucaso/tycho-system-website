@@ -40,10 +40,10 @@ export function Contact() {
     }
   }
 
-  const inputClass = 'mt-2 w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm text-slate-200 outline-none placeholder:text-slate-600 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
+  const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
 
   return (
-    <section id='contact' className='relative border-t border-white/[0.06] py-16'>
+    <section id='contact' className='relative border-t border-[var(--border-subtle)] py-16'>
       <div className='glow-orb left-1/3 top-0 h-48 w-48 bg-cyan-500' />
 
       <Container>
@@ -56,20 +56,20 @@ export function Contact() {
             transition={{ duration: 0.5 }}
           >
             <h2 className='text-gradient text-2xl font-semibold tracking-tight'>Request a free mockup</h2>
-            <p className='max-w-prose text-sm text-slate-400'>Send a few details and I'll reply with next steps. For outreach, keep it simple.</p>
+            <p className='max-w-prose text-sm text-[var(--text-secondary)]'>Send a few details and I'll reply with next steps. For outreach, keep it simple.</p>
 
             <div className='mt-6 space-y-3 text-sm'>
               <div className='glass rounded-xl p-4'>
-                <div className='text-xs font-semibold text-slate-500'>Email</div>
-                <div className='font-medium text-white'>{site.email}</div>
+                <div className='text-xs font-semibold text-[var(--text-muted)]'>Email</div>
+                <div className='font-medium text-[var(--text-primary)]'>{site.email}</div>
               </div>
               <div className='glass rounded-xl p-4'>
-                <div className='text-xs font-semibold text-slate-500'>Location</div>
-                <div className='font-medium text-white'>{site.location}</div>
+                <div className='text-xs font-semibold text-[var(--text-muted)]'>Location</div>
+                <div className='font-medium text-[var(--text-primary)]'>{site.location}</div>
               </div>
             </div>
 
-            <p className='text-xs text-slate-600'>Tip: include your business name, city, services, and any photos you have.</p>
+            <p className='text-xs text-[var(--text-faint)]'>Tip: include your business name, city, services, and any photos you have.</p>
           </motion.div>
 
           <motion.div
@@ -99,9 +99,9 @@ export function Contact() {
                       <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
                     </svg>
                   </motion.div>
-                  <h3 className='text-lg font-semibold text-white'>Request sent!</h3>
-                  <p className='max-w-xs text-sm text-slate-400'>Thanks for reaching out. I'll get back to you within 24 hours with a mockup preview or next steps.</p>
-                  <button onClick={() => setStatus('idle')} className='mt-2 text-sm font-medium text-slate-300 underline underline-offset-4 transition-colors hover:text-white'>
+                  <h3 className='text-lg font-semibold text-[var(--text-primary)]'>Request sent!</h3>
+                  <p className='max-w-xs text-sm text-[var(--text-secondary)]'>Thanks for reaching out. I'll get back to you within 24 hours with a mockup preview or next steps.</p>
+                  <button onClick={() => setStatus('idle')} className='mt-2 text-sm font-medium text-[var(--text-body)] underline underline-offset-4 transition-colors hover:text-[var(--text-primary)]'>
                     Send another
                   </button>
                 </motion.div>
@@ -116,28 +116,28 @@ export function Contact() {
                   className='space-y-4'
                 >
                   <div>
-                    <label className='block text-sm font-medium text-slate-300'>Business name</label>
+                    <label className='block text-sm font-medium text-[var(--text-body)]'>Business name</label>
                     <input name='business' className={inputClass} placeholder='Example Plumbing Co.' required />
                   </div>
 
                   <div className='grid gap-4 sm:grid-cols-2'>
                     <div>
-                      <label className='block text-sm font-medium text-slate-300'>City</label>
+                      <label className='block text-sm font-medium text-[var(--text-body)]'>City</label>
                       <input name='city' className={inputClass} placeholder='Birmingham, AL' required />
                     </div>
                     <div>
-                      <label className='block text-sm font-medium text-slate-300'>Category</label>
+                      <label className='block text-sm font-medium text-[var(--text-body)]'>Category</label>
                       <input name='category' className={inputClass} placeholder='Plumber / Salon / Restaurant' required />
                     </div>
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-slate-300'>Email</label>
+                    <label className='block text-sm font-medium text-[var(--text-body)]'>Email</label>
                     <input name='email' type='email' className={inputClass} placeholder='owner@business.com' required />
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-slate-300'>Message</label>
+                    <label className='block text-sm font-medium text-[var(--text-body)]'>Message</label>
                     <textarea name='message' className={inputClass} placeholder='Tell me what services you want highlighted...' rows={5} required />
                   </div>
 

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { site } from '../../../config/site'
+import { useCart } from '../../lib/cart'
+import { useTheme } from '../../lib/theme'
 import { Container } from './Container'
 
 const links = [
@@ -13,37 +15,66 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
+  const cart = useCart()
+  const { theme, toggleTheme } = useTheme()
 
   return (
-    <header className='sticky top-0 z-40 border-b border-white/[0.08] bg-[#0B1120]/80 backdrop-blur-xl'>
+    <header className='sticky top-0 z-40 border-b border-[var(--border-primary)] bg-[var(--bg-primary-alpha)] backdrop-blur-xl'>
       <Container>
         <div className='flex h-16 items-center justify-between gap-3'>
           <a href='/' className='inline-flex items-center gap-2'>
-            <div className='grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400 text-sm font-semibold text-white'>
-              {site.agencyName.trim().slice(0, 1).toUpperCase()}
-            </div>
-            <div className='leading-tight'>
-              <div className='text-sm font-semibold text-white'>{site.agencyName}</div>
-              <div className='text-xs text-slate-500'>Web mockups &middot; Delivery fast</div>
-            </div>
+            <img src='/logo.svg' alt={site.agencyName} className='h-9' />
           </a>
 
           <nav className='hidden items-center gap-5 md:flex'>
             {links.map((l) => (
-              <a key={l.href} href={l.href} className='text-sm text-slate-400 transition-colors hover:text-white'>
+              <a key={l.href} href={l.href} className='text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'>
                 {l.label}
               </a>
             ))}
           </nav>
 
           <div className='flex items-center gap-3'>
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className='inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-primary)] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? (
+                <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' />
+                </svg>
+              ) : (
+                <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' />
+                </svg>
+              )}
+            </button>
+
+            {/* Cart button */}
+            <button
+              onClick={() => cart.toggleDrawer()}
+              className='relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-primary)] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'
+              aria-label='Open cart'
+            >
+              <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                <path strokeLinecap='round' strokeLinejoin='round' d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z' />
+              </svg>
+              {cart.itemCount > 0 && (
+                <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-500 text-[10px] font-semibold text-white'>
+                  {cart.itemCount}
+                </span>
+              )}
+            </button>
+
             <a href='#contact' className='hidden rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:inline-flex'>
               {site.ctas.primary}
             </a>
 
             <button
               onClick={() => setOpen(!open)}
-              className='inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.1] text-slate-400 transition-colors hover:text-white md:hidden'
+              className='inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-primary)] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] md:hidden'
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
             >
@@ -65,7 +96,7 @@ export function Navbar() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className='overflow-hidden border-t border-white/[0.06] md:hidden'
+              className='overflow-hidden border-t border-[var(--border-subtle)] md:hidden'
             >
               <div className='flex flex-col gap-1 pb-4 pt-2'>
                 {links.map((l, i) => (
@@ -76,7 +107,7 @@ export function Navbar() {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.2 }}
-                    className='rounded-xl px-3 py-2 text-sm text-slate-400 transition-colors hover:bg-white/[0.05] hover:text-white'
+                    className='rounded-xl px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
                   >
                     {l.label}
                   </motion.a>

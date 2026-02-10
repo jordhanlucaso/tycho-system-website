@@ -33,7 +33,7 @@ export function Hero() {
             animate='visible'
             transition={{ staggerChildren: 0.12 }}
           >
-            <motion.div variants={fadeUp} transition={{ duration: 0.5 }} className='inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.03] px-3 py-1 text-xs text-slate-400'>
+            <motion.div variants={fadeUp} transition={{ duration: 0.5 }} className='inline-flex items-center gap-2 rounded-full border border-[var(--border-primary)] bg-[var(--bg-surface)] px-3 py-1 text-xs text-[var(--text-secondary)]'>
               <span className='h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]' />
               Available for new projects
             </motion.div>
@@ -42,7 +42,7 @@ export function Hero() {
               {site.tagline}
             </motion.h1>
 
-            <motion.p variants={fadeUp} transition={{ duration: 0.5 }} className='max-w-prose text-lg text-slate-400'>
+            <motion.p variants={fadeUp} transition={{ duration: 0.5 }} className='max-w-prose text-lg text-[var(--text-secondary)]'>
               {site.description}
             </motion.p>
 
@@ -50,7 +50,7 @@ export function Hero() {
               <a href='#contact' className='rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'>
                 {site.ctas.primary}
               </a>
-              <a href='#mockups' className='rounded-2xl border border-white/[0.15] px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-white/[0.05] hover:text-white'>
+              <a href='#mockups' className='rounded-2xl border border-[var(--border-primary)] px-5 py-3 text-sm font-medium text-[var(--text-body)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'>
                 {site.ctas.secondary}
               </a>
             </motion.div>
@@ -62,8 +62,8 @@ export function Hero() {
                 { k: 'Simple', v: 'Pricing + process' }
               ].map((x) => (
                 <div key={x.k} className='glass rounded-2xl p-4'>
-                  <div className='text-sm font-semibold text-white'>{x.k}</div>
-                  <div className='text-xs text-slate-500'>{x.v}</div>
+                  <div className='text-sm font-semibold text-[var(--text-primary)]'>{x.k}</div>
+                  <div className='text-xs text-[var(--text-muted)]'>{x.v}</div>
                 </div>
               ))}
             </motion.div>
@@ -77,26 +77,22 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
           >
             <div className='space-y-3'>
-              {/* Browser chrome skeleton */}
-              <div className='rounded-2xl border border-white/[0.06] bg-white/[0.02]'>
-                <div className='flex items-center gap-1.5 border-b border-white/[0.06] px-3 py-2'>
-                  <span className='h-2 w-2 rounded-full bg-white/[0.15]' />
-                  <span className='h-2 w-2 rounded-full bg-white/[0.15]' />
-                  <span className='h-2 w-2 rounded-full bg-white/[0.15]' />
-                  <div className='ml-2 h-4 flex-1 rounded-md bg-white/[0.04]' />
+              {/* Browser chrome with preview image */}
+              <div className='rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]'>
+                <div className='flex items-center gap-1.5 border-b border-[var(--border-subtle)] px-3 py-2'>
+                  <span className='h-2 w-2 rounded-full bg-red-400/60' />
+                  <span className='h-2 w-2 rounded-full bg-yellow-400/60' />
+                  <span className='h-2 w-2 rounded-full bg-green-400/60' />
+                  <div className='ml-2 h-4 flex-1 rounded-md bg-[var(--bg-surface)] px-2 text-[10px] leading-4 text-[var(--text-faint)]'>tychosystems.com</div>
                 </div>
-                <div className='space-y-3 p-4'>
-                  <div className='h-28 rounded-xl bg-gradient-to-br from-violet-500/10 to-cyan-500/10' />
-                  <div className='h-3 w-3/4 rounded bg-white/[0.06]' />
-                  <div className='h-3 w-1/2 rounded bg-white/[0.04]' />
-                  <div className='grid grid-cols-3 gap-2'>
-                    <div className='h-14 rounded-lg bg-white/[0.04]' />
-                    <div className='h-14 rounded-lg bg-white/[0.04]' />
-                    <div className='h-14 rounded-lg bg-white/[0.04]' />
-                  </div>
-                </div>
+                <img
+                  src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop'
+                  alt='Website design preview'
+                  className='w-full rounded-b-2xl object-cover'
+                  loading='lazy'
+                />
               </div>
-              <p className='text-center text-xs text-slate-600'>Live preview area</p>
+              <p className='text-center text-xs text-[var(--text-faint)]'>Clean, modern designs for local businesses</p>
             </div>
           </motion.div>
         </div>

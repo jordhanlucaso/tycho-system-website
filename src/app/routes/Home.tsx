@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { site } from '../../config/site'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
+import { CartDrawer } from '../components/layout/CartDrawer'
 import { Hero } from '../components/blocks/Hero'
 import { Services } from '../components/blocks/Services'
 import { Gallery } from '../components/blocks/Gallery'
@@ -12,7 +13,7 @@ import { Contact } from '../components/blocks/Contact'
 
 export function Home() {
   useEffect(() => {
-    document.title = `${site.agencyName} — Modern Websites for Local Businesses`
+    document.title = `${site.agencyName} — Professional Websites for Local Businesses`
   }, [])
 
   return (
@@ -28,6 +29,7 @@ export function Home() {
         <Contact />
       </main>
       <Footer />
+      <CartDrawer />
     </div>
   )
 }

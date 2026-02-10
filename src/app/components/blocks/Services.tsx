@@ -4,7 +4,7 @@ import { services } from '../../../config/services'
 
 export function Services() {
   return (
-    <section id='services' className='border-t border-white/[0.06] py-16'>
+    <section id='services' className='border-t border-[var(--border-subtle)] py-16'>
       <Container>
         <motion.div
           className='flex flex-col gap-3 md:flex-row md:items-end md:justify-between'
@@ -15,9 +15,9 @@ export function Services() {
         >
           <div className='space-y-2'>
             <h2 className='text-gradient text-2xl font-semibold tracking-tight'>What I do</h2>
-            <p className='max-w-prose text-sm text-slate-400'>A simple process designed for busy business owners.</p>
+            <p className='max-w-prose text-sm text-[var(--text-secondary)]'>A simple process designed for busy business owners.</p>
           </div>
-          <a href='#contact' className='text-sm font-medium text-slate-300 underline underline-offset-4 transition-colors hover:text-white'>
+          <a href='#contact' className='text-sm font-medium text-[var(--text-body)] underline underline-offset-4 transition-colors hover:text-[var(--text-primary)]'>
             Get a quote
           </a>
         </motion.div>
@@ -33,8 +33,8 @@ export function Services() {
               transition={{ duration: 0.4, delay: i * 0.08 }}
             >
               <div className='space-y-2'>
-                <div className='text-base font-semibold text-white'>{s.title}</div>
-                <div className='text-sm text-slate-400'>{s.desc}</div>
+                <div className='text-base font-semibold text-[var(--text-primary)]'>{s.title}</div>
+                <div className='text-sm text-[var(--text-secondary)]'>{s.desc}</div>
               </div>
             </motion.div>
           ))}

@@ -10,8 +10,8 @@ export type SiteConfig = {
 
 export const site: SiteConfig = {
   agencyName: 'Tycho Systems',
-  tagline: 'Vercel-style websites for local businesses — fast.',
-  description: 'I build modern, mobile-first websites and quick mockups for small businesses. Clear design, fast delivery, simple process.',
+  tagline: 'Professional websites that bring customers to your door.',
+  description: 'We design and build modern, mobile-first websites for local businesses. Clean design, fast delivery, real results.',
   email: 'hello@tychosystems.com',
   location: 'Remote (US clients welcome)',
   ctas: { primary: 'Request a free mockup', secondary: 'See mockups' },
