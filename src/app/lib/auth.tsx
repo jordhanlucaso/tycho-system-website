@@ -4,17 +4,9 @@ import type { User, Session, Provider } from '@supabase/supabase-js'
 
 // Enabled social providers — add/remove here to control what shows on login/register
 export const OAUTH_PROVIDERS: { id: Provider; label: string; icon: string }[] = [
-  {
-    id: 'google',
-    label: 'Continue with Google',
-    icon: 'google',
-  },
-  {
-    id: 'facebook',
-    label: 'Continue with Facebook',
-    icon: 'facebook',
-  },
-  // Uncomment to enable LinkedIn:
+  { id: 'google', label: 'Continue with Google', icon: 'google' }
+  // { id: 'apple',    label: 'Continue with Apple',    icon: 'apple'    },
+  // { id: 'facebook', label: 'Continue with Facebook', icon: 'facebook' },
   // { id: 'linkedin_oidc', label: 'Continue with LinkedIn', icon: 'linkedin' },
 ]
 
@@ -42,7 +34,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
     })
@@ -64,8 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+        redirectTo: `${window.location.origin}/auth/callback`
+      }
     })
     return { error: error as Error | null }
   }
@@ -74,11 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
-  return (
-    <AuthContext value={{ user, session, loading, signUp, signIn, signInWithOAuth, signOut }}>
-      {children}
-    </AuthContext>
-  )
+  return <AuthContext value={{ user, session, loading, signUp, signIn, signInWithOAuth, signOut }}>{children}</AuthContext>
 }
 
 export function useAuth() {
