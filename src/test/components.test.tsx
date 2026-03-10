@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import { AuthProvider } from '../app/lib/auth'
 import { CartProvider } from '../app/lib/cart'
 import { ThemeProvider } from '../app/lib/theme'
@@ -13,17 +13,23 @@ import { Pricing } from '../app/components/blocks/Pricing'
 import { FAQ } from '../app/components/blocks/FAQ'
 import { Contact } from '../app/components/blocks/Contact'
 import { Testimonials } from '../app/components/blocks/Testimonials'
+import { SalesLayout } from '../app/components/layout/SalesLayout'
+import { SalesNewSale } from '../app/routes/sales/NewSale'
 import { site } from '../config/site'
 import { mockups } from '../config/mockups'
 import { services } from '../config/services'
-import { tiers } from '../config/pricing'
+import { oneTimePackages } from '../config/pricing'
 
 function renderWithRouter(ui: React.ReactElement) {
   return render(<BrowserRouter><AuthProvider><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></AuthProvider></BrowserRouter>)
 }
 
-function renderWithCart(ui: React.ReactElement) {
-  return render(<AuthProvider><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></AuthProvider>)
+function renderWithSalesRouter(ui: React.ReactElement) {
+  return render(
+    <MemoryRouter initialEntries={['/sales']}>
+      <AuthProvider><ThemeProvider><CartProvider>{ui}</CartProvider></ThemeProvider></AuthProvider>
+    </MemoryRouter>
+  )
 }
 
 describe('Navbar', () => {
@@ -52,12 +58,12 @@ describe('Navbar', () => {
 
 describe('Hero', () => {
   it('renders the tagline', () => {
-    render(<Hero />)
+    renderWithRouter(<Hero />)
     expect(screen.getByText(site.tagline)).toBeInTheDocument()
   })
 
   it('renders CTA buttons', () => {
-    render(<Hero />)
+    renderWithRouter(<Hero />)
     expect(screen.getByText(site.ctas.primary)).toBeInTheDocument()
     expect(screen.getByText(site.ctas.secondary)).toBeInTheDocument()
   })
@@ -65,7 +71,7 @@ describe('Hero', () => {
 
 describe('Services', () => {
   it('renders all service items from config', () => {
-    render(<Services />)
+    renderWithRouter(<Services />)
     for (const s of services) {
       expect(screen.getByText(s.title)).toBeInTheDocument()
     }
@@ -88,12 +94,23 @@ describe('Gallery', () => {
 })
 
 describe('Pricing', () => {
-  it('renders all pricing tiers from config', () => {
-    renderWithCart(<Pricing />)
-    for (const t of tiers) {
-      expect(screen.getByText(t.name)).toBeInTheDocument()
-      expect(screen.getByText(t.price)).toBeInTheDocument()
+  it('renders one-time packages by default', () => {
+    renderWithRouter(<Pricing />)
+    for (const pkg of oneTimePackages) {
+      expect(screen.getByText(pkg.name)).toBeInTheDocument()
     }
+  })
+
+  it('renders the tab switcher', () => {
+    renderWithRouter(<Pricing />)
+    expect(screen.getByText('One-time projects')).toBeInTheDocument()
+    expect(screen.getByText('Monthly plans')).toBeInTheDocument()
+  })
+
+  it('renders Add to Cart buttons for one-time packages', () => {
+    renderWithRouter(<Pricing />)
+    const addButtons = screen.getAllByText('Add to Cart')
+    expect(addButtons.length).toBe(oneTimePackages.length)
   })
 })
 
@@ -112,16 +129,15 @@ describe('Testimonials', () => {
 })
 
 describe('Contact', () => {
-  it('renders the contact form', () => {
-    render(<Contact />)
-    expect(screen.getByText('Request a free mockup')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('Example Plumbing Co.')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('owner@business.com')).toBeInTheDocument()
+  it('renders the contact section heading', () => {
+    renderWithRouter(<Contact />)
+    expect(screen.getByText('Have a question?')).toBeInTheDocument()
   })
 
-  it('renders the submit button', () => {
-    render(<Contact />)
-    expect(screen.getByText('Send request')).toBeInTheDocument()
+  it('renders the website check CTA', () => {
+    renderWithRouter(<Contact />)
+    expect(screen.getByText('Free 5-Point Website Check')).toBeInTheDocument()
+    expect(screen.getByText('Get my free website check')).toBeInTheDocument()
   })
 })
 
@@ -129,5 +145,33 @@ describe('Footer', () => {
   it('renders the agency name', () => {
     renderWithRouter(<Footer />)
     expect(screen.getByText(site.agencyName)).toBeInTheDocument()
+  })
+})
+
+describe('SalesLayout', () => {
+  it('renders sales navigation links', () => {
+    renderWithSalesRouter(<SalesLayout />)
+    expect(screen.getByText('Overview')).toBeInTheDocument()
+    expect(screen.getByText('New Sale')).toBeInTheDocument()
+    expect(screen.getByText('Clients')).toBeInTheDocument()
+    expect(screen.getByText('Analytics')).toBeInTheDocument()
+  })
+
+  it('renders the Sales badge', () => {
+    renderWithSalesRouter(<SalesLayout />)
+    expect(screen.getByText('Sales')).toBeInTheDocument()
+  })
+})
+
+describe('SalesNewSale', () => {
+  it('renders the new sale form', () => {
+    // Mock fetch to prevent unhandled promise rejections
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }))
+    renderWithSalesRouter(<SalesNewSale />)
+    expect(screen.getByText('New Sale')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Jane Smith')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Smith Plumbing LLC')).toBeInTheDocument()
+    expect(screen.getByText('Save lead')).toBeInTheDocument()
+    vi.restoreAllMocks()
   })
 })

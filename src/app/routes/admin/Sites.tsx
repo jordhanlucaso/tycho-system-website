@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
+import { apiFetch } from '../../lib/api'
 
 type Site = {
   id: string
   client_id: string
-  domain: string
+  name: string
+  domain: string | null
   status: string
+  plan: string | null
   created_at: string
 }
 
 const statusColors: Record<string, string> = {
-  active: 'bg-green-500/10 text-green-400',
+  live:     'bg-green-500/10 text-green-400',
   building: 'bg-amber-500/10 text-amber-400',
-  inactive: 'bg-[var(--bg-surface)] text-[var(--text-muted)]'
+  paused:   'bg-[var(--bg-surface)] text-[var(--text-muted)]',
+  archived: 'bg-[var(--bg-surface)] text-[var(--text-faint)]',
 }
 
 export function AdminSites() {
@@ -21,7 +25,7 @@ export function AdminSites() {
 
   useEffect(() => {
     document.title = 'Sites — Admin — Tycho Systems'
-    fetch('/api/admin/sites')
+    apiFetch('/api/admin/sites')
       .then((r) => r.json())
       .then((d) => setSites(d.sites || []))
       .catch(() => setSites([]))
@@ -51,14 +55,20 @@ export function AdminSites() {
               transition={{ duration: 0.3, delay: i * 0.05 }}
               className='glass glass-hover rounded-xl p-5'
             >
-              <div className='flex items-center justify-between'>
-                <div className='font-semibold text-[var(--text-primary)]'>{site.domain}</div>
-                <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${statusColors[site.status] || statusColors.inactive}`}>
+              <div className='flex items-start justify-between gap-2'>
+                <div>
+                  <div className='font-semibold text-[var(--text-primary)]'>{site.name}</div>
+                  {site.domain && (
+                    <div className='mt-0.5 text-xs text-[var(--text-muted)]'>{site.domain}</div>
+                  )}
+                </div>
+                <span className={`shrink-0 inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${statusColors[site.status] || statusColors.paused}`}>
                   {site.status}
                 </span>
               </div>
-              <div className='mt-2 text-xs text-[var(--text-muted)]'>
-                Created {new Date(site.created_at).toLocaleDateString()}
+              <div className='mt-3 flex items-center justify-between text-xs text-[var(--text-muted)]'>
+                {site.plan && <span className='rounded-md bg-violet-500/10 px-2 py-0.5 text-violet-400'>{site.plan}</span>}
+                <span className='ml-auto'>Added {new Date(site.created_at).toLocaleDateString()}</span>
               </div>
             </motion.div>
           ))

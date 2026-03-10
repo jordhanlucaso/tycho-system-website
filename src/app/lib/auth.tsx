@@ -1,6 +1,22 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { supabase } from './supabase'
-import type { User, Session } from '@supabase/supabase-js'
+import type { User, Session, Provider } from '@supabase/supabase-js'
+
+// Enabled social providers — add/remove here to control what shows on login/register
+export const OAUTH_PROVIDERS: { id: Provider; label: string; icon: string }[] = [
+  {
+    id: 'google',
+    label: 'Continue with Google',
+    icon: 'google',
+  },
+  {
+    id: 'facebook',
+    label: 'Continue with Facebook',
+    icon: 'facebook',
+  },
+  // Uncomment to enable LinkedIn:
+  // { id: 'linkedin_oidc', label: 'Continue with LinkedIn', icon: 'linkedin' },
+]
 
 type AuthContextValue = {
   user: User | null
@@ -8,6 +24,7 @@ type AuthContextValue = {
   loading: boolean
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
+  signInWithOAuth: (provider: Provider) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
 }
 
@@ -43,12 +60,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error as Error | null }
   }
 
+  async function signInWithOAuth(provider: Provider) {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    return { error: error as Error | null }
+  }
+
   async function signOut() {
     await supabase.auth.signOut()
   }
 
   return (
-    <AuthContext value={{ user, session, loading, signUp, signIn, signOut }}>
+    <AuthContext value={{ user, session, loading, signUp, signIn, signInWithOAuth, signOut }}>
       {children}
     </AuthContext>
   )

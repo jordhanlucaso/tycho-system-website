@@ -10,12 +10,10 @@ export type SiteConfig = {
 
 export const site: SiteConfig = {
   agencyName: 'Tycho Systems',
-  tagline: 'Professional websites that bring customers to your door.',
-  description: 'We design and build modern, mobile-first websites for local businesses. Clean design, fast delivery, real results.',
+  tagline: "Get more calls, more bookings, and a website you're proud of.",
+  description: 'We build fast, professional websites for local businesses. More customers find you. More of them contact you. Simple process, clear pricing.',
   email: 'hello@tychosystems.com',
   location: 'Remote (US clients welcome)',
-  ctas: { primary: 'Request a free mockup', secondary: 'See mockups' },
-  // Set your Web3Forms access key here (get one free at https://web3forms.com)
-  // Leave empty to use demo mode (shows success message without sending)
+  ctas: { primary: 'Get a free website check', secondary: 'See examples' },
   formEndpoint: ''
 }

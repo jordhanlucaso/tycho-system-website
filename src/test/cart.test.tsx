@@ -52,17 +52,17 @@ describe('Cart', () => {
   it('adds items', async () => {
     renderCart()
     await act(async () => {
-      await userEvent.click(screen.getByTestId('add-starter'))
+      await userEvent.click(screen.getByTestId('add-local-starter'))
     })
     expect(screen.getByTestId('count').textContent).toBe('1')
-    expect(screen.getByTestId('has-starter').textContent).toBe('true')
+    expect(screen.getByTestId('has-local-starter').textContent).toBe('true')
   })
 
   it('prevents duplicate items', async () => {
     renderCart()
     await act(async () => {
-      await userEvent.click(screen.getByTestId('add-starter'))
-      await userEvent.click(screen.getByTestId('add-starter'))
+      await userEvent.click(screen.getByTestId('add-local-starter'))
+      await userEvent.click(screen.getByTestId('add-local-starter'))
     })
     expect(screen.getByTestId('count').textContent).toBe('1')
   })
@@ -70,22 +70,22 @@ describe('Cart', () => {
   it('removes items', async () => {
     renderCart()
     await act(async () => {
-      await userEvent.click(screen.getByTestId('add-starter'))
-      await userEvent.click(screen.getByTestId('add-business'))
+      await userEvent.click(screen.getByTestId('add-local-starter'))
+      await userEvent.click(screen.getByTestId('add-local-business'))
     })
     expect(screen.getByTestId('count').textContent).toBe('2')
     await act(async () => {
-      await userEvent.click(screen.getByTestId('remove-starter'))
+      await userEvent.click(screen.getByTestId('remove-local-starter'))
     })
     expect(screen.getByTestId('count').textContent).toBe('1')
-    expect(screen.getByTestId('has-starter').textContent).toBe('false')
+    expect(screen.getByTestId('has-local-starter').textContent).toBe('false')
   })
 
   it('clears all items', async () => {
     renderCart()
     await act(async () => {
-      await userEvent.click(screen.getByTestId('add-starter'))
-      await userEvent.click(screen.getByTestId('add-business'))
+      await userEvent.click(screen.getByTestId('add-local-starter'))
+      await userEvent.click(screen.getByTestId('add-local-business'))
     })
     await act(async () => {
       await userEvent.click(screen.getByTestId('clear'))
@@ -95,12 +95,13 @@ describe('Cart', () => {
 
   it('calculates one-time and recurring totals', async () => {
     renderCart()
+    // local-starter: one-time 125000 cents; care-plan: recurring 14900 cents
     await act(async () => {
-      await userEvent.click(screen.getByTestId('add-starter'))
-      await userEvent.click(screen.getByTestId('add-care'))
+      await userEvent.click(screen.getByTestId('add-local-starter'))
+      await userEvent.click(screen.getByTestId('add-care-plan'))
     })
-    expect(screen.getByTestId('one-time').textContent).toBe('39900')
-    expect(screen.getByTestId('recurring').textContent).toBe('4900')
+    expect(screen.getByTestId('one-time').textContent).toBe('125000')
+    expect(screen.getByTestId('recurring').textContent).toBe('14900')
   })
 
   it('toggles drawer open state', async () => {

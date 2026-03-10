@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { StatusIndicator } from '../../components/StatusIndicator'
 import { UptimeChart } from '../../components/UptimeChart'
+import { apiFetch } from '../../lib/api'
 
 type SiteHealth = {
   siteId: string
@@ -21,7 +22,7 @@ export function AdminMonitoring() {
 
   useEffect(() => {
     document.title = 'Monitoring — Admin — Tycho Systems'
-    fetch('/api/health/sites')
+    apiFetch('/api/health/sites')
       .then((r) => r.json())
       .then((d) => setSites(d.sites || []))
       .catch(() => setSites([]))

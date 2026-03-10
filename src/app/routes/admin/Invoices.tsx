@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
+import { apiFetch } from '../../lib/api'
 
 type Invoice = {
   id: string
@@ -23,7 +24,7 @@ export function AdminInvoices() {
 
   useEffect(() => {
     document.title = 'Invoices — Admin — Tycho Systems'
-    fetch('/api/admin/invoices')
+    apiFetch('/api/admin/invoices')
       .then((r) => r.json())
       .then((d) => setInvoices(d.invoices || []))
       .catch(() => setInvoices([]))

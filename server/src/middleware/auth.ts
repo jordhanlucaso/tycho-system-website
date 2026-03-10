@@ -1,13 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import { supabase } from '../lib/supabase.js'
 
-// Extend Request to carry user data
-declare module 'express' {
-  interface Request {
-    user?: { id: string; email?: string }
-  }
-}
-
 // Verify Supabase JWT and attach user to request
 export async function requireAuth(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization
@@ -24,7 +17,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     return
   }
 
-  req.user = { id: data.user.id, email: data.user.email }
+  req.user = { id: data.user.id, email: data.user.email ?? '', role: 'client' }
   next()
 }
 

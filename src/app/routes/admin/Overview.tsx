@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
+import { apiFetch } from '../../lib/api'
 
 type Stats = {
   clients: number
@@ -20,7 +21,7 @@ export function AdminOverview() {
 
   useEffect(() => {
     document.title = 'Admin — Tycho Systems'
-    fetch('/api/admin/stats')
+    apiFetch('/api/admin/stats')
       .then((r) => r.json())
       .then(setStats)
       .catch(() => setStats({ clients: 0, activeSites: 0, revenue: 0, pendingInvoices: 0 }))

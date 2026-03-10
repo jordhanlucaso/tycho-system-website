@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import { healthRouter } from './routes/health.js'
@@ -6,6 +7,9 @@ import { authRouter } from './routes/auth.js'
 import { adminRouter } from './routes/admin.js'
 import { clientRouter } from './routes/client.js'
 import { monitoringRouter } from './routes/monitoring.js'
+import { salesRouter } from './routes/sales.js'
+import { contractsRouter } from './routes/contracts.js'
+import { contactRouter } from './routes/contact.js'
 import { startHealthCheckCron } from './lib/healthcheck.js'
 
 const app = express()
@@ -31,6 +35,9 @@ app.use('/api/auth', authRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/client', clientRouter)
 app.use('/api', monitoringRouter)
+app.use('/api/sales', salesRouter)
+app.use('/api/contracts', contractsRouter)
+app.use('/api/contact', contactRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)

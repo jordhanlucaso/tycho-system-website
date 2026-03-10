@@ -1,14 +1,15 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, act } from '@testing-library/react'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { render, screen, act, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { AuthProvider } from '../app/lib/auth'
 import { CartProvider, useCart } from '../app/lib/cart'
 import { ThemeProvider } from '../app/lib/theme'
 import { Checkout } from '../app/routes/Checkout'
-import { tiers } from '../config/pricing'
+import { SignContract } from '../app/routes/SignContract'
+import { tiers, oneTimePackages, monthlyPlans } from '../config/pricing'
 import { useEffect } from 'react'
 
-// Helper to pre-populate cart before rendering Checkout
+// Helper to pre-populate cart before rendering
 function CartSeeder({ items }: { items: typeof tiers }) {
   const cart = useCart()
   useEffect(() => {
@@ -32,17 +33,33 @@ function renderCheckout(items = tiers.slice(0, 2)) {
   )
 }
 
+function renderSignContract(items = [tiers[0]]) {
+  return render(
+    <MemoryRouter initialEntries={['/checkout/sign']}>
+      <AuthProvider>
+        <ThemeProvider>
+          <CartProvider>
+            <CartSeeder items={items} />
+            <SignContract />
+          </CartProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </MemoryRouter>
+  )
+}
+
 beforeEach(() => {
   sessionStorage.clear()
+  vi.restoreAllMocks()
 })
 
-describe('Checkout', () => {
+describe('Checkout (Step 1 — Customer Info)', () => {
   it('renders order summary with cart items', async () => {
     await act(async () => {
       renderCheckout([tiers[0], tiers[1]])
     })
-    expect(screen.getByText('Starter')).toBeInTheDocument()
-    expect(screen.getByText('Business')).toBeInTheDocument()
+    expect(screen.getByText('Local Starter')).toBeInTheDocument()
+    expect(screen.getByText('Local Business')).toBeInTheDocument()
   })
 
   it('renders customer info form fields', async () => {
@@ -55,17 +72,152 @@ describe('Checkout', () => {
     expect(screen.getByPlaceholderText('(555) 123-4567')).toBeInTheDocument()
   })
 
-  it('renders pay button', async () => {
+  it('renders Continue to agreement button', async () => {
     await act(async () => {
       renderCheckout([tiers[0]])
     })
-    expect(screen.getByText('Pay with Stripe')).toBeInTheDocument()
+    expect(screen.getByText('Continue to agreement')).toBeInTheDocument()
   })
 
-  it('shows order totals', async () => {
+  it('renders progress steps', async () => {
     await act(async () => {
       renderCheckout([tiers[0]])
     })
-    expect(screen.getAllByText('$399').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Your details').length).toBeGreaterThan(0)
+    expect(screen.getByText('Sign agreement')).toBeInTheDocument()
+    expect(screen.getByText('Payment')).toBeInTheDocument()
+  })
+
+  it('renders What happens next section', async () => {
+    await act(async () => {
+      renderCheckout([tiers[0]])
+    })
+    expect(screen.getByText('What happens next')).toBeInTheDocument()
+  })
+
+  it('shows one-time total', async () => {
+    await act(async () => {
+      renderCheckout([tiers[0]])
+    })
+    // local-starter priceInCents=125000 → $1,250
+    expect(screen.getAllByText(/\$1,250/).length).toBeGreaterThan(0)
+  })
+
+  it('shows mixed cart section headers', async () => {
+    await act(async () => {
+      renderCheckout([oneTimePackages[0], monthlyPlans[0]])
+    })
+    expect(screen.getByText('One-time projects')).toBeInTheDocument()
+    expect(screen.getByText('Monthly subscriptions')).toBeInTheDocument()
+  })
+})
+
+describe('SignContract (Step 2 — Agreement & Payment)', () => {
+  it('renders fallback when sessionStorage is empty', async () => {
+    await act(async () => {
+      renderSignContract()
+    })
+    expect(screen.getByText('No agreement found. Please start from checkout.')).toBeInTheDocument()
+  })
+
+  it('renders contract review UI when contract data in sessionStorage', async () => {
+    sessionStorage.setItem('contract_id', 'test-contract-id')
+    sessionStorage.setItem('contract_text', 'WEB DEVELOPMENT SERVICES AGREEMENT\nThis is a test contract.')
+
+    await act(async () => {
+      renderSignContract()
+    })
+
+    expect(screen.getByText('Review your agreement')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Your full legal name')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /sign agreement/i })).toBeInTheDocument()
+  })
+
+  it('sign button is disabled until checkbox checked and name entered', async () => {
+    sessionStorage.setItem('contract_id', 'test-contract-id')
+    sessionStorage.setItem('contract_text', 'Test contract.')
+
+    await act(async () => {
+      renderSignContract()
+    })
+
+    const btn = screen.getByRole('button', { name: /sign agreement/i })
+    expect(btn).toBeDisabled()
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('checkbox'))
+    })
+    expect(btn).toBeDisabled() // still disabled — no name
+
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText('Your full legal name'), {
+        target: { value: 'Jane Doe' },
+      })
+    })
+    expect(btn).not.toBeDisabled()
+  })
+
+  it('transitions to payment step after signing', async () => {
+    sessionStorage.setItem('contract_id', 'ctr-123')
+    sessionStorage.setItem('contract_text', 'Test contract.')
+
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ signed: true }), { status: 200 })
+    )
+
+    await act(async () => {
+      renderSignContract()
+    })
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('checkbox'))
+      fireEvent.change(screen.getByPlaceholderText('Your full legal name'), {
+        target: { value: 'Jane Doe' },
+      })
+    })
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /sign agreement/i }))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('Agreement signed!')).toBeInTheDocument()
+    })
+  })
+
+  it('shows split payment buttons for mixed cart after signing', async () => {
+    sessionStorage.setItem('contract_id', 'ctr-mixed')
+    sessionStorage.setItem('contract_text', 'Test contract.')
+
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ signed: true }), { status: 200 })
+    )
+
+    render(
+      <MemoryRouter initialEntries={['/checkout/sign']}>
+        <AuthProvider><ThemeProvider>
+          <CartProvider>
+            <CartSeeder items={[oneTimePackages[0], monthlyPlans[0]]} />
+            <SignContract />
+          </CartProvider>
+        </ThemeProvider></AuthProvider>
+      </MemoryRouter>
+    )
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('checkbox'))
+      fireEvent.change(screen.getByPlaceholderText('Your full legal name'), {
+        target: { value: 'Jane Doe' },
+      })
+    })
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /sign agreement/i }))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(/Pay for projects/i)).toBeInTheDocument()
+    })
+    expect(screen.getByText(/Start subscription/i)).toBeInTheDocument()
   })
 })

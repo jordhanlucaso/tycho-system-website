@@ -9,11 +9,31 @@ export function CheckoutSuccess() {
   const cart = useCart()
   const [params] = useSearchParams()
   const sessionId = params.get('session_id')
+  // type: 'payment' (one-time) or 'subscription' (recurring)
+  const type = params.get('type') as 'payment' | 'subscription' | null
+
+  const hasRemainingRecurring = cart.items.some((i) => i.recurring)
+  const hasRemainingOneTime = cart.items.some((i) => !i.recurring)
 
   useEffect(() => {
     document.title = 'Payment Successful — Tycho Systems'
-    cart.clear()
+    sessionStorage.removeItem('contract_id')
+    sessionStorage.removeItem('contract_text')
+    sessionStorage.removeItem('checkout_email')
+
+    // Selectively clear only the items that were just paid for
+    if (type === 'payment') {
+      cart.items.filter((i) => !i.recurring).forEach((i) => cart.removeItem(i.id))
+    } else if (type === 'subscription') {
+      cart.items.filter((i) => i.recurring).forEach((i) => cart.removeItem(i.id))
+    } else {
+      cart.clear()
+    }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const documentId = params.get('id')
+  const showSubscriptionPrompt = type === 'payment' && hasRemainingRecurring
+  const showProjectsPrompt = type === 'subscription' && hasRemainingOneTime
 
   return (
     <div className='min-h-screen font-sans'>
@@ -32,23 +52,56 @@ export function CheckoutSuccess() {
               </svg>
             </div>
 
-            <h1 className='mt-6 text-gradient text-3xl font-semibold tracking-tight'>Payment successful!</h1>
+            <h1 className='mt-6 text-gradient text-3xl font-semibold tracking-tight'>Payment confirmed!</h1>
             <p className='mt-3 text-sm text-[var(--text-secondary)]'>
-              Thank you for your purchase. We&apos;ll be in touch shortly to get started on your project.
+              {showSubscriptionPrompt
+                ? "Your project deposit is confirmed. Don't forget to set up your monthly plan too."
+                : showProjectsPrompt
+                  ? "Your subscription is active. Complete your project payment when you're ready."
+                  : "Thank you for your purchase. We'll reach out within 1–2 business days to kick off your project."}
             </p>
 
             {sessionId && (
               <p className='mt-2 text-xs text-[var(--text-faint)]'>
-                Session: {sessionId.slice(0, 20)}...
+                Ref: {sessionId.slice(0, 24)}…
               </p>
             )}
 
-            <Link
-              to='/'
-              className='mt-8 inline-flex rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
-            >
-              Back to home
-            </Link>
+            <div className='mt-8 flex flex-col gap-3'>
+              {/* Prompt to complete the other payment type if mixed cart */}
+              {showSubscriptionPrompt && documentId && (
+                <Link
+                  to={`/checkout/sign?id=${documentId}`}
+                  className='inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                >
+                  Set up monthly subscription →
+                </Link>
+              )}
+              {showProjectsPrompt && documentId && (
+                <Link
+                  to={`/checkout/sign?id=${documentId}`}
+                  className='inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                >
+                  Pay for projects →
+                </Link>
+              )}
+
+              <Link
+                to='/'
+                className='inline-flex w-full items-center justify-center rounded-xl border border-[var(--border-primary)] px-6 py-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'
+              >
+                Back to home
+              </Link>
+            </div>
+
+            <div className='mt-8 rounded-xl border border-[var(--border-subtle)] p-4 text-left space-y-2'>
+              <p className='text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider'>What happens next</p>
+              <ol className='space-y-1.5 text-xs text-[var(--text-secondary)]'>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>1.</span>You'll receive a payment receipt from Stripe</li>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>2.</span>A confirmation email with your signed agreement details</li>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>3.</span>We'll email you within 1–2 business days with next steps</li>
+              </ol>
+            </div>
           </motion.div>
         </Container>
       </main>

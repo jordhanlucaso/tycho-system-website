@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
+import { apiFetch } from '../../lib/api'
 
 type Site = {
   id: string
@@ -14,7 +15,7 @@ export function DashboardSites() {
 
   useEffect(() => {
     document.title = 'My Sites — Tycho Systems'
-    fetch('/api/client/sites')
+    apiFetch('/api/client/sites')
       .then((r) => r.json())
       .then((d) => setSites(d.sites || []))
       .catch(() => setSites([]))

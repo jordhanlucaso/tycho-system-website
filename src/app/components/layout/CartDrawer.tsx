@@ -64,12 +64,30 @@ export function CartDrawer() {
                         className='glass rounded-xl p-4'
                       >
                         <div className='flex items-start justify-between gap-3'>
-                          <div>
+                          <div className='min-w-0 flex-1'>
                             <div className='font-semibold text-[var(--text-primary)]'>{item.name}</div>
-                            <div className='mt-1 text-sm text-[var(--text-secondary)]'>
+                            {item.description && (
+                              <div className='mt-0.5 text-xs text-[var(--text-muted)]'>{item.description}</div>
+                            )}
+                            <div className='mt-1 text-sm'>
                               <span className='text-gradient font-semibold'>{item.price}</span>
                               <span className='text-[var(--text-muted)]'> /{item.note}</span>
                             </div>
+                            {item.features.length > 0 && (
+                              <ul className='mt-2 space-y-1'>
+                                {item.features.slice(0, 3).map((f) => (
+                                  <li key={f} className='flex items-start gap-1.5 text-xs text-[var(--text-muted)]'>
+                                    <span className='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-cyan-400/50' />
+                                    {f}
+                                  </li>
+                                ))}
+                                {item.features.length > 3 && (
+                                  <li className='text-xs text-[var(--text-faint)]'>
+                                    +{item.features.length - 3} more included
+                                  </li>
+                                )}
+                              </ul>
+                            )}
                           </div>
                           <button
                             onClick={() => cart.removeItem(item.id)}

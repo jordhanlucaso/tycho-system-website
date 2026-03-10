@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { useAuth } from '../../lib/auth'
+import { apiFetch } from '../../lib/api'
 
 type DashboardData = {
   sites: { id: string; domain: string; status: string }[]
@@ -14,7 +15,7 @@ export function DashboardOverview() {
 
   useEffect(() => {
     document.title = 'Dashboard — Tycho Systems'
-    fetch('/api/client/overview')
+    apiFetch('/api/client/overview')
       .then((r) => r.json())
       .then(setData)
       .catch(() => setData({ sites: [], invoices: [], upcomingPayments: [] }))
