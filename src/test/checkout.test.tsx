@@ -6,7 +6,7 @@ import { CartProvider, useCart } from '../app/lib/cart'
 import { ThemeProvider } from '../app/lib/theme'
 import { Checkout } from '../app/routes/Checkout'
 import { SignContract } from '../app/routes/SignContract'
-import { tiers, oneTimePackages, monthlyPlans } from '../config/pricing'
+import { tiers, oneTimePackages } from '../config/pricing'
 import { useEffect } from 'react'
 
 // Helper to pre-populate cart before rendering
