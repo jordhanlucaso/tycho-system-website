@@ -7,13 +7,15 @@ type Stats = {
   activeSites: number
   revenue: number
   pendingInvoices: number
+  activeSubscriptions: number
 }
 
 const statCards = [
-  { key: 'clients' as const, label: 'Total Clients', format: (v: number) => String(v) },
-  { key: 'activeSites' as const, label: 'Active Sites', format: (v: number) => String(v) },
-  { key: 'revenue' as const, label: 'Revenue', format: (v: number) => `$${(v / 100).toLocaleString()}` },
-  { key: 'pendingInvoices' as const, label: 'Pending Invoices', format: (v: number) => String(v) }
+  { key: 'clients' as const,             label: 'Total Clients',        format: (v: number) => String(v) },
+  { key: 'activeSites' as const,         label: 'Active Sites',         format: (v: number) => String(v) },
+  { key: 'revenue' as const,             label: 'Revenue (Stripe)',     format: (v: number) => `$${(v / 100).toLocaleString()}` },
+  { key: 'activeSubscriptions' as const, label: 'Active Subscriptions', format: (v: number) => String(v) },
+  { key: 'pendingInvoices' as const,     label: 'Pending Invoices',     format: (v: number) => String(v) },
 ]
 
 export function AdminOverview() {
@@ -24,7 +26,7 @@ export function AdminOverview() {
     apiFetch('/api/admin/stats')
       .then((r) => r.json())
       .then(setStats)
-      .catch(() => setStats({ clients: 0, activeSites: 0, revenue: 0, pendingInvoices: 0 }))
+      .catch(() => setStats({ clients: 0, activeSites: 0, revenue: 0, pendingInvoices: 0, activeSubscriptions: 0 }))
   }, [])
 
   return (
@@ -34,7 +36,7 @@ export function AdminOverview() {
         <p className='mt-1 text-sm text-[var(--text-secondary)]'>Overview of your business.</p>
       </motion.div>
 
-      <div className='mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+      <div className='mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
         {statCards.map((card, i) => (
           <motion.div
             key={card.key}

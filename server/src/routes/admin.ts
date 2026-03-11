@@ -13,25 +13,24 @@ adminRouter.get('/stats', async (_req, res) => {
     const [
       { count: clients },
       { count: activeSites },
-      { data: paidInvoices },
-      { count: pendingInvoices },
+      { data: stripeStats },
     ] = await Promise.all([
       supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'client'),
       supabase.from('sites').select('*', { count: 'exact', head: true }).eq('status', 'live'),
-      supabase.from('invoices').select('amount_cents').eq('status', 'paid'),
-      supabase.from('invoices').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabase.rpc('get_stripe_admin_stats'),
     ])
 
-    const revenue = (paidInvoices ?? []).reduce((sum, i) => sum + i.amount_cents, 0)
+    const stats = (stripeStats as { revenue: number; activeSubscriptions: number; pendingInvoices: number }) ?? { revenue: 0, activeSubscriptions: 0, pendingInvoices: 0 }
 
     res.json({
-      clients: clients ?? 0,
-      activeSites: activeSites ?? 0,
-      revenue,
-      pendingInvoices: pendingInvoices ?? 0,
+      clients:             clients ?? 0,
+      activeSites:         activeSites ?? 0,
+      revenue:             stats.revenue ?? 0,
+      pendingInvoices:     stats.pendingInvoices ?? 0,
+      activeSubscriptions: stats.activeSubscriptions ?? 0,
     })
   } catch {
-    res.json({ clients: 0, activeSites: 0, revenue: 0, pendingInvoices: 0 })
+    res.json({ clients: 0, activeSites: 0, revenue: 0, pendingInvoices: 0, activeSubscriptions: 0 })
   }
 })
 

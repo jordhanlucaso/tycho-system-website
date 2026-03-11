@@ -6,14 +6,19 @@ export function AuthCallback() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Supabase exchanges the URL hash/code for a session automatically.
-    // onAuthStateChange fires once it's done — redirect to client portal.
+    // Subscribe first to avoid missing the SIGNED_IN event
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
         navigate('/client-portal', { replace: true })
-      } else if (event === 'SIGNED_OUT' || (!session && event !== 'INITIAL_SESSION')) {
+      } else if (event === 'SIGNED_OUT') {
         navigate('/login', { replace: true })
       }
+    })
+
+    // Also check immediately — session may already exist if the exchange
+    // completed before this component mounted
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate('/client-portal', { replace: true })
     })
 
     return () => subscription.unsubscribe()
