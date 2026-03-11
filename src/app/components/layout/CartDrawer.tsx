@@ -2,8 +2,8 @@ import { motion, AnimatePresence } from 'motion/react'
 import { useCart } from '../../lib/cart'
 import { useNavigate } from 'react-router-dom'
 
-function formatCents(cents: number) {
-  return `$${(cents / 100).toFixed(0)}`
+function fmt(cents: number) {
+  return `$${(cents / 100).toLocaleString('en-US')}`
 }
 
 export function CartDrawer() {
@@ -33,7 +33,7 @@ export function CartDrawer() {
           >
             {/* Header */}
             <div className='flex items-center justify-between border-b border-[var(--border-primary)] px-6 py-4'>
-              <h2 className='text-lg font-semibold text-[var(--text-primary)]'>Your cart ({cart.itemCount})</h2>
+              <h2 className='text-lg font-semibold text-[var(--text-primary)]'>Order summary ({cart.itemCount})</h2>
               <button
                 onClick={() => cart.setOpen(false)}
                 className='inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'
@@ -49,84 +49,99 @@ export function CartDrawer() {
             <div className='flex-1 overflow-y-auto px-6 py-4'>
               {cart.items.length === 0 ? (
                 <div className='flex h-full items-center justify-center'>
-                  <p className='text-sm text-[var(--text-muted)]'>Your cart is empty</p>
+                  <p className='text-sm text-[var(--text-muted)]'>No package selected</p>
                 </div>
               ) : (
                 <div className='space-y-3'>
                   <AnimatePresence mode='popLayout'>
-                    {cart.items.map((item) => (
-                      <motion.div
-                        key={item.id}
-                        layout
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: 40 }}
-                        className='glass rounded-xl p-4'
-                      >
-                        <div className='flex items-start justify-between gap-3'>
-                          <div className='min-w-0 flex-1'>
-                            <div className='font-semibold text-[var(--text-primary)]'>{item.name}</div>
-                            {item.description && (
-                              <div className='mt-0.5 text-xs text-[var(--text-muted)]'>{item.description}</div>
-                            )}
-                            <div className='mt-1 text-sm'>
-                              <span className='text-gradient font-semibold'>{item.price}</span>
-                              <span className='text-[var(--text-muted)]'> /{item.note}</span>
+                    {cart.items.map((item) => {
+                      const deposit = item.depositPriceInCents ?? item.priceInCents
+                      return (
+                        <motion.div
+                          key={item.id}
+                          layout
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, x: 40 }}
+                          className='glass rounded-xl p-4'
+                        >
+                          <div className='flex items-start justify-between gap-3'>
+                            <div className='min-w-0 flex-1'>
+                              <div className='flex items-center gap-2'>
+                                <span className='font-semibold text-[var(--text-primary)]'>{item.name}</span>
+                                <span className='text-xs font-mono text-[var(--text-faint)]'>{item.sku}</span>
+                              </div>
+                              {item.description && (
+                                <div className='mt-0.5 text-xs text-[var(--text-muted)]'>{item.description}</div>
+                              )}
+                              <div className='mt-2 space-y-1'>
+                                <div className='flex justify-between text-sm'>
+                                  <span className='text-[var(--text-muted)]'>Total project price</span>
+                                  <span className='font-semibold text-[var(--text-primary)]'>{item.price}</span>
+                                </div>
+                                <div className='flex justify-between text-sm'>
+                                  <span className='text-[var(--text-muted)]'>Deposit due today</span>
+                                  <span className='text-gradient font-semibold'>{fmt(deposit)}</span>
+                                </div>
+                              </div>
+                              {item.remainingMilestones && item.remainingMilestones.length > 0 && (
+                                <div className='mt-2 space-y-0.5'>
+                                  {item.remainingMilestones.map((m) => (
+                                    <div key={m.label} className='flex justify-between text-xs text-[var(--text-faint)]'>
+                                      <span>{m.label}</span>
+                                      <span>{fmt(m.amountInCents)}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {item.features.length > 0 && (
+                                <ul className='mt-3 space-y-1'>
+                                  {item.features.slice(0, 3).map((f) => (
+                                    <li key={f} className='flex items-start gap-1.5 text-xs text-[var(--text-muted)]'>
+                                      <span className='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-cyan-400/50' />
+                                      {f}
+                                    </li>
+                                  ))}
+                                  {item.features.length > 3 && (
+                                    <li className='text-xs text-[var(--text-faint)]'>
+                                      +{item.features.length - 3} more included
+                                    </li>
+                                  )}
+                                </ul>
+                              )}
                             </div>
-                            {item.features.length > 0 && (
-                              <ul className='mt-2 space-y-1'>
-                                {item.features.slice(0, 3).map((f) => (
-                                  <li key={f} className='flex items-start gap-1.5 text-xs text-[var(--text-muted)]'>
-                                    <span className='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-cyan-400/50' />
-                                    {f}
-                                  </li>
-                                ))}
-                                {item.features.length > 3 && (
-                                  <li className='text-xs text-[var(--text-faint)]'>
-                                    +{item.features.length - 3} more included
-                                  </li>
-                                )}
-                              </ul>
-                            )}
+                            <button
+                              onClick={() => cart.removeItem(item.id)}
+                              className='inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-red-400'
+                              aria-label={`Remove ${item.name}`}
+                            >
+                              <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                                <path strokeLinecap='round' strokeLinejoin='round' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+                              </svg>
+                            </button>
                           </div>
-                          <button
-                            onClick={() => cart.removeItem(item.id)}
-                            className='inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-red-400'
-                            aria-label={`Remove ${item.name}`}
-                          >
-                            <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
-                              <path strokeLinecap='round' strokeLinejoin='round' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
-                            </svg>
-                          </button>
-                        </div>
-                      </motion.div>
-                    ))}
+                        </motion.div>
+                      )
+                    })}
                   </AnimatePresence>
                 </div>
               )}
             </div>
 
-            {/* Footer with totals */}
+            {/* Footer */}
             {cart.items.length > 0 && (
               <div className='border-t border-[var(--border-primary)] px-6 py-4 space-y-3'>
-                {cart.oneTimeTotal > 0 && (
-                  <div className='flex justify-between text-sm'>
-                    <span className='text-[var(--text-secondary)]'>One-time</span>
-                    <span className='font-semibold text-[var(--text-primary)]'>{formatCents(cart.oneTimeTotal)}</span>
-                  </div>
-                )}
-                {cart.recurringTotal > 0 && (
-                  <div className='flex justify-between text-sm'>
-                    <span className='text-[var(--text-secondary)]'>Monthly recurring</span>
-                    <span className='font-semibold text-[var(--text-primary)]'>{formatCents(cart.recurringTotal)}/mo</span>
-                  </div>
-                )}
+                <div className='flex justify-between text-sm'>
+                  <span className='text-[var(--text-secondary)]'>Total project price</span>
+                  <span className='font-semibold text-[var(--text-primary)]'>{fmt(cart.oneTimeTotal)}</span>
+                </div>
+                <div className='flex justify-between text-sm'>
+                  <span className='text-[var(--text-secondary)]'>Deposit due today</span>
+                  <span className='text-gradient font-semibold text-base'>{fmt(cart.depositTotal)}</span>
+                </div>
 
                 <button
-                  onClick={() => {
-                    cart.setOpen(false)
-                    navigate('/checkout')
-                  }}
+                  onClick={() => { cart.setOpen(false); navigate('/checkout') }}
                   className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
                 >
                   Proceed to checkout
@@ -136,7 +151,7 @@ export function CartDrawer() {
                   onClick={() => cart.clear()}
                   className='w-full rounded-xl border border-[var(--border-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'
                 >
-                  Clear cart
+                  Clear
                 </button>
               </div>
             )}

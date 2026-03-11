@@ -1,10 +1,23 @@
+export type Milestone = {
+  label: string
+  amountInCents: number
+}
+
 export type ContractItem = {
+  id: string
+  sku: string
   name: string
+  contractTitle: string
+  invoiceLabel: string
   priceInCents: number
+  depositPriceInCents?: number
+  remainingMilestones?: Milestone[]
   recurring: boolean
   delivery?: string
   revisions?: string
+  includedPages?: number | string
   features?: string[]
+  outOfScope?: string[]
   description?: string
 }
 
@@ -26,41 +39,42 @@ function fmt(cents: number): string {
 }
 
 function buildScopeOfWork(items: ContractItem[]): string {
-  const oneTime = items.filter((i) => !i.recurring)
-  const recurring = items.filter((i) => i.recurring)
   const lines: string[] = []
 
-  if (oneTime.length > 0) {
-    lines.push('ONE-TIME DELIVERABLES')
-    lines.push('─'.repeat(40))
-    for (const item of oneTime) {
-      lines.push('')
-      lines.push(`${item.name} — ${fmt(item.priceInCents)}`)
-      if (item.description) lines.push(item.description)
-      const meta: string[] = []
-      if (item.delivery)  meta.push(`Delivery: ${item.delivery}`)
-      if (item.revisions) meta.push(`Revisions: ${item.revisions}`)
-      if (meta.length) lines.push(meta.join(' | '))
-      if (item.features?.length) {
-        lines.push('Includes:')
-        item.features.forEach((f) => lines.push(`  • ${f}`))
-      }
-    }
-  }
+  for (const item of items) {
+    const deposit = item.depositPriceInCents ?? item.priceInCents
 
-  if (recurring.length > 0) {
-    if (lines.length) lines.push('')
-    lines.push('ONGOING SERVICES (Monthly)')
-    lines.push('─'.repeat(40))
-    for (const item of recurring) {
-      lines.push('')
-      lines.push(`${item.name} — ${fmt(item.priceInCents)}/mo`)
-      if (item.description) lines.push(item.description)
-      if (item.features?.length) {
-        lines.push('Includes:')
-        item.features.forEach((f) => lines.push(`  • ${f}`))
+    lines.push(`${item.contractTitle}`)
+    lines.push('─'.repeat(50))
+    lines.push(`SKU:              ${item.sku}`)
+    lines.push(`Total price:      ${fmt(item.priceInCents)}`)
+    lines.push(`Deposit due now:  ${fmt(deposit)}`)
+
+    if (item.remainingMilestones?.length) {
+      lines.push('Payment schedule:')
+      lines.push(`  Deposit (now):  ${fmt(deposit)}`)
+      for (const m of item.remainingMilestones) {
+        lines.push(`  ${m.label}: ${fmt(m.amountInCents)}`)
       }
     }
+
+    if (item.delivery)      lines.push(`Delivery:         ${item.delivery}`)
+    if (item.revisions)     lines.push(`Revisions:        ${item.revisions}`)
+    if (item.includedPages) lines.push(`Included pages:   ${item.includedPages}`)
+
+    if (item.features?.length) {
+      lines.push('')
+      lines.push('Included in scope:')
+      item.features.forEach((f) => lines.push(`  • ${f}`))
+    }
+
+    if (item.outOfScope?.length) {
+      lines.push('')
+      lines.push('Explicitly out of scope:')
+      item.outOfScope.forEach((f) => lines.push(`  ✕ ${f}`))
+    }
+
+    lines.push('')
   }
 
   return lines.join('\n')
@@ -72,20 +86,25 @@ export function renderContractText(ctx: ContractContext): string {
   const date = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
   const oneTimeItems = ctx.items.filter((i) => !i.recurring)
-  const recurringItems = ctx.items.filter((i) => i.recurring)
   const oneTimeTotal = oneTimeItems.reduce((s, i) => s + i.priceInCents, 0)
-  const recurringTotal = recurringItems.reduce((s, i) => s + i.priceInCents, 0)
+  const depositTotal = ctx.items.reduce((s, i) => s + (i.depositPriceInCents ?? i.priceInCents), 0)
 
   const deliveryTimeline = oneTimeItems[0]?.delivery ?? 'To be agreed'
   const revisionRounds = oneTimeItems[0]?.revisions ?? 'As per package'
-  const monthlyPlan = recurringItems.length
-    ? recurringItems.map((i) => `${i.name} — ${fmt(i.priceInCents)}/mo`).join(', ')
-    : 'N/A (no monthly plan selected)'
-  const monthlyAmount = recurringTotal > 0 ? fmt(recurringTotal) : 'N/A'
   const scopeOfWork = buildScopeOfWork(ctx.items)
 
+  const milestonesSection = oneTimeItems.flatMap((item) => {
+    if (!item.remainingMilestones?.length) return []
+    const deposit = item.depositPriceInCents ?? item.priceInCents
+    return [
+      `${item.contractTitle}:`,
+      `  Deposit (on signing):  ${fmt(deposit)}`,
+      ...item.remainingMilestones.map((m) => `  ${m.label}: ${fmt(m.amountInCents)}`),
+    ]
+  }).join('\n')
+
   return `WEB DEVELOPMENT SERVICES AGREEMENT
-(Fixed-Price Project + Optional Monthly Plan)
+(Fixed-Price Project)
 
 This Web Development Services Agreement ("Agreement") is entered into on ${date}
 by and between:
@@ -100,6 +119,8 @@ Phone:    ${ctx.customerPhone || 'N/A'}
 1. SCOPE OF WORK
 1.1 Provider will deliver the website/services described in Exhibit A ("Scope").
 1.2 Anything not explicitly listed in Exhibit A is out of scope.
+1.3 Items listed under "Explicitly out of scope" in Exhibit A require a separate
+    written Change Request and are subject to additional fees.
 
 2. TIMELINE & CLIENT RESPONSIBILITIES
 2.1 Estimated start: TBD (within 5 business days of signing).
@@ -108,13 +129,12 @@ Phone:    ${ctx.customerPhone || 'N/A'}
 2.2 Delays caused by Client extend the schedule accordingly.
 
 3. PRICING, INVOICING & PAYMENTS
-3.1 Project fee: ${fmt(oneTimeTotal)} (USD) + applicable taxes/fees (if any).
-3.2 Payment schedule:
-    - 40% due upon signing (reserves schedule; non-refundable),
-    - 40% due upon delivery of Milestone 1,
-    - 20% due prior to final handoff / go-live.
-3.3 Payments will be made via Stripe (card/ACH where available).
-3.4 Provider may pause work if any invoice is overdue by more than 7 days.
+3.1 Total project fee: ${fmt(oneTimeTotal)} (USD) + applicable taxes/fees (if any).
+3.2 Deposit due on signing: ${fmt(depositTotal)} (non-refundable; reserves schedule).
+3.3 Payment schedule per package (see Exhibit A for exact milestones):
+${milestonesSection || '    As described in Exhibit A.'}
+3.4 Payments will be made via Stripe (card/ACH where available).
+3.5 Provider may pause work if any invoice is overdue by more than 7 days.
 
 4. CHANGE REQUESTS (OUT-OF-SCOPE WORK)
 4.1 Any change not included in Exhibit A requires a written Change Request.
@@ -144,37 +164,31 @@ Phone:    ${ctx.customerPhone || 'N/A'}
     billed to Client or paid directly by Client.
 8.2 Provider is not responsible for downtime caused by third-party services.
 
-9. MONTHLY PLAN (OPTIONAL)
-9.1 Monthly plan selected: ${monthlyPlan}.
-9.2 Monthly plan price: ${monthlyAmount}/month (billed via Stripe auto-pay).
-9.3 Out-of-plan work is billed at ${ctx.hourlyRate}/hour.
-9.4 Client may cancel with 30 days' notice. Non-payment may result in suspension.
-
-10. CONFIDENTIALITY
+9. CONFIDENTIALITY
 Both parties agree to keep non-public information confidential and use it only to
 perform this Agreement.
 
-11. LIMITATION OF LIABILITY
+10. LIMITATION OF LIABILITY
 Provider's total liability is limited to the total fees paid by Client under this
 Agreement in the last 3 months. Provider is not liable for indirect, incidental,
 or consequential damages.
 
-12. TERMINATION
-12.1 Client may terminate at any time. Client will pay for completed/accepted
+11. TERMINATION
+11.1 Client may terminate at any time. Client will pay for completed/accepted
      milestones and work in progress at ${ctx.hourlyRate}/hour. The initial deposit
      remains non-refundable.
-12.2 Provider may terminate if Client materially breaches this Agreement and fails
+11.2 Provider may terminate if Client materially breaches this Agreement and fails
      to cure within 7 days after written notice.
 
-13. PORTFOLIO RIGHTS
+12. PORTFOLIO RIGHTS
 Provider may display the completed work in its portfolio after launch, unless
 Client requests confidentiality in writing.
 
-14. ELECTRONIC SIGNATURES
+13. ELECTRONIC SIGNATURES
 This Agreement may be executed electronically. Electronic and typed signatures are
 legally binding under the US ESIGN Act (15 U.S.C. § 7001) and applicable state law.
 
-15. GOVERNING LAW & VENUE
+14. GOVERNING LAW & VENUE
 This Agreement is governed by the laws of ${ctx.governingState}.
 Any disputes shall be brought in the courts of ${ctx.governingCounty}.
 
@@ -183,17 +197,10 @@ Any disputes shall be brought in the courts of ${ctx.governingCounty}.
 EXHIBIT A — SCOPE OF WORK
 
 ${scopeOfWork}
-
-One-time project fee:   ${fmt(oneTimeTotal)}
-Monthly plan (if any):  ${monthlyPlan} — ${monthlyAmount}/mo
-Estimated delivery:     ${deliveryTimeline}
-Revision rounds:        ${revisionRounds}
-
-════════════════════════════════════════════════════════════════
-
-EXHIBIT B — MILESTONES & TIMELINE
-
-To be defined in the project kick-off document delivered within 5 business days of signing.
+Total project price:  ${fmt(oneTimeTotal)}
+Deposit due today:    ${fmt(depositTotal)}
+Estimated delivery:   ${deliveryTimeline}
+Revision rounds:      ${revisionRounds}
 
 ════════════════════════════════════════════════════════════════
 

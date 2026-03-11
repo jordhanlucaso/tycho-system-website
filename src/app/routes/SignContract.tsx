@@ -2,6 +2,7 @@ import { useState, useEffect, type ChangeEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { useCart } from '../lib/cart'
+import { apiFetch } from '../lib/api'
 import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'
 import { CartDrawer } from '../components/layout/CartDrawer'
@@ -26,11 +27,7 @@ export function SignContract() {
   const [signing, setSigning]     = useState(false)
   const [signError, setSignError] = useState('')
   const [payError, setPayError]   = useState('')
-  const [paying, setPaying]       = useState<'one-time' | 'recurring' | null>(null)
-
-  const oneTimeItems   = cart.items.filter((i) => !i.recurring)
-  const recurringItems = cart.items.filter((i) => i.recurring)
-  const isMixed        = oneTimeItems.length > 0 && recurringItems.length > 0
+  const [paying, setPaying]       = useState(false)
 
   useEffect(() => {
     document.title = 'Sign Agreement — Tycho Systems'
@@ -41,9 +38,8 @@ export function SignContract() {
     setSigning(true)
     setSignError('')
     try {
-      const res = await fetch(`/api/contracts/${contractId}/sign`, {
+      const res = await apiFetch(`/api/contracts/${contractId}/sign`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ signerName: signerName.trim() }),
       })
       const data = await res.json()
@@ -56,21 +52,20 @@ export function SignContract() {
     }
   }
 
-  async function handlePay(filter?: 'one-time' | 'recurring') {
-    setPaying(filter ?? 'one-time')
+  async function handlePay() {
+    setPaying(true)
     setPayError('')
     try {
-      const res = await fetch(`/api/contracts/${contractId}/payment`, {
+      const res = await apiFetch(`/api/contracts/${contractId}/payment`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filter }),
+        body: JSON.stringify({}),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Payment session failed')
       if (data.url) window.location.href = data.url
     } catch (err) {
       setPayError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
-      setPaying(null)
+      setPaying(false)
     }
   }
 
@@ -236,15 +231,26 @@ export function SignContract() {
                   {/* Order recap */}
                   {cart.items.length > 0 && (
                     <div className='glass rounded-xl p-5 space-y-3'>
-                      <h2 className='text-sm font-semibold text-[var(--text-primary)]'>Your order</h2>
-                      {cart.items.map((item) => (
-                        <div key={item.id} className='flex justify-between text-sm'>
-                          <span className='text-[var(--text-secondary)]'>{item.name}</span>
-                          <span className='font-semibold text-[var(--text-primary)]'>
-                            {item.price}{item.recurring ? '/mo' : ''}
-                          </span>
-                        </div>
-                      ))}
+                      <h2 className='text-sm font-semibold text-[var(--text-primary)]'>Payment summary</h2>
+                      {cart.items.map((item) => {
+                        const deposit = item.depositPriceInCents ?? item.priceInCents
+                        return (
+                          <div key={item.id} className='space-y-1'>
+                            <div className='flex justify-between text-sm'>
+                              <span className='text-[var(--text-secondary)]'>{item.name}</span>
+                              <span className='font-semibold text-[var(--text-primary)]'>{item.price}</span>
+                            </div>
+                            <div className='flex justify-between text-xs text-[var(--text-faint)]'>
+                              <span>Deposit due today</span>
+                              <span className='text-gradient font-semibold'>{formatCents(deposit)}</span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                      <div className='border-t border-[var(--border-subtle)] pt-2 flex justify-between text-sm'>
+                        <span className='text-[var(--text-secondary)]'>Total due today</span>
+                        <span className='text-gradient font-semibold'>{formatCents(cart.depositTotal)}</span>
+                      </div>
                     </div>
                   )}
 
@@ -254,52 +260,26 @@ export function SignContract() {
                     </div>
                   )}
 
-                  {!isMixed && (
-                    <button
-                      onClick={() => handlePay(undefined)}
-                      disabled={paying !== null}
-                      className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2'
-                    >
-                      {paying !== null ? (
-                        <>
-                          <svg className='h-4 w-4 animate-spin' fill='none' viewBox='0 0 24 24'>
-                            <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
-                            <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z' />
-                          </svg>
-                          Redirecting to Stripe…
-                        </>
-                      ) : recurringItems.length > 0 ? (
-                        <>Start subscription — {formatCents(cart.recurringTotal)}/mo</>
-                      ) : (
-                        <>Pay {formatCents(cart.oneTimeTotal)} — confirm project</>
-                      )}
-                    </button>
-                  )}
-
-                  {isMixed && (
-                    <div className='space-y-3'>
-                      <p className='text-sm text-[var(--text-secondary)]'>
-                        Your cart has both one-time projects and a monthly plan. Complete each payment separately:
-                      </p>
-                      <button
-                        onClick={() => handlePay('one-time')}
-                        disabled={paying !== null}
-                        className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50'
-                      >
-                        {paying === 'one-time' ? 'Redirecting…' : `Pay for projects — ${formatCents(cart.oneTimeTotal)}`}
-                      </button>
-                      <button
-                        onClick={() => handlePay('recurring')}
-                        disabled={paying !== null}
-                        className='w-full rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-3 text-sm font-medium text-violet-400 transition-colors hover:bg-violet-500/20 disabled:opacity-50'
-                      >
-                        {paying === 'recurring' ? 'Redirecting…' : `Start subscription — ${formatCents(cart.recurringTotal)}/mo`}
-                      </button>
-                    </div>
-                  )}
+                  <button
+                    onClick={handlePay}
+                    disabled={paying}
+                    className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2'
+                  >
+                    {paying ? (
+                      <>
+                        <svg className='h-4 w-4 animate-spin' fill='none' viewBox='0 0 24 24'>
+                          <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
+                          <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z' />
+                        </svg>
+                        Redirecting to Stripe…
+                      </>
+                    ) : (
+                      <>Pay deposit — {formatCents(cart.depositTotal)}</>
+                    )}
+                  </button>
 
                   <p className='text-center text-xs text-[var(--text-faint)]'>
-                    First payment is a 40% deposit. Remaining balance invoiced at project milestones.
+                    Deposit only. Remaining balance invoiced at project milestones.
                     Secure checkout powered by Stripe.
                   </p>
                 </motion.div>

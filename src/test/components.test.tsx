@@ -101,16 +101,16 @@ describe('Pricing', () => {
     }
   })
 
-  it('renders the tab switcher', () => {
+  it('renders care plans section', () => {
     renderWithRouter(<Pricing />)
-    expect(screen.getByText('One-time projects')).toBeInTheDocument()
-    expect(screen.getByText('Monthly plans')).toBeInTheDocument()
+    expect(screen.getByText('Monthly care plans')).toBeInTheDocument()
   })
 
-  it('renders Add to Cart buttons for one-time packages', () => {
+  it('renders CTA buttons for one-time packages', () => {
     renderWithRouter(<Pricing />)
-    const addButtons = screen.getAllByText('Add to Cart')
-    expect(addButtons.length).toBe(oneTimePackages.length)
+    for (const pkg of oneTimePackages) {
+      expect(screen.getByText(pkg.cta)).toBeInTheDocument()
+    }
   })
 })
 

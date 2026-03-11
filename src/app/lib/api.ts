@@ -1,5 +1,9 @@
 import { supabase } from './supabase'
 
+// In production, set VITE_API_URL to your backend URL (e.g. https://api.tychosystem.com).
+// In development, leave it unset — Vite's proxy forwards /api to localhost:3001.
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? ''
+
 /**
  * Authenticated fetch wrapper for all /api/* calls.
  * Automatically attaches the current Supabase session token as Bearer.
@@ -17,5 +21,5 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
     headers['Authorization'] = `Bearer ${session.access_token}`
   }
 
-  return fetch(path, { ...init, headers })
+  return fetch(`${API_BASE}${path}`, { ...init, headers })
 }

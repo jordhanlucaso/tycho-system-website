@@ -56,8 +56,8 @@ contractsRouter.post('/create', async (req, res) => {
     const ctx = buildCtx(customerName, customerEmail, customerBusiness, customerPhone, items)
     const contractText = renderContractText(ctx)
 
-    const oneTimeTotal  = items.filter((i) => !i.recurring).reduce((s, i) => s + i.priceInCents, 0)
-    const recurringTotal = items.filter((i) =>  i.recurring).reduce((s, i) => s + i.priceInCents, 0)
+    const oneTimeTotal = items.filter((i) => !i.recurring).reduce((s, i) => s + i.priceInCents, 0)
+    const depositTotal = items.reduce((s, i) => s + (i.depositPriceInCents ?? i.priceInCents), 0)
 
     const { data, error } = await supabase
       .from('contracts')
@@ -71,7 +71,7 @@ contractsRouter.post('/create', async (req, res) => {
         customer_phone:       customerPhone || null,
         items_json:           items,
         one_time_total_cents: oneTimeTotal,
-        recurring_total_cents: recurringTotal,
+        recurring_total_cents: depositTotal,
       })
       .select('id')
       .single()
@@ -148,13 +148,13 @@ contractsRouter.post('/:id/sign', async (req, res) => {
 })
 
 // ─── POST /api/contracts/:id/payment ────────────────────────────────────────
-// Step 3: verify contract is signed, create Stripe Checkout session.
+// Step 3: verify contract is signed, create a single Stripe Checkout session.
+// Mixed carts (one-time + recurring) are handled in one subscription session —
+// Stripe charges one-time items on the first invoice automatically.
 contractsRouter.post('/:id/payment', async (req, res) => {
   try {
-    const { filter } = req.body as { filter?: 'one-time' | 'recurring' }
     const contractId = req.params.id
 
-    // Fetch contract
     const { data: contract, error } = await supabase
       .from('contracts')
       .select('*')
@@ -176,62 +176,26 @@ contractsRouter.post('/:id/payment', async (req, res) => {
 
     const allItems: ContractItem[] = contract.items_json
 
-    // Apply filter for mixed carts
-    const filteredItems = filter === 'one-time'
-      ? allItems.filter((i) => !i.recurring)
-      : filter === 'recurring'
-        ? allItems.filter((i) => i.recurring)
-        : allItems
-
-    if (!filteredItems.length) {
-      res.status(400).json({ error: 'No items match the specified filter' })
-      return
-    }
-
-    const hasRecurring = filteredItems.some((i) => i.recurring)
-    const hasOneTime   = filteredItems.some((i) => !i.recurring)
-
-    if (hasRecurring && hasOneTime) {
-      res.status(400).json({ error: 'Use filter=one-time or filter=recurring for mixed carts' })
-      return
-    }
-
-    const mode = hasRecurring ? 'subscription' : 'payment'
-
-    const lineItems = filteredItems.map((item) => ({
+    // Checkout is deposit-only, always one-time payment mode.
+    // Stripe charges depositPriceInCents (not full project price).
+    const lineItems = allItems.map((item) => ({
       price_data: {
         currency: 'usd',
-        product_data: { name: item.name },
-        unit_amount: item.priceInCents,
-        ...(item.recurring ? { recurring: { interval: 'month' as const } } : {}),
+        product_data: { name: item.invoiceLabel || item.name },
+        unit_amount: item.depositPriceInCents ?? item.priceInCents,
       },
       quantity: 1,
     }))
 
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173'
-    // For subscriptions, apply a free trial so billing starts after project delivery,
-    // not immediately at checkout. Configurable via CARE_PLAN_TRIAL_DAYS (default: 30).
-    const trialDays = mode === 'subscription'
-      ? parseInt(process.env.CARE_PLAN_TRIAL_DAYS ?? '30', 10)
-      : undefined
 
     const session = await stripe.checkout.sessions.create({
-      mode,
+      mode: 'payment',
       payment_method_types: ['card'],
       line_items: lineItems,
       customer_email: contract.customer_email,
-      metadata: {
-        customerName: contract.customer_name,
-        contractId,
-        filter: filter ?? 'all',
-      },
-      ...(trialDays !== undefined ? {
-        subscription_data: {
-          trial_period_days: trialDays,
-          metadata: { contractId },
-        },
-      } : {}),
-      success_url: `${clientUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}&type=${mode}&id=${contractId}`,
+      metadata: { customerName: contract.customer_name, contractId },
+      success_url: `${clientUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}&id=${contractId}`,
       cancel_url:  `${clientUrl}/checkout/sign?id=${contractId}&cancelled=true`,
     })
 
@@ -240,7 +204,7 @@ contractsRouter.post('/:id/payment', async (req, res) => {
       .update({ stripe_session_id: session.id })
       .eq('id', contractId)
 
-    res.json({ url: session.url, mode })
+    res.json({ url: session.url, mode: 'payment' })
   } catch (err) {
     console.error('contracts/payment error:', err)
     res.status(500).json({ error: err instanceof Error ? err.message : 'Failed to create payment session' })

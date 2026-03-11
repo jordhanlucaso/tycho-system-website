@@ -2,6 +2,7 @@ import { useState, useEffect, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { useCart } from '../lib/cart'
+import { apiFetch } from '../lib/api'
 import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'
 import { CartDrawer } from '../components/layout/CartDrawer'
@@ -28,9 +29,6 @@ export function Checkout() {
 
   if (cart.itemCount === 0) return null
 
-  const oneTimeItems = cart.items.filter((i) => !i.recurring)
-  const recurringItems = cart.items.filter((i) => i.recurring)
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setSubmitting(true)
@@ -39,22 +37,29 @@ export function Checkout() {
     const form = new FormData(e.currentTarget)
 
     try {
-      const res = await fetch('/api/contracts/create', {
+      const res = await apiFetch('/api/contracts/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerName:     form.get('name') as string,
           customerEmail:    form.get('email') as string,
           customerBusiness: form.get('business') as string,
           customerPhone:    form.get('phone') as string || undefined,
           items: cart.items.map((i) => ({
-            name:         i.name,
-            priceInCents: i.priceInCents,
-            recurring:    i.recurring,
-            delivery:     i.delivery,
-            revisions:    i.revisions,
-            features:     i.features,
-            description:  i.description,
+            id:                   i.id,
+            sku:                  i.sku,
+            name:                 i.name,
+            contractTitle:        i.contractTitle,
+            invoiceLabel:         i.invoiceLabel,
+            priceInCents:         i.priceInCents,
+            depositPriceInCents:  i.depositPriceInCents,
+            remainingMilestones:  i.remainingMilestones,
+            recurring:            i.recurring,
+            delivery:             i.delivery,
+            revisions:            i.revisions,
+            includedPages:        i.includedPages,
+            features:             i.features,
+            outOfScope:           i.outOfScope,
+            description:          i.description,
           })),
         }),
       })
@@ -107,14 +112,12 @@ export function Checkout() {
               <div className='space-y-4'>
                 <h2 className='text-lg font-semibold text-[var(--text-primary)]'>Order summary</h2>
 
-                {oneTimeItems.length > 0 && (
-                  <div>
-                    {cart.items.some((i) => i.recurring) && (
-                      <div className='mb-2 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]'>One-time projects</div>
-                    )}
-                    <div className='space-y-2'>
-                      {oneTimeItems.map((item) => (
-                        <div key={item.id} className='glass flex items-start justify-between rounded-xl p-4 gap-4'>
+                <div className='space-y-2'>
+                  {cart.items.map((item) => {
+                    const deposit = item.depositPriceInCents ?? item.priceInCents
+                    return (
+                      <div key={item.id} className='glass rounded-xl p-4 space-y-2'>
+                        <div className='flex items-start justify-between gap-4'>
                           <div className='min-w-0'>
                             <div className='font-semibold text-[var(--text-primary)]'>{item.name}</div>
                             {item.description && <div className='text-xs text-[var(--text-muted)] mt-0.5'>{item.description}</div>}
@@ -124,51 +127,37 @@ export function Checkout() {
                             </div>
                           </div>
                           <div className='shrink-0 text-right'>
-                            <div className='text-gradient font-semibold'>{item.price}</div>
-                            <div className='text-xs text-[var(--text-muted)]'>one-time</div>
+                            <div className='font-semibold text-[var(--text-primary)]'>{item.price}</div>
+                            <div className='text-xs text-[var(--text-muted)]'>total price</div>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {recurringItems.length > 0 && (
-                  <div>
-                    {cart.items.some((i) => !i.recurring) && (
-                      <div className='mb-2 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]'>Monthly subscriptions</div>
-                    )}
-                    <div className='space-y-2'>
-                      {recurringItems.map((item) => (
-                        <div key={item.id} className='glass flex items-start justify-between rounded-xl p-4 gap-4'>
-                          <div className='min-w-0'>
-                            <div className='font-semibold text-[var(--text-primary)]'>{item.name}</div>
-                            {item.description && <div className='text-xs text-[var(--text-muted)] mt-0.5'>{item.description}</div>}
+                        <div className='border-t border-[var(--border-subtle)] pt-2 space-y-1'>
+                          <div className='flex justify-between text-xs'>
+                            <span className='text-[var(--text-muted)]'>Deposit due today</span>
+                            <span className='text-gradient font-semibold'>{formatCents(deposit)}</span>
                           </div>
-                          <div className='shrink-0 text-right'>
-                            <div className='text-gradient font-semibold'>{item.price}</div>
-                            <div className='text-xs text-[var(--text-muted)]'>/mo</div>
-                          </div>
+                          {item.remainingMilestones?.map((m) => (
+                            <div key={m.label} className='flex justify-between text-xs text-[var(--text-faint)]'>
+                              <span>{m.label}</span>
+                              <span>{formatCents(m.amountInCents)}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                      </div>
+                    )
+                  })}
+                </div>
 
                 {/* Totals */}
                 <div className='glass rounded-xl p-4 space-y-2'>
-                  {cart.oneTimeTotal > 0 && (
-                    <div className='flex justify-between text-sm'>
-                      <span className='text-[var(--text-secondary)]'>One-time total</span>
-                      <span className='font-semibold text-[var(--text-primary)]'>{formatCents(cart.oneTimeTotal)}</span>
-                    </div>
-                  )}
-                  {cart.recurringTotal > 0 && (
-                    <div className='flex justify-between text-sm'>
-                      <span className='text-[var(--text-secondary)]'>Monthly recurring</span>
-                      <span className='font-semibold text-[var(--text-primary)]'>{formatCents(cart.recurringTotal)}/mo</span>
-                    </div>
-                  )}
+                  <div className='flex justify-between text-sm'>
+                    <span className='text-[var(--text-secondary)]'>Total project price</span>
+                    <span className='font-semibold text-[var(--text-primary)]'>{formatCents(cart.oneTimeTotal)}</span>
+                  </div>
+                  <div className='flex justify-between text-sm border-t border-[var(--border-subtle)] pt-2'>
+                    <span className='text-[var(--text-secondary)]'>Deposit due today</span>
+                    <span className='text-gradient font-semibold text-base'>{formatCents(cart.depositTotal)}</span>
+                  </div>
                 </div>
 
                 {/* What happens next */}
@@ -177,7 +166,7 @@ export function Checkout() {
                   <ol className='space-y-1.5 text-xs text-[var(--text-secondary)]'>
                     <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>1.</span>Submit your details below</li>
                     <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>2.</span>Review and e-sign the service agreement</li>
-                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>3.</span>Complete payment via Stripe — first 40% deposit</li>
+                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>3.</span>Pay deposit of {formatCents(cart.depositTotal)} via Stripe — remaining balance due at milestones</li>
                     <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>4.</span>We kick off your project within 1–2 business days</li>
                   </ol>
                 </div>

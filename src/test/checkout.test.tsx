@@ -56,10 +56,9 @@ beforeEach(() => {
 describe('Checkout (Step 1 — Customer Info)', () => {
   it('renders order summary with cart items', async () => {
     await act(async () => {
-      renderCheckout([tiers[0], tiers[1]])
+      renderCheckout([tiers[0]])
     })
-    expect(screen.getByText('Local Starter')).toBeInTheDocument()
-    expect(screen.getByText('Local Business')).toBeInTheDocument()
+    expect(screen.getByText('Starter Website')).toBeInTheDocument()
   })
 
   it('renders customer info form fields', async () => {
@@ -99,16 +98,8 @@ describe('Checkout (Step 1 — Customer Info)', () => {
     await act(async () => {
       renderCheckout([tiers[0]])
     })
-    // local-starter priceInCents=125000 → $1,250
-    expect(screen.getAllByText(/\$1,250/).length).toBeGreaterThan(0)
-  })
-
-  it('shows mixed cart section headers', async () => {
-    await act(async () => {
-      renderCheckout([oneTimePackages[0], monthlyPlans[0]])
-    })
-    expect(screen.getByText('One-time projects')).toBeInTheDocument()
-    expect(screen.getByText('Monthly subscriptions')).toBeInTheDocument()
+    // starter-website priceInCents=199000 → $1,990
+    expect(screen.getAllByText(/\$1,990/).length).toBeGreaterThan(0)
   })
 })
 
@@ -185,8 +176,8 @@ describe('SignContract (Step 2 — Agreement & Payment)', () => {
     })
   })
 
-  it('shows split payment buttons for mixed cart after signing', async () => {
-    sessionStorage.setItem('contract_id', 'ctr-mixed')
+  it('shows single deposit payment button after signing', async () => {
+    sessionStorage.setItem('contract_id', 'ctr-deposit')
     sessionStorage.setItem('contract_text', 'Test contract.')
 
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
@@ -197,7 +188,7 @@ describe('SignContract (Step 2 — Agreement & Payment)', () => {
       <MemoryRouter initialEntries={['/checkout/sign']}>
         <AuthProvider><ThemeProvider>
           <CartProvider>
-            <CartSeeder items={[oneTimePackages[0], monthlyPlans[0]]} />
+            <CartSeeder items={[oneTimePackages[0]]} />
             <SignContract />
           </CartProvider>
         </ThemeProvider></AuthProvider>
@@ -216,8 +207,7 @@ describe('SignContract (Step 2 — Agreement & Payment)', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByText(/Pay for projects/i)).toBeInTheDocument()
+      expect(screen.getByText(/Pay deposit/i)).toBeInTheDocument()
     })
-    expect(screen.getByText(/Start subscription/i)).toBeInTheDocument()
   })
 })
