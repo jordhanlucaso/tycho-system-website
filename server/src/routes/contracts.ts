@@ -78,7 +78,7 @@ contractsRouter.post('/create', async (req, res) => {
 
     if (error || !data) {
       console.error('Contract insert error:', error)
-      res.status(500).json({ error: 'Failed to create contract record' })
+      res.status(500).json({ error: 'Failed to create contract record', detail: error?.message, code: error?.code })
       return
     }
 
