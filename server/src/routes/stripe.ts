@@ -76,10 +76,10 @@ stripeRouter.post('/checkout', async (req, res) => {
 // Stripe webhook handler
 stripeRouter.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'] as string
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY
 
   if (!webhookSecret || webhookSecret === 'whsec_...') {
-    console.warn('STRIPE_WEBHOOK_SECRET not configured — skipping verification')
+    console.warn('STRIPE_WEBHOOK_SECRET_KEY not configured — skipping verification')
     res.json({ received: true })
     return
   }

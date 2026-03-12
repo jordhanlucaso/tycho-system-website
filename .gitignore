@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 .env
+railway-env.json
+
 
 # Editor directories and files
 .vscode/*
