@@ -22,20 +22,11 @@ const allowedOrigins = [
   'https://tycho-system-website.vercel.app',
 ]
 
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error(`CORS: origin ${origin} not allowed`))
-    }
-  },
+// CORS
+app.use(cors({
+  origin: allowedOrigins,
   credentials: true,
-}
-
-// CORS — handle preflight OPTIONS globally first
-app.options('/{*path}', cors(corsOptions))
-app.use(cors(corsOptions))
+}))
 
 // Parse JSON for all routes except Stripe webhooks (needs raw body)
 app.use((req, res, next) => {
