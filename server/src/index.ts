@@ -16,8 +16,26 @@ const app = express()
 const PORT = process.env.PORT || 3001
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173'
 
-// CORS
-app.use(cors({ origin: CLIENT_URL, credentials: true }))
+const allowedOrigins = [
+  CLIENT_URL,
+  'http://localhost:5173',
+  'https://tycho-system-website.vercel.app',
+]
+
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error(`CORS: origin ${origin} not allowed`))
+    }
+  },
+  credentials: true,
+}
+
+// CORS — handle preflight OPTIONS globally first
+app.options('*', cors(corsOptions))
+app.use(cors(corsOptions))
 
 // Parse JSON for all routes except Stripe webhooks (needs raw body)
 app.use((req, res, next) => {
