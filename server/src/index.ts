@@ -34,7 +34,7 @@ const corsOptions = {
 }
 
 // CORS — handle preflight OPTIONS globally first
-app.options('*', cors(corsOptions))
+app.options('/{*path}', cors(corsOptions))
 app.use(cors(corsOptions))
 
 // Parse JSON for all routes except Stripe webhooks (needs raw body)
