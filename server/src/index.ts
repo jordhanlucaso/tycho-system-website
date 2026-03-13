@@ -16,15 +16,20 @@ const app = express()
 const PORT = process.env.PORT || 3001
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173'
 
-const allowedOrigins = [
-  CLIENT_URL,
-  'http://localhost:5173',
-  'https://tycho-system-website.vercel.app',
-]
-
 // CORS
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (
+      !origin ||
+      origin === CLIENT_URL ||
+      origin === 'http://localhost:5173' ||
+      origin.endsWith('.vercel.app')
+    ) {
+      callback(null, true)
+    } else {
+      callback(null, false)
+    }
+  },
   credentials: true,
 }))
 
