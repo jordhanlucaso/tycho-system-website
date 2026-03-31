@@ -8,9 +8,9 @@ import { useTheme } from '../../lib/theme'
 import { Container } from './Container'
 
 const links = [
-  { href: '#services', label: 'Services' },
-  { href: '#mockups', label: 'Mockups' },
-  { href: '#pricing', label: 'Pricing' },
+  { href: '#packages', label: 'Packages' },
+  { href: '#process', label: 'Process' },
+  { href: '#included', label: 'What\'s Included' },
   { href: '#faq', label: 'FAQ' },
   { href: '#contact', label: 'Contact' }
 ]

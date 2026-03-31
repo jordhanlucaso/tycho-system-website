@@ -10,10 +10,10 @@ export type SiteConfig = {
 
 export const site: SiteConfig = {
   agencyName: 'Tycho Systems',
-  tagline: "Get more calls, more bookings, and a website you're proud of.",
-  description: 'We build fast, professional websites for local businesses. More customers find you. More of them contact you. Simple process, clear pricing.',
+  tagline: 'Websites for local businesses — built fast, launched properly, and supported after go-live.',
+  description: 'Tycho Systems helps local businesses get a professional website through a simple step-by-step process, from first call to launch, with optional ongoing support after the site goes live.',
   email: 'hello@tychosystems.com',
   location: 'Remote (US clients welcome)',
-  ctas: { primary: 'Get a free website check', secondary: 'See examples' },
+  ctas: { primary: 'Book a strategy call', secondary: 'See packages' },
   formEndpoint: ''
 }

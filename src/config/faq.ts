@@ -5,35 +5,27 @@ export type FaqItem = {
 
 export const faq: FaqItem[] = [
   {
-    q: 'What is the free website check?',
-    a: "We review your current site (or your top competitor's) across 5 areas: page speed, mobile experience, trust signals, contact clarity, and local SEO basics. You get a plain-English summary and recommendations within 1–2 business days — no strings attached.",
+    q: 'How long does it take?',
+    a: 'Most projects launch within 2–4 weeks depending on the package. The Starter Site is typically ready in 7–10 business days. We confirm your timeline on the first call and stick to it.',
   },
   {
-    q: 'How fast do I get my website?',
-    a: 'The Local Starter is typically ready in 7–10 business days. The Local Business package takes 2–3 weeks. We confirm the timeline when you kick off and stick to it.',
+    q: 'What do you need from me?',
+    a: 'Your business name, services, location, and any photos or brand materials you have. We handle the design, content writing, and all the technical setup. You review and approve before anything goes live.',
   },
   {
-    q: 'What do I need to provide?',
-    a: 'Your business name, services, city, and any photos you have. We handle the design, write the copy, and take care of all the technical setup. You review and approve before anything goes live.',
+    q: 'Can you help with domain and hosting?',
+    a: "Yes. We'll walk you through domain registration, DNS setup, and hosting options. If you already have a domain or hosting, we work with your existing setup. If not, we'll guide you step by step.",
   },
   {
-    q: 'Is the Care plan required?',
-    a: 'No. Care is optional. It covers hosting, backups, updates, and small monthly edits. If you already have hosting or want to manage things yourself, that works too. If you add Care at checkout, your first 30 days are free so billing starts after your site is live.',
+    q: 'How many revisions are included?',
+    a: 'Every package includes revision rounds — 1 round for the Starter Site, 2 for the Growth Site, and 3 for Site + Monthly Care. We start with a design mockup for your approval before we build anything, so revisions are usually small.',
   },
   {
-    q: 'Can you add online booking or appointment scheduling?',
-    a: 'Yes. The Local Bookings package includes full booking integration (Calendly, Acuity, Square, or similar). It can also be added to other packages as an add-on.',
+    q: 'Do you offer ongoing support?',
+    a: 'Yes. Our monthly care plans cover hosting, backups, updates, and small edits after launch. Care is optional — if you want to manage things yourself, that works too. First 30 days are free with any website package.',
   },
   {
-    q: "What if I don't like the design?",
-    a: "We start every project with a design mockup for your approval before we build anything. Every package includes revision rounds, so you won't be stuck with something you don't love.",
-  },
-  {
-    q: 'Do you handle hosting?',
-    a: "We can set up and manage hosting for you as part of the Care plan, or we can work with your existing provider. Either way, we'll guide you through what you need.",
-  },
-  {
-    q: 'Can I add niche-specific pages later?',
-    a: 'Absolutely. The site is built to grow with you — you can add service pages, location pages, a blog, or a booking system at any time.',
+    q: 'Do I need to provide all text and images?',
+    a: "No. We write the copy and can source professional stock images if needed. If you have specific photos, brand guidelines, or content you'd like to use, we'll incorporate those. You review everything before launch.",
   },
 ]

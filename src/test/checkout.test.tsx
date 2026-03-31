@@ -58,7 +58,7 @@ describe('Checkout (Step 1 — Customer Info)', () => {
     await act(async () => {
       renderCheckout([tiers[0]])
     })
-    expect(screen.getByText('Starter Website')).toBeInTheDocument()
+    expect(screen.getByText('Starter Site')).toBeInTheDocument()
   })
 
   it('renders customer info form fields', async () => {

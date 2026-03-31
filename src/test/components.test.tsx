@@ -13,6 +13,7 @@ import { Pricing } from '../app/components/blocks/Pricing'
 import { FAQ } from '../app/components/blocks/FAQ'
 import { Contact } from '../app/components/blocks/Contact'
 import { Testimonials } from '../app/components/blocks/Testimonials'
+import { WhoItsFor } from '../app/components/blocks/WhoItsFor'
 import { SalesLayout } from '../app/components/layout/SalesLayout'
 import { SalesNewSale } from '../app/routes/sales/NewSale'
 import { site } from '../config/site'
@@ -40,9 +41,9 @@ describe('Navbar', () => {
 
   it('renders navigation links', () => {
     renderWithRouter(<Navbar />)
-    expect(screen.getAllByText('Services').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Mockups').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Pricing').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Packages').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Process').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('FAQ').length).toBeGreaterThan(0)
   })
 
   it('renders the mobile menu button', () => {
@@ -66,6 +67,16 @@ describe('Hero', () => {
     renderWithRouter(<Hero />)
     expect(screen.getByText(site.ctas.primary)).toBeInTheDocument()
     expect(screen.getByText(site.ctas.secondary)).toBeInTheDocument()
+  })
+})
+
+describe('WhoItsFor', () => {
+  it('renders audience cards', () => {
+    render(<WhoItsFor />)
+    expect(screen.getByText('Restaurants')).toBeInTheDocument()
+    expect(screen.getByText('Salons & Beauty')).toBeInTheDocument()
+    expect(screen.getByText('Trades & Home Services')).toBeInTheDocument()
+    expect(screen.getByText('Local Professional Services')).toBeInTheDocument()
   })
 })
 
@@ -108,8 +119,9 @@ describe('Pricing', () => {
 
   it('renders CTA buttons for one-time packages', () => {
     renderWithRouter(<Pricing />)
-    for (const pkg of oneTimePackages) {
-      expect(screen.getByText(pkg.cta)).toBeInTheDocument()
+    const ctaLabels = new Set(oneTimePackages.map((p) => p.cta))
+    for (const label of ctaLabels) {
+      expect(screen.getAllByText(label).length).toBeGreaterThan(0)
     }
   })
 })
@@ -131,13 +143,12 @@ describe('Testimonials', () => {
 describe('Contact', () => {
   it('renders the contact section heading', () => {
     renderWithRouter(<Contact />)
-    expect(screen.getByText('Have a question?')).toBeInTheDocument()
+    expect(screen.getByText('Get in touch')).toBeInTheDocument()
   })
 
-  it('renders the website check CTA', () => {
+  it('renders the strategy call CTA', () => {
     renderWithRouter(<Contact />)
-    expect(screen.getByText('Free 5-Point Website Check')).toBeInTheDocument()
-    expect(screen.getByText('Get my free website check')).toBeInTheDocument()
+    expect(screen.getByText('Book a strategy call', { selector: 'h3' })).toBeInTheDocument()
   })
 })
 

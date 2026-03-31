@@ -5,33 +5,39 @@ import { Container } from '../layout/Container'
 const steps = [
   {
     number: '01',
-    title: 'Free website check',
-    desc: "We review your current site (or a blank slate if you don't have one) and show you exactly what's holding you back.",
-    cta: null,
+    title: 'Book a call',
+    desc: 'We learn about your business, goals, and what you need from your website.',
   },
   {
     number: '02',
-    title: 'Personalized mockup',
-    desc: 'We send you a custom design preview for your business — real content, real layout — before you pay anything.',
-    cta: null,
+    title: 'Get a clear proposal',
+    desc: 'You receive a fixed-price proposal with a defined scope, timeline, and deliverables.',
   },
   {
     number: '03',
-    title: 'We build it',
-    desc: 'You approve the design, we build and launch. Most sites go live within 2–3 weeks. Clear milestones, no surprises.',
-    cta: null,
+    title: 'Send assets & access',
+    desc: 'Share your logo, photos, and any content you have. We handle the rest.',
   },
   {
     number: '04',
-    title: 'Optional ongoing care',
-    desc: 'Keep the site fresh with our monthly Care plan — hosting, updates, and small edits included.',
-    cta: null,
+    title: 'Review on staging',
+    desc: 'You review your site on a private staging link before anything goes live.',
+  },
+  {
+    number: '05',
+    title: 'Launch',
+    desc: 'We handle the go-live process — domain, DNS, hosting — and make sure everything works.',
+  },
+  {
+    number: '06',
+    title: 'Ongoing support',
+    desc: 'Optional monthly care plan for hosting, updates, and small edits after launch.',
   },
 ]
 
 export function ProcessSteps() {
   return (
-    <section id='how-it-works' className='border-t border-[var(--border-subtle)] py-16'>
+    <section id='process' className='border-t border-[var(--border-subtle)] py-16'>
       <Container>
         <motion.div
           className='space-y-2'
@@ -42,11 +48,11 @@ export function ProcessSteps() {
         >
           <h2 className='text-gradient text-2xl font-semibold tracking-tight'>How it works</h2>
           <p className='max-w-prose text-sm text-[var(--text-secondary)]'>
-            A simple 4-step process. No tech knowledge required on your end.
+            A simple 6-step process from first call to launch. No tech knowledge required.
           </p>
         </motion.div>
 
-        <div className='mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
           {steps.map((step, i) => (
             <motion.div
               key={step.number}
@@ -54,12 +60,8 @@ export function ProcessSteps() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
             >
-              {/* connector line */}
-              {i < steps.length - 1 && (
-                <div className='absolute left-full top-5 hidden h-px w-6 bg-gradient-to-r from-violet-500/30 to-transparent lg:block' />
-              )}
               <div className='glass rounded-2xl p-5 h-full flex flex-col gap-3'>
                 <div className='text-2xl font-semibold text-gradient leading-none'>{step.number}</div>
                 <div className='text-sm font-semibold text-[var(--text-primary)]'>{step.title}</div>
@@ -80,7 +82,7 @@ export function ProcessSteps() {
             to='/website-check'
             className='inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
           >
-            Start with a free website check
+            Book a strategy call
             <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
               <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
             </svg>

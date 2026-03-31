@@ -4,18 +4,18 @@ import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { CartDrawer } from '../components/layout/CartDrawer'
 import { Hero } from '../components/blocks/Hero'
+import { WhoItsFor } from '../components/blocks/WhoItsFor'
+import { Pricing } from '../components/blocks/Pricing'
 import { ProcessSteps } from '../components/blocks/ProcessSteps'
 import { Services } from '../components/blocks/Services'
-import { Gallery } from '../components/blocks/Gallery'
 import { Testimonials } from '../components/blocks/Testimonials'
-import { Pricing } from '../components/blocks/Pricing'
 import { CTABanner } from '../components/blocks/CTABanner'
 import { FAQ } from '../components/blocks/FAQ'
 import { Contact } from '../components/blocks/Contact'
 
 export function Home() {
   useEffect(() => {
-    document.title = `${site.agencyName} — Professional Websites for Local Businesses`
+    document.title = `${site.agencyName} | Websites for Local Businesses`
   }, [])
 
   return (
@@ -23,20 +23,20 @@ export function Home() {
       <Navbar />
       <main>
         <Hero />
+        <WhoItsFor />
+        <Pricing />
         <ProcessSteps />
         <Services />
-        <Gallery />
         <Testimonials />
-        <Pricing />
-        <CTABanner
-          headline='Not sure where to start?'
-          subheadline='Get a free 5-point check on your current website. No commitment, no hard sell — just honest feedback.'
-          primaryLabel='Get my free website check'
-          primaryTo='/website-check'
-          secondaryLabel='See pricing'
-          secondaryHref='#pricing'
-        />
         <FAQ />
+        <CTABanner
+          headline='Ready to get your business online properly?'
+          subheadline="Book a call and we'll walk you through the fastest path from where you are now to a site you're proud of."
+          primaryLabel='Book a strategy call'
+          primaryTo='/website-check'
+          secondaryLabel='See packages'
+          secondaryHref='#packages'
+        />
         <Contact />
       </main>
       <Footer />

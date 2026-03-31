@@ -1,5 +1,4 @@
 import { motion } from 'motion/react'
-import { Link } from 'react-router-dom'
 import { Container } from '../layout/Container'
 import { services } from '../../../config/services'
 
@@ -14,27 +13,19 @@ const iconPaths: Record<string, string> = {
 
 export function Services() {
   return (
-    <section id='services' className='border-t border-[var(--border-subtle)] py-16'>
+    <section id='included' className='border-t border-[var(--border-subtle)] py-16'>
       <Container>
         <motion.div
-          className='flex flex-col gap-3 md:flex-row md:items-end md:justify-between'
+          className='space-y-2'
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.5 }}
         >
-          <div className='space-y-2'>
-            <h2 className='text-gradient text-2xl font-semibold tracking-tight'>What you get</h2>
-            <p className='max-w-prose text-sm text-[var(--text-secondary)]'>
-              Every site we build is designed around one goal: getting your phone to ring.
-            </p>
-          </div>
-          <Link
-            to='/website-check'
-            className='text-sm font-medium text-violet-400 hover:text-violet-300 transition-colors'
-          >
-            Start with a free check →
-          </Link>
+          <h2 className='text-gradient text-2xl font-semibold tracking-tight'>What's included</h2>
+          <p className='max-w-prose text-sm text-[var(--text-secondary)]'>
+            Every project comes with the fundamentals you need to launch properly.
+          </p>
         </motion.div>
 
         <div className='mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>

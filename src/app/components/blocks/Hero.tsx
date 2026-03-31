@@ -9,9 +9,9 @@ const fadeUp = {
 }
 
 const outcomes = [
-  { k: 'More calls', v: 'from Google' },
-  { k: 'Live in 2–3 wks', v: 'fast delivery' },
-  { k: 'Clear pricing', v: 'no surprises' },
+  { k: 'Simple process', v: 'discovery to launch' },
+  { k: 'Live in 2–4 wks', v: 'depending on package' },
+  { k: 'Support after launch', v: 'optional care plans' },
 ]
 
 export function Hero() {
@@ -55,7 +55,7 @@ export function Hero() {
               <Link to='/website-check' className='rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'>
                 {site.ctas.primary}
               </Link>
-              <a href='#mockups' className='rounded-2xl border border-[var(--border-primary)] px-5 py-3 text-sm font-medium text-[var(--text-body)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'>
+              <a href='#packages' className='rounded-2xl border border-[var(--border-primary)] px-5 py-3 text-sm font-medium text-[var(--text-body)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'>
                 {site.ctas.secondary}
               </a>
             </motion.div>
@@ -67,19 +67,6 @@ export function Hero() {
                   <div className='text-xs text-[var(--text-muted)]'>{x.v}</div>
                 </div>
               ))}
-            </motion.div>
-
-            <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
-              <Link
-                to='/quiz'
-                className='inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-violet-400 transition-colors'
-              >
-                <span>✦</span>
-                Not sure which plan fits? Take the 60-second quiz
-                <svg className='h-3.5 w-3.5' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
-                  <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
-                </svg>
-              </Link>
             </motion.div>
           </motion.div>
 

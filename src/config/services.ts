@@ -6,33 +6,38 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    title: 'More calls & bookings',
-    desc: 'Clear CTAs, click-to-call, and contact forms that make it easy for customers to reach you.',
-    icon: 'phone',
-  },
-  {
-    title: 'Better first impression',
-    desc: 'A clean, professional look that builds trust before a customer even calls or walks in.',
-    icon: 'star',
-  },
-  {
     title: 'Mobile-first design',
-    desc: 'Most customers find you on their phone. Your site will look great on every screen.',
+    desc: 'Every site is built for phones first — where most of your customers are looking.',
     icon: 'device',
   },
   {
-    title: 'Copy that converts',
-    desc: "We write clear, simple words that explain what you do and why customers should choose you.",
-    icon: 'edit',
+    title: 'Modern, fast-loading build',
+    desc: 'Clean code and optimized assets so your site loads fast and works reliably.',
+    icon: 'star',
   },
   {
-    title: 'Local SEO basics',
-    desc: 'Fast load times, proper structure, and Google-ready setup so more people find you online.',
+    title: 'Contact form setup',
+    desc: 'Click-to-call, email forms, and maps so customers can reach you easily.',
+    icon: 'phone',
+  },
+  {
+    title: 'Basic SEO foundations',
+    desc: 'Proper page structure, meta tags, and Google-ready setup out of the box.',
     icon: 'search',
   },
   {
-    title: 'Ongoing care plan',
-    desc: 'Optional monthly plan — hosting, updates, and small edits so your site never falls behind.',
+    title: 'Domain & DNS guidance',
+    desc: 'We walk you through domain registration, DNS setup, and hosting — no tech knowledge needed.',
+    icon: 'edit',
+  },
+  {
+    title: 'Launch support',
+    desc: 'We handle the go-live process and make sure everything works before handing it over.',
+    icon: 'shield',
+  },
+  {
+    title: 'Optional monthly care',
+    desc: 'Ongoing hosting, updates, and small edits so your site stays current after launch.',
     icon: 'shield',
   },
 ]

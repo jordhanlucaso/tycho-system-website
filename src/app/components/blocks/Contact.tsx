@@ -17,10 +17,9 @@ export function Contact() {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className='text-gradient text-2xl font-semibold tracking-tight'>Have a question?</h2>
+            <h2 className='text-gradient text-2xl font-semibold tracking-tight'>Get in touch</h2>
             <p className='text-sm text-[var(--text-secondary)]'>
-              Not ready for a full website check yet? Happy to answer a quick question first.
-              Reach out and we'll get back to you within 24 hours.
+              Have a question before booking? Reach out and we'll get back to you within 24 hours.
             </p>
 
             <div className='space-y-3'>
@@ -60,21 +59,19 @@ export function Contact() {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            {/* Primary offer card */}
             <div className='glass rounded-2xl p-6 space-y-4'>
               <div className='space-y-1'>
-                <p className='text-xs font-semibold uppercase tracking-wider text-violet-400'>Most popular first step</p>
-                <h3 className='text-base font-semibold text-[var(--text-primary)]'>Free 5-Point Website Check</h3>
+                <p className='text-xs font-semibold uppercase tracking-wider text-violet-400'>Best first step</p>
+                <h3 className='text-base font-semibold text-[var(--text-primary)]'>Book a strategy call</h3>
                 <p className='text-sm text-[var(--text-secondary)]'>
-                  We review your site (or a competitor's) and show you exactly what's hurting your chances of getting calls.
-                  Plain English, no jargon.
+                  We'll talk through your business, what you need, and which package fits. No pressure, no hard sell — just honest guidance.
                 </p>
               </div>
               <ul className='space-y-1.5 text-xs text-[var(--text-secondary)]'>
-                {['Speed & mobile experience', 'Trust signals & design', 'Contact clarity', 'Local SEO basics'].map((item) => (
+                {['Understand your goals', 'Review your current online presence', 'Recommend a package', 'Answer any questions'].map((item) => (
                   <li key={item} className='flex items-center gap-2'>
                     <span className='h-3.5 w-3.5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0'>
-                      <span className='text-[8px] text-emerald-400'>✓</span>
+                      <span className='text-[8px] text-emerald-400'>&#10003;</span>
                     </span>
                     {item}
                   </li>
@@ -84,7 +81,7 @@ export function Contact() {
                 to='/website-check'
                 className='inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
               >
-                Get my free website check
+                Book a strategy call
                 <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                   <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
                 </svg>

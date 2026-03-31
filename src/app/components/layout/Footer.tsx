@@ -10,14 +10,14 @@ export function Footer() {
             <span className='font-medium text-[var(--text-primary)]'>{site.agencyName}</span> &middot; {site.location}
           </div>
           <div className='flex flex-wrap gap-4'>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#services'>
-              Services
+            <a className='transition-colors hover:text-[var(--text-primary)]' href='#packages'>
+              Packages
             </a>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#mockups'>
-              Mockups
+            <a className='transition-colors hover:text-[var(--text-primary)]' href='#process'>
+              Process
             </a>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#pricing'>
-              Pricing
+            <a className='transition-colors hover:text-[var(--text-primary)]' href='#included'>
+              What's Included
             </a>
             <a className='transition-colors hover:text-[var(--text-primary)]' href='#contact'>
               Contact

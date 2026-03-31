@@ -141,7 +141,7 @@ export function Pricing() {
   const cart = useCart()
 
   return (
-    <section id='pricing' className='relative border-t border-[var(--border-subtle)] py-16'>
+    <section id='packages' className='relative border-t border-[var(--border-subtle)] py-16'>
       <div className='glow-orb right-1/4 top-0 h-64 w-64 bg-cyan-500' />
 
       <Container>
@@ -154,13 +154,13 @@ export function Pricing() {
           transition={{ duration: 0.5 }}
         >
           <h2 className='text-gradient text-2xl font-semibold tracking-tight'>
-            Fixed website packages for small businesses
+            Packages
           </h2>
           <p className='max-w-prose text-sm text-[var(--text-secondary)]'>
-            Clear scope, fixed pricing, and predictable payment milestones. Optional care plans are available after launch.
+            Fixed scope, clear pricing, and a predictable process. Pick the package that fits your business.
           </p>
           <p className='text-xs text-[var(--text-muted)]'>
-            Standard packages have fixed pricing. If your project falls outside the listed scope, we'll recommend a custom quote instead.
+            If your project falls outside the listed scope, we'll recommend a custom quote instead.
           </p>
         </motion.div>
 
