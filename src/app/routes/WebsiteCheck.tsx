@@ -17,12 +17,10 @@ declare global {
 
 const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
 
-const checks = [
-  { icon: '⚡', label: 'Page speed', desc: 'Does it load fast on mobile?' },
-  { icon: '📱', label: 'Mobile experience', desc: 'Is it easy to use on a phone?' },
-  { icon: '✅', label: 'Trust signals', desc: 'Does it look professional and credible?' },
-  { icon: '📞', label: 'Contact clarity', desc: 'Can customers easily call, book, or reach you?' },
-  { icon: '📍', label: 'Local SEO basics', desc: 'Is it set up for Google to find you?' },
+const nextSteps = [
+  { num: '1', title: 'I review your request', desc: 'I look at your business, current website (if any), and what you need.' },
+  { num: '2', title: 'I reach out with the best next step', desc: 'You get a clear recommendation — no jargon, no pressure.' },
+  { num: '3', title: 'We book a call or move to a proposal', desc: 'If it makes sense, we jump straight into scoping your project.' },
 ]
 
 export function WebsiteCheck() {
@@ -31,7 +29,7 @@ export function WebsiteCheck() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    document.title = 'Free Website Check — Tycho Systems'
+    document.title = 'Book a Strategy Call — Tycho Systems'
     if (!SITE_KEY || document.getElementById('recaptcha-script')) return
     const script = document.createElement('script')
     script.id = 'recaptcha-script'
@@ -71,8 +69,8 @@ export function WebsiteCheck() {
           city:         data.get('city') as string,
           category:     data.get('category') as string,
           email:        data.get('email') as string,
-          message:      `Website Check Request — ${data.get('business')} (${data.get('city')})`,
-          source:       'website-check',
+          message:      `Strategy Call Request — ${data.get('business')} (${data.get('city')})`,
+          source:       'strategy-call',
           recaptchaToken,
         }),
       })
@@ -104,33 +102,35 @@ export function WebsiteCheck() {
                 <div>
                   <div className='inline-flex items-center gap-2 rounded-full border border-[var(--border-primary)] bg-[var(--bg-surface)] px-3 py-1 text-xs text-[var(--text-secondary)] mb-4'>
                     <span className='h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]' />
-                    Free — no credit card required
+                    Free — no commitment required
                   </div>
                   <h1 className='text-gradient text-3xl font-semibold tracking-tight'>
-                    Free 5-Point Website Check
+                    Book a strategy call
                   </h1>
                   <p className='mt-3 text-[var(--text-secondary)]'>
-                    Tell us about your business and we'll review your current website (or audit a competitor's) across 5 areas that directly affect how many customers contact you.
+                    Tell me a bit about your business and what you need help with. I'll review your situation and guide you toward the fastest, most practical next step for your website.
                   </p>
                 </div>
 
                 <div className='space-y-3'>
-                  <p className='text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]'>What we check</p>
-                  {checks.map((c) => (
-                    <div key={c.label} className='glass flex items-start gap-3 rounded-xl p-4'>
-                      <span className='text-lg leading-none mt-0.5'>{c.icon}</span>
+                  <p className='text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]'>What happens next</p>
+                  {nextSteps.map((s) => (
+                    <div key={s.num} className='glass flex items-start gap-3 rounded-xl p-4'>
+                      <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-xs font-semibold text-violet-400 mt-0.5'>
+                        {s.num}
+                      </span>
                       <div>
-                        <div className='text-sm font-medium text-[var(--text-primary)]'>{c.label}</div>
-                        <div className='text-xs text-[var(--text-secondary)]'>{c.desc}</div>
+                        <div className='text-sm font-medium text-[var(--text-primary)]'>{s.title}</div>
+                        <div className='text-xs text-[var(--text-secondary)]'>{s.desc}</div>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 <div className='rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-1'>
-                  <p className='text-xs font-semibold text-violet-400 uppercase tracking-wider'>What you get</p>
+                  <p className='text-xs font-semibold text-violet-400 uppercase tracking-wider'>No hard sell</p>
                   <p className='text-sm text-[var(--text-secondary)]'>
-                    A plain-English summary of what's working, what's hurting you, and the 2–3 most important fixes — delivered to your inbox within 1–2 business days.
+                    You'll get honest guidance on what your business actually needs — whether that's a full project, a small fix, or nothing at all right now.
                   </p>
                 </div>
               </div>
@@ -142,7 +142,7 @@ export function WebsiteCheck() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
               >
-                <h2 className='text-base font-semibold text-[var(--text-primary)] mb-5'>Tell us about your business</h2>
+                <h2 className='text-base font-semibold text-[var(--text-primary)] mb-5'>Tell me about your business</h2>
                 <form onSubmit={handleSubmit} className='space-y-4'>
                   <div>
                     <label className='block text-sm font-medium text-[var(--text-body)]'>Your name *</label>
@@ -194,12 +194,12 @@ export function WebsiteCheck() {
                         Sending…
                       </>
                     ) : (
-                      'Send me my free check'
+                      'Send my request'
                     )}
                   </button>
 
                   <p className='text-center text-xs text-[var(--text-faint)]'>
-                    No spam. No hard sell. Just honest feedback on your website.
+                    No spam. No obligation. I'll get back to you within 1–2 business days.
                   </p>
                 </form>
               </motion.div>

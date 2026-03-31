@@ -25,7 +25,7 @@ export function MockupPage() {
             <div className='mx-auto max-w-md text-center'>
               <div className='text-gradient text-6xl font-semibold'>404</div>
               <h1 className='mt-4 text-2xl font-semibold text-white'>Mockup not found</h1>
-              <p className='mt-2 text-sm text-slate-400'>This preview link doesn't exist. Go back to the homepage and pick a mockup.</p>
+              <p className='mt-2 text-sm text-slate-400'>This preview link doesn't exist.</p>
               <a href='/' className='mt-6 inline-flex rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'>
                 Back to home
               </a>
@@ -56,8 +56,8 @@ export function MockupPage() {
                 <a href='/#contact' className='rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'>
                   Request this style
                 </a>
-                <a href='/#mockups' className='rounded-xl border border-white/[0.15] px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-white/[0.05] hover:text-white'>
-                  Back to mockups
+                <a href='/' className='rounded-xl border border-white/[0.15] px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-white/[0.05] hover:text-white'>
+                  Back to home
                 </a>
               </div>
             </div>

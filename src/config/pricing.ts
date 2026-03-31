@@ -149,7 +149,7 @@ export const websitePackages: Package[] = [
       'Performance + accessibility pass',
       'Analytics setup',
       'Scalable structure for future growth',
-      '3 months of Care plan included',
+      'Initial support period included after launch',
       'Ongoing updates and support after launch',
     ],
     outOfScope: [

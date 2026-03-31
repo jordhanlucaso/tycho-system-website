@@ -15,12 +15,12 @@ type CTABannerProps = {
 
 export function CTABanner({
   headline = 'Not sure where to start?',
-  subheadline = 'Get a free 5-point check on your current website. No commitment, no hard sell.',
-  primaryLabel = 'Get my free website check',
+  subheadline = 'Tell me about your business and I\'ll guide you to the right next step. No commitment, no hard sell.',
+  primaryLabel = 'Book a strategy call',
   primaryTo = '/website-check',
   primaryHref,
-  secondaryLabel = 'See pricing',
-  secondaryHref = '#pricing',
+  secondaryLabel = 'See packages',
+  secondaryHref = '#packages',
 }: CTABannerProps) {
   return (
     <section className='relative border-t border-[var(--border-subtle)] py-16 overflow-hidden'>

@@ -43,13 +43,13 @@ export function NichePage() {
                   to='/website-check'
                   className='rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
                 >
-                  Get a free website check
+                  Book a strategy call
                 </Link>
                 <a
-                  href='#pricing'
+                  href='/#packages'
                   className='rounded-2xl border border-[var(--border-primary)] px-5 py-3 text-sm font-medium text-[var(--text-body)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
                 >
-                  See pricing
+                  See packages
                 </a>
               </div>
             </motion.div>
@@ -144,16 +144,16 @@ export function NichePage() {
               transition={{ duration: 0.4 }}
             >
               <h2 className='text-gradient text-2xl font-semibold tracking-tight'>
-                Ready to get more {niche.namePlural.toLowerCase()} customers?
+                Ready to get your {niche.name.toLowerCase()} business online properly?
               </h2>
               <p className='text-sm text-[var(--text-secondary)] max-w-md mx-auto'>
-                Start with a free website check. We'll show you exactly what's holding your online presence back.
+                Book a call and I'll walk you through the fastest path to a website that works for your business.
               </p>
               <Link
                 to='/website-check'
                 className='inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
               >
-                Get my free website check
+                Book a strategy call
                 <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                   <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
                 </svg>

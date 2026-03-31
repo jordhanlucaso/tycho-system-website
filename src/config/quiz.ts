@@ -84,14 +84,10 @@ export function getRecommendation(answers: QuizAnswers): QuizRecommendation {
   // Determine package
   let pkg = oneTimePackages[0] // default: Local Starter
 
-  if (pages === 'multi' || business_type === 'multi_location') {
-    pkg = oneTimePackages.find((p) => p.id === 'multi-location') ?? pkg
-  } else if (booking === 'essential') {
-    pkg = oneTimePackages.find((p) => p.id === 'local-bookings') ?? pkg
-  } else if (pages === 'many') {
-    pkg = oneTimePackages.find((p) => p.id === 'local-pro') ?? pkg
-  } else if (pages === 'few' || business_type === 'professional') {
-    pkg = oneTimePackages.find((p) => p.id === 'local-business') ?? pkg
+  if (pages === 'many' || pages === 'multi' || business_type === 'multi_location') {
+    pkg = oneTimePackages.find((p) => p.id === 'pro-website') ?? pkg
+  } else if (pages === 'few' || business_type === 'professional' || booking === 'essential') {
+    pkg = oneTimePackages.find((p) => p.id === 'business-website') ?? pkg
   }
 
   // Build reason
@@ -116,16 +112,16 @@ export function getRecommendation(answers: QuizAnswers): QuizRecommendation {
   let planReason: string | undefined
 
   if (support === 'growth') {
-    if (goal === 'seo' || pkg.id === 'local-pro' || pkg.id === 'multi-location') {
-      plan = monthlyPlans.find((p) => p.id === 'performance')
+    if (goal === 'seo' || pkg.id === 'pro-website') {
+      plan = monthlyPlans.find((p) => p.id === 'performance-plan')
       planReason = 'matches your growth goals with SEO improvements and expert monthly hours'
     } else {
-      plan = monthlyPlans.find((p) => p.id === 'growth')
+      plan = monthlyPlans.find((p) => p.id === 'growth-plan')
       planReason = 'keeps your site continuously improving with regular updates'
     }
   } else if (support === 'care') {
-    plan = monthlyPlans.find((p) => p.id === 'care')
-    planReason = 'covers hosting, daily backups, and 1 hour of edits per month'
+    plan = monthlyPlans.find((p) => p.id === 'care-plan')
+    planReason = 'covers hosting, backups, and 1 hour of edits per month'
   }
 
   return {

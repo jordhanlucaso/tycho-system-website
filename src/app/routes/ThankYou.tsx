@@ -12,18 +12,18 @@ const nextSteps = [
   },
   {
     step: '2',
-    title: 'We review your site',
-    desc: 'Within 1–2 business days, we go through the 5-point check on your website.',
+    title: 'I review your request',
+    desc: 'Within 1–2 business days, I look at your business and current online presence.',
   },
   {
     step: '3',
-    title: 'You get your results',
-    desc: "We send you a plain-English summary with specific, actionable recommendations for your business.",
+    title: 'You hear back with a clear next step',
+    desc: "I'll reach out with honest guidance — whether that's a call, a proposal, or a recommendation.",
   },
   {
     step: '4',
-    title: 'Optional next step',
-    desc: 'If it makes sense, we can follow up with a personalized mockup showing exactly what your site could look like.',
+    title: 'We move forward if it makes sense',
+    desc: 'If a project is the right fit, we scope it out with a fixed proposal. No pressure either way.',
   },
 ]
 
@@ -58,7 +58,7 @@ export function ThankYou() {
             </div>
 
             <div className='mt-6 text-center space-y-3'>
-              <h1 className='text-gradient text-3xl font-semibold tracking-tight'>We got your request!</h1>
+              <h1 className='text-gradient text-3xl font-semibold tracking-tight'>Got your request!</h1>
               <p className='text-[var(--text-secondary)]'>
                 Thanks for reaching out. Here's what happens next.
               </p>
@@ -93,15 +93,15 @@ export function ThankYou() {
               transition={{ duration: 0.4, delay: 0.6 }}
             >
               <div className='glass w-full rounded-2xl p-6 text-center space-y-3'>
-                <p className='text-sm font-medium text-[var(--text-primary)]'>Want to see what's possible?</p>
+                <p className='text-sm font-medium text-[var(--text-primary)]'>While you wait</p>
                 <p className='text-xs text-[var(--text-secondary)]'>
-                  Browse our mockup examples to get a feel for the kind of sites we build.
+                  Check out our packages and process to get a feel for how we work.
                 </p>
                 <a
-                  href='/#mockups'
+                  href='/#packages'
                   className='inline-flex items-center gap-2 rounded-xl border border-[var(--border-primary)] px-5 py-2.5 text-sm font-medium text-[var(--text-body)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
                 >
-                  See examples
+                  See packages
                   <svg className='h-3.5 w-3.5' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                     <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
                   </svg>

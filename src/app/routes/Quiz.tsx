@@ -324,8 +324,8 @@ export function Quiz() {
                       ← Retake quiz
                     </button>
                     <div className='flex items-center gap-4'>
-                      <Link to='/#pricing' className='hover:text-[var(--text-secondary)] transition-colors'>
-                        See all plans
+                      <Link to='/#packages' className='hover:text-[var(--text-secondary)] transition-colors'>
+                        See all packages
                       </Link>
                       {(pkgInCart || planInCart) && (
                         <Link
