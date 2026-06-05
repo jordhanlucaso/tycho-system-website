@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Container } from './Container'
 import { site } from '../../../config/site'
 
@@ -22,6 +23,15 @@ export function Footer() {
             <a className='transition-colors hover:text-[var(--text-primary)]' href='#contact'>
               Contact
             </a>
+            <Link to='/terms' className='transition-colors hover:text-[var(--text-primary)]'>
+              Terms
+            </Link>
+            <Link to='/privacy' className='transition-colors hover:text-[var(--text-primary)]'>
+              Privacy
+            </Link>
+            <Link to='/refunds' className='transition-colors hover:text-[var(--text-primary)]'>
+              Refunds
+            </Link>
           </div>
         </div>
         <div className='border-t border-[var(--border-subtle)] py-6 text-xs text-[var(--text-faint)]'>

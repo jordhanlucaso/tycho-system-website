@@ -33,6 +33,9 @@ import { ClientPortal } from './routes/ClientPortal'
 import { NichePage } from './routes/niche/NichePage'
 import { AuthCallback } from './routes/AuthCallback'
 import { NotFound } from './routes/NotFound'
+import { Terms } from './routes/Terms'
+import { Privacy } from './routes/Privacy'
+import { Refunds } from './routes/Refunds'
 
 export default function App() {
   return (
@@ -54,6 +57,9 @@ export default function App() {
             <Route path='/auth/callback' element={<AuthCallback />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/terms' element={<Terms />} />
+            <Route path='/privacy' element={<Privacy />} />
+            <Route path='/refunds' element={<Refunds />} />
 
             {/* Admin dashboard */}
             <Route path='/admin' element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
