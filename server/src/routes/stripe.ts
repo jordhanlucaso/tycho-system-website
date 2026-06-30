@@ -78,8 +78,22 @@ stripeRouter.post('/webhooks/stripe', express.raw({ type: 'application/json' }),
   const sig = req.headers['stripe-signature'] as string
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY
 
-  if (!webhookSecret || webhookSecret === 'whsec_...') {
-    console.warn('STRIPE_WEBHOOK_SECRET_KEY not configured — skipping verification')
+  if (!webhookSecret || webhookSecret === 'whsec_...' || !webhookSecret.startsWith('whsec_')) {
+    const msg =
+      `STRIPE_WEBHOOK_SECRET_KEY missing or invalid (must start with "whsec_"). ` +
+      `Get it from Stripe Dashboard → Developers → Webhooks → your endpoint → "Reveal signing secret".`
+
+    // In production, never trust unverified events — a missing secret would let
+    // anyone forge "payment completed" events. Reject instead of processing.
+    if (process.env.NODE_ENV === 'production') {
+      console.error(`${msg} Rejecting unverified webhook in production.`)
+      res.status(503).json({ error: 'Webhook signature verification not configured' })
+      return
+    }
+
+    // Non-production (local dev without the Stripe CLI): skip verification so
+    // the funnel can be exercised end-to-end without a signing secret.
+    console.warn(`${msg} Skipping verification (non-production).`)
     res.json({ received: true })
     return
   }
