@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tychosystems.com/sitemap.xml
+Sitemap: https://tychosystem.com/sitemap.xml

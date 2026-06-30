@@ -86,7 +86,7 @@ export function ClientPortal() {
             <div className='mt-8 rounded-xl border border-[var(--border-subtle)] p-4'>
               <p className='text-xs text-[var(--text-muted)]'>
                 Need help?{' '}
-                <a href='mailto:hello@tychosystems.com' className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
+                <a href='mailto:felix@tychosystem.com' className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
                   Email us directly
                 </a>{' '}
                 or{' '}
