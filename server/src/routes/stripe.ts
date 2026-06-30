@@ -111,23 +111,25 @@ stripeRouter.post('/webhooks/stripe', express.raw({ type: 'application/json' }),
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object
-        const documentId = session.metadata?.documentId
+        const contractId = session.metadata?.contractId
         const customerEmail = session.customer_email ?? ''
         const amountTotal = session.amount_total ?? 0
         const mode = session.mode // 'payment' | 'subscription'
 
-        // Update contract record if this payment came from PandaDoc funnel
-        if (documentId) {
-          await supabase
-            .from('contracts')
-            .update({
-              stripe_session_id: session.id,
-              stripe_payment_status: session.payment_status,
-              ...(mode === 'subscription' && session.subscription
-                ? { stripe_subscription_id: String(session.subscription) }
-                : {}),
-            })
-            .eq('pandadoc_document_id', documentId)
+        // Mark the contract paid. The funnel (POST /api/contracts/:id/payment)
+        // puts contractId in metadata and stores stripe_session_id at session
+        // creation, so match on whichever we have.
+        const contractPatch = {
+          stripe_session_id: session.id,
+          stripe_payment_status: session.payment_status,
+          ...(mode === 'subscription' && session.subscription
+            ? { stripe_subscription_id: String(session.subscription) }
+            : {}),
+        }
+        if (contractId) {
+          await supabase.from('contracts').update(contractPatch).eq('id', contractId)
+        } else {
+          await supabase.from('contracts').update(contractPatch).eq('stripe_session_id', session.id)
         }
 
         // Find the client profile by email to create an invoice record
