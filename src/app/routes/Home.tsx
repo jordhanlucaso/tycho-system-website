@@ -1,46 +1,46 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { site } from '../../config/site'
-import { Navbar } from '../components/layout/Navbar'
-import { Footer } from '../components/layout/Footer'
-import { CartDrawer } from '../components/layout/CartDrawer'
-import { Hero } from '../components/blocks/Hero'
-import { WhoItsFor } from '../components/blocks/WhoItsFor'
-import { Pricing } from '../components/blocks/Pricing'
-import { ProcessSteps } from '../components/blocks/ProcessSteps'
-import { Services } from '../components/blocks/Services'
-import { Testimonials } from '../components/blocks/Testimonials'
-import { CTABanner } from '../components/blocks/CTABanner'
-import { FAQ } from '../components/blocks/FAQ'
-import { Contact } from '../components/blocks/Contact'
+import { usePrefersReducedMotion } from '../lib/usePrefersReducedMotion'
+import { SiteNav } from '../components/home/SiteNav'
+import { Hero } from '../components/home/Hero'
+import { AudienceLine } from '../components/home/AudienceLine'
+import { Process } from '../components/home/Process'
+import { SelectedWork } from '../components/home/SelectedWork'
+import { Services } from '../components/home/Services'
+import { Cta } from '../components/home/Cta'
+import { SiteFooter } from '../components/home/SiteFooter'
 
 export function Home() {
+  const location = useLocation()
+  const prefersReducedMotion = usePrefersReducedMotion()
+
   useEffect(() => {
     document.title = `${site.agencyName} | Websites for Local Businesses`
   }, [])
 
+  useEffect(() => {
+    if (!location.hash) return
+    const id = location.hash.slice(1)
+    const target = document.getElementById(id)
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth' }))
+  }, [location.hash])
+
   return (
-    <div className='min-h-screen font-sans'>
-      <Navbar />
+    <div
+      className="min-h-screen overflow-hidden bg-[var(--bg-primary)] font-sans text-[var(--text-body)]"
+      data-tycho-motion={prefersReducedMotion ? 'off' : 'on'}
+    >
+      <SiteNav />
       <main>
-        <Hero />
-        <WhoItsFor />
-        <Pricing />
-        <ProcessSteps />
+        <Hero heroVisual="2D orbit" animate={!prefersReducedMotion} />
+        <AudienceLine />
+        <Process />
+        <SelectedWork />
         <Services />
-        <Testimonials />
-        <FAQ />
-        <CTABanner
-          headline='Ready to get your business online properly?'
-          subheadline="Book a call and we'll walk you through the fastest path from where you are now to a site you're proud of."
-          primaryLabel='Book a strategy call'
-          primaryTo='/website-check'
-          secondaryLabel='See packages'
-          secondaryHref='#packages'
-        />
-        <Contact />
+        <Cta />
       </main>
-      <Footer />
-      <CartDrawer />
+      <SiteFooter />
     </div>
   )
 }

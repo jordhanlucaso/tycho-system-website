@@ -22,7 +22,7 @@ export function NichePage() {
       <main>
         {/* Hero */}
         <section className='relative overflow-hidden py-20 sm:py-28'>
-          <div className='glow-orb -top-32 left-1/4 h-96 w-96 bg-violet-600' />
+          <div className='glow-orb -top-32 left-1/4 h-96 w-96 bg-[var(--azure)]' />
           <div className='bg-grid absolute inset-0' />
           <Container>
             <motion.div
@@ -41,7 +41,7 @@ export function NichePage() {
               <div className='flex flex-wrap gap-3'>
                 <Link
                   to='/website-check'
-                  className='rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                  className='rounded-2xl bg-[var(--azure)] px-5 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'
                 >
                   Book a strategy call
                 </Link>
@@ -123,8 +123,8 @@ export function NichePage() {
                   viewport={{ once: true, margin: '-30px' }}
                   transition={{ duration: 0.35, delay: i * 0.06 }}
                 >
-                  <span className='h-5 w-5 shrink-0 rounded-full bg-violet-500/10 flex items-center justify-center'>
-                    <span className='text-[10px] text-violet-400'>✓</span>
+                  <span className='h-5 w-5 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] flex items-center justify-center'>
+                    <span className='text-[10px] text-[var(--azure)]'>✓</span>
                   </span>
                   <span className='text-sm text-[var(--text-secondary)]'>{f}</span>
                 </motion.div>
@@ -151,7 +151,7 @@ export function NichePage() {
               </p>
               <Link
                 to='/website-check'
-                className='inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                className='inline-flex items-center gap-2 rounded-2xl bg-[var(--azure)] px-6 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'
               >
                 Book a strategy call
                 <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>

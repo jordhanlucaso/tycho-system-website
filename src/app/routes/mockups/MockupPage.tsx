@@ -26,7 +26,7 @@ export function MockupPage() {
               <div className='text-gradient text-6xl font-semibold'>404</div>
               <h1 className='mt-4 text-2xl font-semibold text-white'>Mockup not found</h1>
               <p className='mt-2 text-sm text-slate-400'>This preview link doesn't exist.</p>
-              <a href='/' className='mt-6 inline-flex rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'>
+              <a href='/' className='mt-6 inline-flex rounded-xl bg-[var(--azure)] px-5 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'>
                 Back to home
               </a>
             </div>
@@ -53,7 +53,7 @@ export function MockupPage() {
               <p className='max-w-prose text-base text-slate-300'>{mockup.tagline}</p>
 
               <div className='flex flex-wrap gap-3 pt-3'>
-                <a href='/#contact' className='rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'>
+                <a href='/#contact' className='rounded-xl bg-[var(--azure)] px-5 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'>
                   Request this style
                 </a>
                 <a href='/' className='rounded-xl border border-white/[0.15] px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-white/[0.05] hover:text-white'>
@@ -80,7 +80,7 @@ export function MockupPage() {
                       <div className='ml-2 h-4 flex-1 rounded-md bg-white/[0.04]' />
                     </div>
                     <div className='space-y-3 p-4'>
-                      <div className='h-32 rounded-xl bg-gradient-to-br from-violet-500/10 to-cyan-500/10' />
+                      <div className='h-32 rounded-xl bg-gradient-to-br from-[color-mix(in_srgb,var(--azure)_10%,transparent)] to-[color-mix(in_srgb,var(--azure)_4%,transparent)]' />
                       <div className='h-4 w-3/4 rounded bg-white/[0.06]' />
                       <div className='h-4 w-1/2 rounded bg-white/[0.04]' />
                       <div className='grid grid-cols-3 gap-2'>
@@ -92,7 +92,7 @@ export function MockupPage() {
                     </div>
                   </div>
                   <p className='text-center text-xs text-slate-600'>
-                    Preview screenshot coming soon. <a href='/#contact' className='text-cyan-400 underline underline-offset-2'>Request this mockup</a> to see the full design.
+                    Preview screenshot coming soon. <a href='/#contact' className='text-[var(--azure)] underline underline-offset-2'>Request this mockup</a> to see the full design.
                   </p>
                 </div>
               )}

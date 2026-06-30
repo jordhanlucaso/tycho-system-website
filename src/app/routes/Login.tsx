@@ -6,7 +6,7 @@ import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'
 import type { Provider } from '@supabase/supabase-js'
 
-const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
+const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] focus:ring-1 focus:ring-[color-mix(in_srgb,var(--azure)_30%,transparent)]'
 
 import type { ReactElement } from 'react'
 
@@ -130,7 +130,7 @@ export function Login() {
               <button
                 type='submit'
                 disabled={submitting || oauthLoading !== null}
-                className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50'
+                className='w-full rounded-xl bg-[var(--azure)] px-4 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] disabled:opacity-50'
               >
                 {submitting ? 'Signing in…' : 'Sign in with email'}
               </button>
@@ -138,7 +138,7 @@ export function Login() {
 
             <p className='mt-6 text-center text-sm text-[var(--text-muted)]'>
               Don't have an account?{' '}
-              <Link to='/register' className='text-violet-400 hover:text-violet-300 transition-colors'>
+              <Link to='/register' className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
                 Create one
               </Link>
             </p>

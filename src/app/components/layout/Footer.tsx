@@ -1,28 +1,32 @@
 import { Link } from 'react-router-dom'
 import { Container } from './Container'
+import { HashLink } from './HashLink'
+import { Logo } from '../ui/Logo'
 import { site } from '../../../config/site'
 
 export function Footer() {
   return (
-    <footer className='border-t border-[var(--border-subtle)]'>
+    <footer className='border-t border-[var(--border-primary)]'>
       <Container>
         <div className='flex flex-col gap-3 py-10 text-sm text-[var(--text-muted)] md:flex-row md:items-center md:justify-between'>
-          <div>
-            <span className='font-medium text-[var(--text-primary)]'>{site.agencyName}</span> &middot; {site.location}
+          <div className='flex items-center gap-[11px]'>
+            <Logo size={22} />
+            <span className='font-display font-semibold text-[var(--text-primary)]'>{site.agencyName}</span>
+            <span className='text-[var(--text-faint)]'>&middot; {site.location}</span>
           </div>
           <div className='flex flex-wrap gap-4'>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#packages'>
-              Packages
-            </a>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#process'>
+            <HashLink hash='work' className='transition-colors hover:text-[var(--text-primary)]'>
+              Work
+            </HashLink>
+            <HashLink hash='process' className='transition-colors hover:text-[var(--text-primary)]'>
               Process
-            </a>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#included'>
-              What's Included
-            </a>
-            <a className='transition-colors hover:text-[var(--text-primary)]' href='#contact'>
+            </HashLink>
+            <HashLink hash='services' className='transition-colors hover:text-[var(--text-primary)]'>
+              Services
+            </HashLink>
+            <HashLink hash='contact' className='transition-colors hover:text-[var(--text-primary)]'>
               Contact
-            </a>
+            </HashLink>
             <Link to='/terms' className='transition-colors hover:text-[var(--text-primary)]'>
               Terms
             </Link>
@@ -34,8 +38,8 @@ export function Footer() {
             </Link>
           </div>
         </div>
-        <div className='border-t border-[var(--border-subtle)] py-6 text-xs text-[var(--text-faint)]'>
-          &copy; {new Date().getFullYear()} {site.agencyName}. All rights reserved.
+        <div className='border-t border-[var(--border-subtle)] py-6 font-mono text-[11.5px] tracking-[0.05em] text-[var(--text-fainter)]'>
+          &copy; {new Date().getFullYear()} {site.agencyName} &middot; CHARTED WITH PRECISION
         </div>
       </Container>
     </footer>

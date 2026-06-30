@@ -73,7 +73,7 @@ export function Quiz() {
             </div>
             <div className='h-1.5 w-full rounded-full bg-[var(--bg-surface)]'>
               <motion.div
-                className='h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-cyan-500'
+                className='h-1.5 rounded-full bg-[var(--azure)]'
                 animate={{ width: `${isResult ? 100 : (step / totalQuestions) * 100}%` }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
               />
@@ -109,17 +109,17 @@ export function Quiz() {
                         key={opt.value}
                         onClick={() => handleAnswer(opt.value)}
                         disabled={pending !== null}
-                        className={`relative flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-violet-500 ${
+                        className={`relative flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[var(--azure)] ${
                           pending === opt.value
-                            ? 'border-violet-500 bg-violet-500/10 scale-[0.98]'
-                            : 'border-[var(--border-primary)] bg-[var(--bg-surface)] hover:border-violet-500/50 hover:bg-violet-500/5'
+                            ? 'border-[var(--azure)] bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] scale-[0.98]'
+                            : 'border-[var(--border-primary)] bg-[var(--bg-surface)] hover:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] hover:bg-[color-mix(in_srgb,var(--azure)_5%,transparent)]'
                         }`}
                       >
                         <span className='text-2xl shrink-0'>{opt.emoji}</span>
                         <span className='text-sm font-medium text-[var(--text-body)]'>{opt.label}</span>
                         {pending === opt.value && (
                           <motion.div
-                            className='absolute inset-0 rounded-2xl border-2 border-violet-500'
+                            className='absolute inset-0 rounded-2xl border-2 border-[var(--azure)]'
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.15 }}
@@ -153,7 +153,7 @@ export function Quiz() {
                 >
                   {/* Result header */}
                   <div className='text-center mb-8'>
-                    <div className='inline-flex items-center gap-2 rounded-full bg-violet-500/10 border border-violet-500/20 px-4 py-1.5 text-xs font-medium text-violet-400 mb-4'>
+                    <div className='inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] border border-[color-mix(in_srgb,var(--azure)_20%,transparent)] px-4 py-1.5 text-xs font-medium text-[var(--azure)] mb-4'>
                       ✦ Personalized recommendation
                     </div>
                     <h1 className='text-2xl font-semibold text-[var(--text-primary)]'>
@@ -175,7 +175,7 @@ export function Quiz() {
                       >
                         <div className='flex items-start justify-between gap-4 flex-wrap'>
                           <div>
-                            <div className='text-xs font-medium uppercase tracking-wider text-violet-400 mb-1'>
+                            <div className='text-xs font-medium uppercase tracking-wider text-[var(--azure)] mb-1'>
                               Recommended package
                             </div>
                             <h2 className='text-xl font-semibold text-[var(--text-primary)]'>
@@ -205,7 +205,7 @@ export function Quiz() {
                         <ul className='mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-2'>
                           {recommendation.package.features.map((f) => (
                             <li key={f} className='flex items-start gap-2 text-sm text-[var(--text-secondary)]'>
-                              <svg className='mt-0.5 h-4 w-4 shrink-0 text-violet-400' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                              <svg className='mt-0.5 h-4 w-4 shrink-0 text-[var(--azure)]' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
                               </svg>
                               {f}
@@ -217,7 +217,7 @@ export function Quiz() {
                           {pkgInCart ? (
                             <button
                               onClick={() => navigate('/checkout')}
-                              className='flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-2.5 text-sm font-medium text-white'
+                              className='flex items-center gap-2 rounded-xl bg-[var(--azure)] px-5 py-2.5 text-sm font-medium text-[var(--bg-primary)]'
                             >
                               <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
@@ -227,7 +227,7 @@ export function Quiz() {
                           ) : (
                             <button
                               onClick={() => addToCart(recommendation.package)}
-                              className='flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-5 py-2.5 text-sm font-medium text-white hover:opacity-90 transition-opacity'
+                              className='flex items-center gap-2 rounded-xl bg-[var(--azure)] px-5 py-2.5 text-sm font-medium text-[var(--bg-primary)] hover:bg-[var(--azure-hover)] transition-colors'
                             >
                               <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' />
@@ -257,7 +257,7 @@ export function Quiz() {
                       >
                         <div className='flex items-start justify-between gap-4 flex-wrap'>
                           <div>
-                            <div className='text-xs font-medium uppercase tracking-wider text-cyan-400 mb-1'>
+                            <div className='text-xs font-medium uppercase tracking-wider text-[var(--azure)] mb-1'>
                               Recommended monthly plan
                             </div>
                             <h2 className='text-lg font-semibold text-[var(--text-primary)]'>
@@ -283,7 +283,7 @@ export function Quiz() {
                         <ul className='mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-2'>
                           {recommendation.plan.features.slice(0, 4).map((f) => (
                             <li key={f} className='flex items-start gap-2 text-sm text-[var(--text-secondary)]'>
-                              <svg className='mt-0.5 h-4 w-4 shrink-0 text-cyan-400' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                              <svg className='mt-0.5 h-4 w-4 shrink-0 text-[var(--azure)]' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
                               </svg>
                               {f}
@@ -295,7 +295,7 @@ export function Quiz() {
                           {planInCart ? (
                             <button
                               onClick={() => navigate('/checkout')}
-                              className='flex items-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-500/10 px-5 py-2.5 text-sm font-medium text-cyan-400'
+                              className='flex items-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--azure)_40%,transparent)] bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] px-5 py-2.5 text-sm font-medium text-[var(--azure)]'
                             >
                               <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
@@ -305,7 +305,7 @@ export function Quiz() {
                           ) : (
                             <button
                               onClick={() => cart.addItem(recommendation.plan!)}
-                              className='flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/5 px-5 py-2.5 text-sm font-medium text-cyan-400 hover:border-cyan-500/60 hover:bg-cyan-500/10 transition-colors'
+                              className='flex items-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--azure)_30%,transparent)] bg-[color-mix(in_srgb,var(--azure)_5%,transparent)] px-5 py-2.5 text-sm font-medium text-[var(--azure)] hover:border-[color-mix(in_srgb,var(--azure)_60%,transparent)] hover:bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] transition-colors'
                             >
                               <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
                                 <path strokeLinecap='round' strokeLinejoin='round' d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
@@ -330,7 +330,7 @@ export function Quiz() {
                       {(pkgInCart || planInCart) && (
                         <Link
                           to='/checkout'
-                          className='flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity'
+                          className='flex items-center gap-1.5 rounded-xl bg-[var(--azure)] px-4 py-2 text-sm font-medium text-[var(--bg-primary)] hover:bg-[var(--azure-hover)] transition-colors'
                         >
                           Proceed to checkout →
                         </Link>

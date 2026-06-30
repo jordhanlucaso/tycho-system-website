@@ -58,10 +58,10 @@ export function CheckoutSuccess() {
             <div className='mt-8 rounded-xl border border-[var(--border-subtle)] p-4 text-left space-y-2'>
               <p className='text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider'>What happens next</p>
               <ol className='space-y-1.5 text-xs text-[var(--text-secondary)]'>
-                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>1.</span>You'll receive a payment receipt from Stripe</li>
-                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>2.</span>A confirmation email with your signed agreement details</li>
-                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>3.</span>We'll email you within 1–2 business days with next steps</li>
-                <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>4.</span>Remaining balance invoiced at project milestones</li>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>1.</span>You'll receive a payment receipt from Stripe</li>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>2.</span>A confirmation email with your signed agreement details</li>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>3.</span>We'll email you within 1–2 business days with next steps</li>
+                <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>4.</span>Remaining balance invoiced at project milestones</li>
               </ol>
             </div>
           </motion.div>

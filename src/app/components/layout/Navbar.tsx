@@ -6,13 +6,14 @@ import { useAuth } from '../../lib/auth'
 import { useCart } from '../../lib/cart'
 import { useTheme } from '../../lib/theme'
 import { Container } from './Container'
+import { HashLink } from './HashLink'
+import { Logo } from '../ui/Logo'
 
 const links = [
-  { href: '#packages', label: 'Packages' },
-  { href: '#process', label: 'Process' },
-  { href: '#included', label: 'What\'s Included' },
-  { href: '#faq', label: 'FAQ' },
-  { href: '#contact', label: 'Contact' }
+  { hash: 'work', label: 'Work' },
+  { hash: 'process', label: 'Process' },
+  { hash: 'services', label: 'Services' },
+  { hash: 'contact', label: 'Contact' }
 ]
 
 export function Navbar() {
@@ -25,15 +26,16 @@ export function Navbar() {
     <header className='sticky top-0 z-40 border-b border-[var(--border-primary)] bg-[var(--bg-primary-alpha)] backdrop-blur-xl'>
       <Container>
         <div className='flex h-16 items-center justify-between gap-3'>
-          <a href='/' className='inline-flex items-center gap-2'>
-            <img src='/logo.svg' alt={site.agencyName} className='h-9' />
+          <a href='/' className='inline-flex items-center gap-[11px]'>
+            <Logo size={26} />
+            <span className='font-display text-[17px] font-semibold tracking-[-0.01em] text-[var(--text-primary)]'>{site.agencyName}</span>
           </a>
 
           <nav className='hidden items-center gap-5 md:flex'>
             {links.map((l) => (
-              <a key={l.href} href={l.href} className='text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'>
+              <HashLink key={l.hash} hash={l.hash} className='text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'>
                 {l.label}
-              </a>
+              </HashLink>
             ))}
           </nav>
 
@@ -65,7 +67,7 @@ export function Navbar() {
                 <path strokeLinecap='round' strokeLinejoin='round' d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z' />
               </svg>
               {cart.itemCount > 0 && (
-                <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-500 text-[10px] font-semibold text-white'>
+                <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--azure)] text-[10px] font-semibold text-[var(--bg-primary)]'>
                   {cart.itemCount}
                 </span>
               )}
@@ -73,7 +75,7 @@ export function Navbar() {
 
             {user ? (
               <div className='hidden items-center gap-2 sm:flex'>
-                <Link to='/dashboard' className='inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-cyan-500 text-xs font-semibold text-white' title={user.email ?? 'Account'}>
+                <Link to='/dashboard' className='inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--azure)] text-xs font-semibold text-[var(--bg-primary)]' title={user.email ?? 'Account'}>
                   {(user.email?.[0] ?? 'U').toUpperCase()}
                 </Link>
                 <button onClick={() => signOut()} className='text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]'>
@@ -81,7 +83,7 @@ export function Navbar() {
                 </button>
               </div>
             ) : (
-              <Link to='/login' className='hidden rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:inline-flex'>
+              <Link to='/login' className='hidden rounded-[9px] bg-[var(--azure)] px-4 py-2 text-sm font-semibold text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] sm:inline-flex'>
                 Sign in
               </Link>
             )}
@@ -114,17 +116,20 @@ export function Navbar() {
             >
               <div className='flex flex-col gap-1 pb-4 pt-2'>
                 {links.map((l, i) => (
-                  <motion.a
-                    key={l.href}
-                    href={l.href}
-                    onClick={() => setOpen(false)}
+                  <motion.div
+                    key={l.hash}
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.2 }}
-                    className='rounded-xl px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
                   >
-                    {l.label}
-                  </motion.a>
+                    <HashLink
+                      hash={l.hash}
+                      onClick={() => setOpen(false)}
+                      className='block rounded-xl px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
+                    >
+                      {l.label}
+                    </HashLink>
+                  </motion.div>
                 ))}
                 {user ? (
                   <motion.div
@@ -150,7 +155,7 @@ export function Navbar() {
                     <Link
                       to='/login'
                       onClick={() => setOpen(false)}
-                      className='inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                      className='inline-flex items-center justify-center rounded-[9px] bg-[var(--azure)] px-4 py-2 text-sm font-semibold text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'
                     >
                       Sign in
                     </Link>

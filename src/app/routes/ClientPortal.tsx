@@ -69,7 +69,7 @@ export function ClientPortal() {
               <div className='glass rounded-2xl p-5 space-y-3 opacity-60'>
                 <div className='flex items-center gap-2'>
                   <div className='text-sm font-semibold text-[var(--text-primary)]'>Project Updates</div>
-                  <span className='rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-medium text-violet-400'>Coming soon</span>
+                  <span className='rounded-full bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] px-2 py-0.5 text-[10px] font-medium text-[var(--azure)]'>Coming soon</span>
                 </div>
                 <div className='text-xs text-[var(--text-secondary)]'>Track the progress of your website build in real time.</div>
               </div>
@@ -77,7 +77,7 @@ export function ClientPortal() {
               <div className='glass rounded-2xl p-5 space-y-3 opacity-60'>
                 <div className='flex items-center gap-2'>
                   <div className='text-sm font-semibold text-[var(--text-primary)]'>Content Requests</div>
-                  <span className='rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-medium text-violet-400'>Coming soon</span>
+                  <span className='rounded-full bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] px-2 py-0.5 text-[10px] font-medium text-[var(--azure)]'>Coming soon</span>
                 </div>
                 <div className='text-xs text-[var(--text-secondary)]'>Submit small edits and update requests directly from here.</div>
               </div>
@@ -86,11 +86,11 @@ export function ClientPortal() {
             <div className='mt-8 rounded-xl border border-[var(--border-subtle)] p-4'>
               <p className='text-xs text-[var(--text-muted)]'>
                 Need help?{' '}
-                <a href='mailto:hello@tychosystems.com' className='text-violet-400 hover:text-violet-300 transition-colors'>
+                <a href='mailto:hello@tychosystems.com' className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
                   Email us directly
                 </a>{' '}
                 or{' '}
-                <Link to='/#contact' className='text-violet-400 hover:text-violet-300 transition-colors'>
+                <Link to='/#contact' className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
                   use the contact form
                 </Link>
                 .

@@ -98,7 +98,7 @@ export function CartDrawer() {
                                 <ul className='mt-3 space-y-1'>
                                   {item.features.slice(0, 3).map((f) => (
                                     <li key={f} className='flex items-start gap-1.5 text-xs text-[var(--text-muted)]'>
-                                      <span className='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-cyan-400/50' />
+                                      <span className='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--azure)_50%,transparent)]' />
                                       {f}
                                     </li>
                                   ))}
@@ -142,7 +142,7 @@ export function CartDrawer() {
 
                 <button
                   onClick={() => { cart.setOpen(false); navigate('/checkout') }}
-                  className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                  className='w-full rounded-xl bg-[var(--azure)] px-4 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'
                 >
                   Proceed to checkout
                 </button>

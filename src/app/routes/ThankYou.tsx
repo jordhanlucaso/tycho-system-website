@@ -74,7 +74,7 @@ export function ThankYou() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.35, delay: 0.2 + i * 0.08 }}
                 >
-                  <span className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-xs font-semibold text-violet-400'>
+                  <span className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--azure)_20%,transparent)] text-xs font-semibold text-[var(--azure)]'>
                     {s.step}
                   </span>
                   <div>

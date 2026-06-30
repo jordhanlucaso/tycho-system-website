@@ -1,26 +1,49 @@
 @import 'tailwindcss';
 
+/* ── Font tokens (Web Observatory) ──
+   Registered with Tailwind so `font-sans` / `font-display` / `font-mono`
+   utilities resolve to the brand faces loaded in index.html. */
+@theme {
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
 /* ── CSS Custom Properties (Dark = default) ── */
 :root {
-  --bg-primary: #0B1120;
-  --bg-primary-alpha: rgba(11, 17, 32, 0.8);
+  /* Surfaces */
+  --bg-primary: #0B1120; /* Sky / base */
+  --bg-primary-alpha: rgba(11, 17, 32, 0.72); /* sticky-nav blur backdrop */
   --bg-surface: rgba(255, 255, 255, 0.03);
   --bg-surface-hover: rgba(255, 255, 255, 0.06);
+  --surface-solid: #0E1528; /* solid card / panel surface */
+  --surface-raised: #14203A; /* elevated surface (rare) */
   --border-primary: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.14);
   --border-subtle: rgba(255, 255, 255, 0.06);
-  --text-primary: #ffffff;
-  --text-secondary: #94a3b8; /* slate-400 */
-  --text-muted: #64748b; /* slate-500 */
-  --text-faint: #475569; /* slate-600 */
-  --text-body: #e2e8f0; /* slate-200 */
+
+  /* Text */
+  --text-primary: #E9EEF9; /* headings / high emphasis */
+  --text-secondary: #C7D0E4; /* strong body */
+  --text-muted: #93A0BD; /* secondary copy */
+  --text-faint: #6B7795; /* mono labels, footer meta */
+  --text-fainter: #4E5A77; /* footer column headers */
+  --text-body: #A9B4CC; /* default body copy */
+
+  /* Accents — azure is the workhorse, gold the single warm "fixed star" */
+  --azure: #6FA8FF;
+  --azure-hover: #8DBBFF;
+  --azure-deep: #3C6FD6;
+  --gold: #E7B85C;
+  --gold-deep: #C99A2E;
+
   --grid-line: rgba(255, 255, 255, 0.03);
   --glow-opacity: 0.25;
-  --gradient-from: #a78bfa;
-  --gradient-via: #818cf8;
-  --gradient-to: #22d3ee;
-  --glow-border-from: rgba(167, 139, 250, 0.15);
-  --glow-border-to: rgba(34, 211, 238, 0.15);
+  --gradient-from: #8DBBFF;
+  --gradient-via: #6FA8FF;
+  --gradient-to: #3C6FD6;
+  --glow-border-from: rgba(111, 168, 255, 0.18);
+  --glow-border-to: rgba(111, 168, 255, 0.06);
 }
 
 /* ── Light mode overrides ── */
@@ -29,21 +52,31 @@
   --bg-primary-alpha: rgba(248, 250, 252, 0.85);
   --bg-surface: rgba(0, 0, 0, 0.03);
   --bg-surface-hover: rgba(0, 0, 0, 0.06);
-  --border-primary: rgba(0, 0, 0, 0.1);
-  --border-hover: rgba(0, 0, 0, 0.18);
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --text-faint: #94a3b8;
+  --surface-solid: #ffffff;
+  --surface-raised: #eef2fb;
+  --border-primary: rgba(11, 17, 32, 0.1);
+  --border-hover: rgba(11, 17, 32, 0.18);
+  --border-subtle: rgba(11, 17, 32, 0.06);
+  --text-primary: #0B1120;
+  --text-secondary: #1f2a44;
+  --text-muted: #475569;
+  --text-faint: #64748b;
+  --text-fainter: #94a3b8;
   --text-body: #334155;
-  --grid-line: rgba(0, 0, 0, 0.04);
+
+  --azure: #3C6FD6;
+  --azure-hover: #2F5DBE;
+  --azure-deep: #2F5DBE;
+  --gold: #C99A2E;
+  --gold-deep: #9C6B1E;
+
+  --grid-line: rgba(11, 17, 32, 0.04);
   --glow-opacity: 0.12;
-  --gradient-from: #7c3aed;
-  --gradient-via: #6366f1;
-  --gradient-to: #0891b2;
-  --glow-border-from: rgba(124, 58, 237, 0.12);
-  --glow-border-to: rgba(8, 145, 178, 0.12);
+  --gradient-from: #2F5DBE;
+  --gradient-via: #3C6FD6;
+  --gradient-to: #6FA8FF;
+  --glow-border-from: rgba(60, 111, 214, 0.14);
+  --glow-border-to: rgba(60, 111, 214, 0.04);
 }
 
 /* ── Grid pattern background ── */
@@ -104,4 +137,131 @@
 /* ── Smooth open for details/FAQ ── */
 details summary::-webkit-details-marker {
   display: none;
+}
+
+/* ── Web Observatory: orbital + float motion ──
+   Used by the hero solar system and floating instrument. */
+@keyframes tycho-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes tycho-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes tycho-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+::selection {
+  background: var(--azure);
+  color: var(--bg-primary);
+}
+
+/* The mono "[ … ]" eyebrow + brand text selection share the azure accent. */
+.text-azure {
+  color: var(--azure);
+}
+.text-gold {
+  color: var(--gold);
+}
+
+/* Azure radial accent glow (not a box-shadow on big elements). */
+.obs-glow {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(111, 168, 255, 0.16),
+    rgba(111, 168, 255, 0) 68%
+  );
+  pointer-events: none;
+}
+
+/* ── Legal / long-form pages: style the markdown HTML emitted by `marked`
+   (these pages render from src/content/legal/*.md). */
+.legal-prose h1 {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+.legal-prose h2 {
+  margin-top: 2.5rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.legal-prose h3 {
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.legal-prose p {
+  margin-top: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.legal-prose ul {
+  margin-top: 0.85rem;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+.legal-prose li {
+  margin-top: 0.5rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.legal-prose strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.legal-prose em {
+  font-style: italic;
+  color: var(--text-muted);
+}
+.legal-prose code {
+  background: var(--bg-surface);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+.legal-prose a {
+  color: var(--azure);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.legal-prose a:hover {
+  color: var(--azure-hover);
+}
+
+/* ── Reduced motion: stop the starfield twinkle (handled in JS) and freeze
+   every orbital/float animation. The data attribute mirrors the design
+   reference's `data-tycho-motion="off"` toggle. */
+[data-tycho-motion='off'],
+[data-tycho-motion='off'] * {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

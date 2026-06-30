@@ -27,7 +27,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       root.classList.remove('light')
     }
-    localStorage.setItem('tycho-theme', theme)
+    try {
+      localStorage.setItem('tycho-theme', theme)
+    } catch {}
   }, [theme])
 
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))

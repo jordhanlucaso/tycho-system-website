@@ -34,16 +34,16 @@ function renderWithSalesRouter(ui: React.ReactElement) {
 }
 
 describe('Navbar', () => {
-  it('renders the agency logo', () => {
+  it('renders the agency wordmark', () => {
     renderWithRouter(<Navbar />)
-    expect(screen.getByAltText(site.agencyName)).toBeInTheDocument()
+    expect(screen.getAllByText(site.agencyName).length).toBeGreaterThan(0)
   })
 
   it('renders navigation links', () => {
     renderWithRouter(<Navbar />)
-    expect(screen.getAllByText('Packages').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Work').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Process').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('FAQ').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Services').length).toBeGreaterThan(0)
   })
 
   it('renders the mobile menu button', () => {

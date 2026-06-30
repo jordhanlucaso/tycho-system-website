@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
+const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] focus:ring-1 focus:ring-[color-mix(in_srgb,var(--azure)_30%,transparent)]'
 
 const nextSteps = [
   { num: '1', title: 'I review your request', desc: 'I look at your business, current website (if any), and what you need.' },
@@ -116,7 +116,7 @@ export function WebsiteCheck() {
                   <p className='text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]'>What happens next</p>
                   {nextSteps.map((s) => (
                     <div key={s.num} className='glass flex items-start gap-3 rounded-xl p-4'>
-                      <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-xs font-semibold text-violet-400 mt-0.5'>
+                      <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--azure)_20%,transparent)] text-xs font-semibold text-[var(--azure)] mt-0.5'>
                         {s.num}
                       </span>
                       <div>
@@ -127,8 +127,8 @@ export function WebsiteCheck() {
                   ))}
                 </div>
 
-                <div className='rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-1'>
-                  <p className='text-xs font-semibold text-violet-400 uppercase tracking-wider'>No hard sell</p>
+                <div className='rounded-xl border border-[color-mix(in_srgb,var(--azure)_20%,transparent)] bg-[color-mix(in_srgb,var(--azure)_5%,transparent)] p-4 space-y-1'>
+                  <p className='text-xs font-semibold text-[var(--azure)] uppercase tracking-wider'>No hard sell</p>
                   <p className='text-sm text-[var(--text-secondary)]'>
                     You'll get honest guidance on what your business actually needs — whether that's a full project, a small fix, or nothing at all right now.
                   </p>
@@ -183,7 +183,7 @@ export function WebsiteCheck() {
                   <button
                     type='submit'
                     disabled={submitting}
-                    className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2'
+                    className='w-full rounded-xl bg-[var(--azure)] px-4 py-3.5 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] disabled:opacity-50 flex items-center justify-center gap-2'
                   >
                     {submitting ? (
                       <>

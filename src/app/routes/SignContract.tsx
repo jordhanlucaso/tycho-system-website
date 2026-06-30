@@ -77,7 +77,7 @@ export function SignContract() {
           <Container>
             <div className='mx-auto max-w-md text-center space-y-4'>
               <p className='text-[var(--text-secondary)]'>No agreement found. Please start from checkout.</p>
-              <Link to='/checkout' className='inline-flex rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white'>Back to checkout</Link>
+              <Link to='/checkout' className='inline-flex rounded-xl bg-[var(--azure)] px-6 py-3 text-sm font-medium text-[var(--bg-primary)]'>Back to checkout</Link>
             </div>
           </Container>
         </main>
@@ -98,15 +98,15 @@ export function SignContract() {
           >
             {/* Progress */}
             <div className='flex items-center gap-2 text-xs text-[var(--text-muted)] mb-8'>
-              <span className='flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/30 text-violet-400 text-xs font-medium'>✓</span>
+              <span className='flex h-5 w-5 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--azure)_30%,transparent)] text-[var(--azure)] text-xs font-medium'>✓</span>
               <span className='text-[var(--text-muted)]'>Your details</span>
               <span className='text-[var(--text-faint)]'>→</span>
-              <span className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-medium ${step === 'signed' ? 'bg-violet-500/30 text-violet-400' : 'bg-violet-500 text-white'}`}>
+              <span className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-medium ${step === 'signed' ? 'bg-[color-mix(in_srgb,var(--azure)_30%,transparent)] text-[var(--azure)]' : 'bg-[var(--azure)] text-[var(--bg-primary)]'}`}>
                 {step === 'signed' ? '✓' : '2'}
               </span>
               <span className={step === 'signed' ? 'text-[var(--text-muted)]' : 'text-[var(--text-primary)] font-medium'}>Sign agreement</span>
               <span className='text-[var(--text-faint)]'>→</span>
-              <span className={`flex h-5 w-5 items-center justify-center rounded-full border text-xs font-medium ${step === 'signed' ? 'border-violet-500 text-violet-400' : 'border-[var(--border-primary)] text-[var(--text-muted)]'}`}>3</span>
+              <span className={`flex h-5 w-5 items-center justify-center rounded-full border text-xs font-medium ${step === 'signed' ? 'border-[var(--azure)] text-[var(--azure)]' : 'border-[var(--border-primary)] text-[var(--text-muted)]'}`}>3</span>
               <span className={step === 'signed' ? 'text-[var(--text-primary)] font-medium' : ''}>Payment</span>
             </div>
 
@@ -151,7 +151,7 @@ export function SignContract() {
                       type='checkbox'
                       checked={agreed}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => setAgreed(e.target.checked)}
-                      className='mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--border-primary)] accent-violet-500'
+                      className='mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--border-primary)] accent-[var(--azure)]'
                     />
                     <span className='text-sm text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors'>
                       I have read and agree to the terms of this service agreement
@@ -168,7 +168,7 @@ export function SignContract() {
                       value={signerName}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => setSignerName(e.target.value)}
                       placeholder='Your full legal name'
-                      className='w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
+                      className='w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] focus:ring-1 focus:ring-[color-mix(in_srgb,var(--azure)_30%,transparent)]'
                     />
                     {signerName.trim() && (
                       <p className='text-base italic text-[var(--text-secondary)]' style={{ fontFamily: 'Georgia, serif' }}>
@@ -186,7 +186,7 @@ export function SignContract() {
                   <button
                     onClick={handleSign}
                     disabled={!agreed || !signerName.trim() || signing}
-                    className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 flex items-center justify-center gap-2'
+                    className='w-full rounded-xl bg-[var(--azure)] px-4 py-3.5 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] disabled:opacity-40 flex items-center justify-center gap-2'
                   >
                     {signing ? (
                       <>
@@ -263,7 +263,7 @@ export function SignContract() {
                   <button
                     onClick={handlePay}
                     disabled={paying}
-                    className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2'
+                    className='w-full rounded-xl bg-[var(--azure)] px-4 py-3.5 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] disabled:opacity-50 flex items-center justify-center gap-2'
                   >
                     {paying ? (
                       <>

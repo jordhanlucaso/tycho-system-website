@@ -27,7 +27,7 @@ export function AuthCallback() {
   return (
     <div className='flex min-h-screen items-center justify-center bg-[var(--bg-primary)]'>
       <div className='text-center'>
-        <div className='mx-auto h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent' />
+        <div className='mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[var(--azure)] border-t-transparent' />
         <p className='mt-4 text-sm text-[var(--text-muted)]'>Signing you in…</p>
       </div>
     </div>

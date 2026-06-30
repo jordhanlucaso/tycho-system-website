@@ -34,7 +34,7 @@ export function CheckoutCancel() {
             <div className='mt-8 flex items-center justify-center gap-4'>
               <Link
                 to='/checkout'
-                className='inline-flex rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90'
+                className='inline-flex rounded-xl bg-[var(--azure)] px-6 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'
               >
                 Return to checkout
               </Link>

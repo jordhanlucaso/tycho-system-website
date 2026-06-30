@@ -11,7 +11,7 @@ function formatCents(cents: number) {
   return `$${(cents / 100).toLocaleString('en-US')}`
 }
 
-const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
+const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] focus:ring-1 focus:ring-[color-mix(in_srgb,var(--azure)_30%,transparent)]'
 
 export function Checkout() {
   const cart = useCart()
@@ -92,7 +92,7 @@ export function Checkout() {
           >
             {/* Progress indicator */}
             <div className='flex items-center gap-2 text-xs text-[var(--text-muted)] mb-8'>
-              <span className='flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-white text-xs font-medium'>1</span>
+              <span className='flex h-5 w-5 items-center justify-center rounded-full bg-[var(--azure)] text-[var(--bg-primary)] text-xs font-medium'>1</span>
               <span className='text-[var(--text-primary)] font-medium'>Your details</span>
               <span className='text-[var(--text-faint)]'>→</span>
               <span className='flex h-5 w-5 items-center justify-center rounded-full border border-[var(--border-primary)] text-xs font-medium text-[var(--text-muted)]'>2</span>
@@ -161,13 +161,13 @@ export function Checkout() {
                 </div>
 
                 {/* What happens next */}
-                <div className='rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-2'>
-                  <p className='text-xs font-semibold text-violet-400 uppercase tracking-wider'>What happens next</p>
+                <div className='rounded-xl border border-[color-mix(in_srgb,var(--azure)_20%,transparent)] bg-[color-mix(in_srgb,var(--azure)_5%,transparent)] p-4 space-y-2'>
+                  <p className='text-xs font-semibold text-[var(--azure)] uppercase tracking-wider'>What happens next</p>
                   <ol className='space-y-1.5 text-xs text-[var(--text-secondary)]'>
-                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>1.</span>Submit your details below</li>
-                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>2.</span>Review and e-sign the service agreement</li>
-                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>3.</span>Pay deposit of {formatCents(cart.depositTotal)} via Stripe — remaining balance due at milestones</li>
-                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-violet-400'>4.</span>We kick off your project within 1–2 business days</li>
+                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>1.</span>Submit your details below</li>
+                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>2.</span>Review and e-sign the service agreement</li>
+                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>3.</span>Pay deposit of {formatCents(cart.depositTotal)} via Stripe — remaining balance due at milestones</li>
+                    <li className='flex gap-2'><span className='shrink-0 font-semibold text-[var(--azure)]'>4.</span>We kick off your project within 1–2 business days</li>
                   </ol>
                 </div>
               </div>
@@ -202,7 +202,7 @@ export function Checkout() {
                   <button
                     type='submit'
                     disabled={submitting}
-                    className='w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2'
+                    className='w-full rounded-xl bg-[var(--azure)] px-4 py-3.5 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] disabled:opacity-50 flex items-center justify-center gap-2'
                   >
                     {submitting ? (
                       <>
