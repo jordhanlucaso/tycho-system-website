@@ -4,7 +4,7 @@ import { motion } from 'motion/react'
 import { tiers } from '../../../config/pricing'
 import { apiFetch } from '../../lib/api'
 
-const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30'
+const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] focus:ring-1 focus:ring-[color-mix(in_srgb,var(--azure)_30%,transparent)]'
 const selectClass = inputClass + ' cursor-pointer'
 
 const sources = ['Website', 'Referral', 'Cold outreach', 'Social media', 'Event', 'Other']
@@ -151,7 +151,7 @@ export function SalesNewSale() {
               <button
                 type='submit'
                 disabled={submitting}
-                className='rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50'
+                className='rounded-xl bg-[var(--azure)] px-6 py-3 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)] disabled:opacity-50'
               >
                 {submitting ? 'Saving…' : 'Save lead'}
               </button>

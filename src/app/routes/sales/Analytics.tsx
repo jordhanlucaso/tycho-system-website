@@ -15,7 +15,7 @@ type AnalyticsData = {
   totalLost: number
 }
 
-function Bar({ value, max, color = 'from-violet-500 to-cyan-500' }: { value: number; max: number; color?: string }) {
+function Bar({ value, max, color = 'from-[var(--azure)] to-[var(--azure-deep)]' }: { value: number; max: number; color?: string }) {
   const pct = max > 0 ? (value / max) * 100 : 0
   return (
     <div className='h-2 w-full overflow-hidden rounded-full bg-[var(--bg-surface-hover)]'>
@@ -119,7 +119,7 @@ export function SalesAnalytics() {
                     <span>{s.source}</span>
                     <span className='font-medium text-[var(--text-body)]'>{s.count} lead{s.count !== 1 ? 's' : ''}</span>
                   </div>
-                  <Bar value={s.count} max={maxSource} color='from-cyan-500 to-violet-500' />
+                  <Bar value={s.count} max={maxSource} color='from-[var(--azure-deep)] to-[var(--azure)]' />
                 </div>
               ))
             )}

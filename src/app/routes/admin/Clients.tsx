@@ -17,8 +17,8 @@ type UserProfile = {
 const ROLES: Role[] = ['client', 'sales', 'admin']
 
 const roleBadge: Record<Role, string> = {
-  admin:  'bg-violet-500/10 text-violet-400',
-  sales:  'bg-cyan-500/10 text-cyan-400',
+  admin:  'bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] text-[var(--azure)]',
+  sales:  'bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] text-[var(--gold)]',
   client: 'bg-[var(--bg-surface)] text-[var(--text-muted)]',
 }
 
@@ -106,14 +106,14 @@ export function AdminClients() {
                         value={u.role}
                         disabled={updating === u.id}
                         onChange={(e) => changeRole(u.id, e.target.value as Role)}
-                        className='rounded-lg border border-[var(--border-primary)] bg-[var(--bg-surface)] px-2 py-1 text-xs text-[var(--text-body)] outline-none focus:border-violet-500/50 disabled:opacity-50 cursor-pointer'
+                        className='rounded-lg border border-[var(--border-primary)] bg-[var(--bg-surface)] px-2 py-1 text-xs text-[var(--text-body)] outline-none focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] disabled:opacity-50 cursor-pointer'
                       >
                         {ROLES.map((r) => (
                           <option key={r} value={r}>{r}</option>
                         ))}
                       </select>
                       {updating === u.id && (
-                        <svg className='h-3.5 w-3.5 animate-spin text-violet-400' fill='none' viewBox='0 0 24 24'>
+                        <svg className='h-3.5 w-3.5 animate-spin text-[var(--azure)]' fill='none' viewBox='0 0 24 24'>
                           <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
                           <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z' />
                         </svg>

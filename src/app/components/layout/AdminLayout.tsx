@@ -11,7 +11,7 @@ const navItems = [
 function linkClass({ isActive }: { isActive: boolean }) {
   return `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
     isActive
-      ? 'bg-violet-500/10 text-violet-400 font-medium'
+      ? 'bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] text-[var(--azure)] font-medium'
       : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
   }`
 }
@@ -26,7 +26,7 @@ export function AdminLayout() {
             <a href='/' className='inline-flex items-center gap-2'>
               <img src='/logo.svg' alt='Tycho Systems' className='h-8' />
             </a>
-            <span className='ml-2 rounded-md bg-violet-500/10 px-2 py-0.5 text-xs font-medium text-violet-400'>Admin</span>
+            <span className='ml-2 rounded-md bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] px-2 py-0.5 text-xs font-medium text-[var(--azure)]'>Admin</span>
           </div>
 
           <nav className='flex-1 space-y-1 p-3'>

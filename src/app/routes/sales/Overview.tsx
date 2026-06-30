@@ -23,7 +23,7 @@ type Lead = {
 const statusColors: Record<Lead['status'], string> = {
   new: 'bg-blue-500/10 text-blue-400',
   contacted: 'bg-yellow-500/10 text-yellow-400',
-  quoted: 'bg-violet-500/10 text-violet-400',
+  quoted: 'bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] text-[var(--azure)]',
   closed: 'bg-green-500/10 text-green-400',
   lost: 'bg-red-500/10 text-red-400',
 }
@@ -62,7 +62,7 @@ export function SalesOverview() {
           </div>
           <Link
             to='/sales/new'
-            className='inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90'
+            className='inline-flex items-center gap-2 rounded-xl bg-[var(--azure)] px-4 py-2.5 text-sm font-medium text-[var(--bg-primary)] transition-colors hover:bg-[var(--azure-hover)]'
           >
             <svg className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
               <path strokeLinecap='round' strokeLinejoin='round' d='M12 4v16m8-8H4' />
@@ -95,13 +95,13 @@ export function SalesOverview() {
       >
         <div className='flex items-center justify-between'>
           <h2 className='text-lg font-semibold text-[var(--text-primary)]'>Recent Leads</h2>
-          <Link to='/sales/clients' className='text-sm text-violet-400 transition-colors hover:text-violet-300'>
+          <Link to='/sales/clients' className='text-sm text-[var(--azure)] transition-colors hover:text-[var(--azure-hover)]'>
             View all →
           </Link>
         </div>
 
         {leads.length === 0 ? (
-          <p className='mt-4 text-sm text-[var(--text-muted)]'>No leads yet. <Link to='/sales/new' className='text-violet-400 hover:text-violet-300'>Add your first sale →</Link></p>
+          <p className='mt-4 text-sm text-[var(--text-muted)]'>No leads yet. <Link to='/sales/new' className='text-[var(--azure)] hover:text-[var(--azure-hover)]'>Add your first sale →</Link></p>
         ) : (
           <div className='mt-4 space-y-3'>
             {leads.map((lead) => (

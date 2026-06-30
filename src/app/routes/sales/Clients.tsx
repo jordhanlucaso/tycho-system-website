@@ -19,7 +19,7 @@ type Lead = {
 const statusColors: Record<Lead['status'], string> = {
   new: 'bg-blue-500/10 text-blue-400',
   contacted: 'bg-yellow-500/10 text-yellow-400',
-  quoted: 'bg-violet-500/10 text-violet-400',
+  quoted: 'bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] text-[var(--azure)]',
   closed: 'bg-green-500/10 text-green-400',
   lost: 'bg-red-500/10 text-red-400',
 }
@@ -83,7 +83,7 @@ export function SalesClients() {
           placeholder='Search by name, business, or email…'
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className='rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-2.5 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-violet-500/50 w-72'
+          className='rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-2.5 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] w-72'
         />
         <select
           value={statusFilter}
@@ -173,7 +173,7 @@ export function SalesClients() {
             <div className='space-y-2 text-sm'>
               <div className='flex gap-2'>
                 <span className='text-[var(--text-muted)] w-20 shrink-0'>Email</span>
-                <a href={`mailto:${selected.email}`} className='text-violet-400 hover:text-violet-300 truncate'>{selected.email}</a>
+                <a href={`mailto:${selected.email}`} className='text-[var(--azure)] hover:text-[var(--azure-hover)] truncate'>{selected.email}</a>
               </div>
               {selected.phone && (
                 <div className='flex gap-2'>

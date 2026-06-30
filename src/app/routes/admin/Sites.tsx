@@ -67,7 +67,7 @@ export function AdminSites() {
                 </span>
               </div>
               <div className='mt-3 flex items-center justify-between text-xs text-[var(--text-muted)]'>
-                {site.plan && <span className='rounded-md bg-violet-500/10 px-2 py-0.5 text-violet-400'>{site.plan}</span>}
+                {site.plan && <span className='rounded-md bg-[color-mix(in_srgb,var(--azure)_10%,transparent)] px-2 py-0.5 text-[var(--azure)]'>{site.plan}</span>}
                 <span className='ml-auto'>Added {new Date(site.created_at).toLocaleDateString()}</span>
               </div>
             </motion.div>
