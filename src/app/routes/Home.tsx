@@ -1,13 +1,16 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { site } from '../../config/site'
 import { usePrefersReducedMotion } from '../lib/usePrefersReducedMotion'
+import { useSeo } from '../lib/seo'
 import { SiteNav } from '../components/home/SiteNav'
 import { Hero } from '../components/home/Hero'
 import { AudienceLine } from '../components/home/AudienceLine'
 import { Process } from '../components/home/Process'
 import { SelectedWork } from '../components/home/SelectedWork'
 import { Services } from '../components/home/Services'
+import { AutomationCare } from '../components/home/AutomationCare'
+import { GuideSelector } from '../components/home/GuideSelector'
 import { Cta } from '../components/home/Cta'
 import { SiteFooter } from '../components/home/SiteFooter'
 
@@ -15,9 +18,11 @@ export function Home() {
   const location = useLocation()
   const prefersReducedMotion = usePrefersReducedMotion()
 
-  useEffect(() => {
-    document.title = `${site.agencyName} | Websites for Local Businesses`
-  }, [])
+  useSeo({
+    title: `${site.agencyName} | AI Automation, Websites and Business Systems`,
+    description: site.description,
+    path: '/',
+  })
 
   useEffect(() => {
     if (!location.hash) return
@@ -38,6 +43,8 @@ export function Home() {
         <Process />
         <SelectedWork />
         <Services />
+        <AutomationCare />
+        <GuideSelector />
         <Cta />
       </main>
       <SiteFooter />

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router'
 import { AuthProvider } from './lib/auth'
 import { CartProvider } from './lib/cart'
 import { ProtectedRoute } from './components/layout/ProtectedRoute'
@@ -31,6 +31,9 @@ import { WebsiteCheck } from './routes/WebsiteCheck'
 import { ThankYou } from './routes/ThankYou'
 import { ClientPortal } from './routes/ClientPortal'
 import { NichePage } from './routes/niche/NichePage'
+import { ResourcesPage } from './routes/resources/ResourcesPage'
+import { LeadMagnetPage } from './routes/resources/LeadMagnetPage'
+import { LeadMagnetThankYou } from './routes/resources/LeadMagnetThankYou'
 import { AuthCallback } from './routes/AuthCallback'
 import { NotFound } from './routes/NotFound'
 import { Terms } from './routes/Terms'
@@ -52,6 +55,23 @@ export default function App() {
             <Route path='/quiz' element={<Quiz />} />
             <Route path='/website-check' element={<WebsiteCheck />} />
             <Route path='/thank-you' element={<ThankYou />} />
+            <Route path='/resources' element={<ResourcesPage />} />
+            <Route
+              path='/resources/ai-operations-pain-map'
+              element={<LeadMagnetPage resource='ai_operations_pain_map' />}
+            />
+            <Route
+              path='/resources/ai-dictionary'
+              element={<LeadMagnetPage resource='ai_dictionary' />}
+            />
+            <Route
+              path='/thank-you/business-leader'
+              element={<LeadMagnetThankYou variant='business_leader' />}
+            />
+            <Route
+              path='/thank-you/ai-dictionary'
+              element={<LeadMagnetThankYou variant='ai_builder_learner' />}
+            />
             <Route path='/client-portal' element={<ClientPortal />} />
             <Route path='/websites-for/:niche' element={<NichePage />} />
             <Route path='/auth/callback' element={<AuthCallback />} />

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'

@@ -34,17 +34,12 @@ export function SalesClients() {
 
   useEffect(() => {
     document.title = 'Clients — Sales — Tycho Systems'
-    loadLeads()
-  }, [])
-
-  function loadLeads() {
-    setLoading(true)
     apiFetch('/api/sales/leads')
       .then((r: Response) => r.json())
       .then((d: { leads?: Lead[] }) => setLeads(d.leads ?? []))
       .catch(() => setLeads([]))
       .finally(() => setLoading(false))
-  }
+  }, [])
 
   async function updateStatus(id: string, status: Lead['status']) {
     setUpdatingStatus(true)

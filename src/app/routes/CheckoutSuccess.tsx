@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router'
 import { motion } from 'motion/react'
 import { useCart } from '../lib/cart'
 import { Container } from '../components/layout/Container'

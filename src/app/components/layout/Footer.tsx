@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Container } from './Container'
 import { HashLink } from './HashLink'
 import { Logo } from '../ui/Logo'

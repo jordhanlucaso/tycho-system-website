@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "gen:mockup": "bun scripts/generate-mockup.ts",
+    "gen:pdfs": "node scripts/generate-resource-pdfs.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "dev:server": "cd server && bun run dev"
@@ -21,10 +22,10 @@
     "motion": "^12.33.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.13.0"
+    "react-router": "^8.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/cli": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -34,9 +35,9 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.24",
-    "eslint": "^9.39.1",
+    "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
+    "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^16.5.0",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.6",

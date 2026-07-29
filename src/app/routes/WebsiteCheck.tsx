@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { motion } from 'motion/react'
 import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'

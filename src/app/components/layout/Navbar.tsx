@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { motion, AnimatePresence } from 'motion/react'
 import { site } from '../../../config/site'
 import { useAuth } from '../../lib/auth'

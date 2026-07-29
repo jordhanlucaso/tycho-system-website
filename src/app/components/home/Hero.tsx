@@ -1,3 +1,4 @@
+import { hero } from '../../../config/site'
 import { Button } from '../ui/Button'
 import { PillBadge } from '../ui/PillBadge'
 import { Starfield, type StarfieldDensity } from './Starfield'
@@ -11,11 +12,12 @@ type HeroProps = {
 }
 
 const ribbon: Array<{ label: string; gold?: boolean }> = [
-  { label: 'Discovery' },
+  { label: 'Diagnose' },
+  { label: 'Prioritise' },
   { label: 'Design' },
   { label: 'Build' },
-  { label: 'Launch' },
-  { label: 'Care', gold: true },
+  { label: 'Test & launch' },
+  { label: 'Monitor & improve', gold: true },
 ]
 
 /**
@@ -35,24 +37,24 @@ export function Hero({ heroVisual = '3D solar system', starfield = 'Balanced', a
 
       <div className="relative z-[2] mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(330px,1fr))] items-center gap-[clamp(40px,6vw,72px)] px-[clamp(20px,6vw,80px)] pb-[clamp(40px,6vw,72px)] pt-[clamp(56px,9vw,108px)]">
         <div>
-          <PillBadge dot>Tycho Systems · Web Observatory</PillBadge>
+          <PillBadge dot>{hero.eyebrow}</PillBadge>
           <h1 className="mt-[22px] text-balance font-display text-[clamp(40px,6.2vw,76px)] font-semibold leading-[1.02] tracking-[-0.025em] text-[var(--text-primary)]">
-            Websites, charted
-            <br />
-            with precision.
+            {hero.headline}
           </h1>
           <p className="mt-[22px] max-w-[520px] text-[clamp(16px,1.4vw,19px)] leading-[1.6] text-[var(--text-body)]">
-            We build modern websites — and the AI agents that run on them — for local businesses,
-            mapped from first discovery to launch and watched over on every orbit after.
+            {hero.supporting}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="#contact" variant="primary" arrow>
-              Start a project
+            <Button href={hero.primaryCta.href} variant="primary" arrow>
+              {hero.primaryCta.label}
             </Button>
-            <Button href="#work" variant="secondary">
-              See the work
+            <Button href={hero.secondaryCta.href} variant="secondary">
+              {hero.secondaryCta.label}
             </Button>
           </div>
+          <p className="mt-6 max-w-[520px] font-mono text-[12.5px] leading-[1.7] tracking-[0.04em] text-[var(--text-faint)]">
+            {hero.trustLine}
+          </p>
         </div>
 
         <div

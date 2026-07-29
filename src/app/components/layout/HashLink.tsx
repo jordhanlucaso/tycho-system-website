@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 import type { MouseEvent, ReactNode } from 'react'
 
 type HashLinkProps = {

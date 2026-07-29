@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { motion } from 'motion/react'
 import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'

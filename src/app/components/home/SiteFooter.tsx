@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { site } from '../../../config/site'
 import { Logo } from '../ui/Logo'
 
@@ -6,6 +6,7 @@ const navigate = [
   { href: '#work', label: 'Work' },
   { href: '#process', label: 'Process' },
   { href: '#services', label: 'Services' },
+  { href: '/resources', label: 'Resources' },
 ]
 
 /**
@@ -26,7 +27,8 @@ export function SiteFooter() {
             </span>
           </a>
           <p className="m-0 text-[13.5px] leading-[1.6] text-[var(--text-faint)]">
-            Modern websites for local businesses — and the people behind them.
+            Practical AI automation, websites and business systems for small businesses — and the
+            people behind them.
           </p>
         </div>
 

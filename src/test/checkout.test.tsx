@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, act, fireEvent, waitFor } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { AuthProvider } from '../app/lib/auth'
 import { CartProvider, useCart } from '../app/lib/cart'
 import { ThemeProvider } from '../app/lib/theme'

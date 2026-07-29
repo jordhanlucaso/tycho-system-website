@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { mockups } from '../../../config/mockups'
 import { site } from '../../../config/site'
 import { Container } from '../../components/layout/Container'

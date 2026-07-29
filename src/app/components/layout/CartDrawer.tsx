@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { useCart } from '../../lib/cart'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 function fmt(cents: number) {
   return `$${(cents / 100).toLocaleString('en-US')}`

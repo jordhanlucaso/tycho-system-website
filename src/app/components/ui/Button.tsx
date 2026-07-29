@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Link } from 'react-router'
 
 type ButtonProps = {
   href: string
@@ -22,8 +23,9 @@ const variants = {
 } as const
 
 /**
- * Primary (azure) / secondary (translucent outline) action, rendered as an
- * anchor so it works for in-page hash links and mailto: targets alike.
+ * Primary (azure) / secondary (translucent outline) action. Internal routes
+ * (href starting with "/") render as a client-side <Link>; hash and mailto:
+ * targets stay plain anchors.
  */
 export function Button({
   href,
@@ -33,13 +35,25 @@ export function Button({
   children,
   className = '',
 }: ButtonProps) {
-  return (
-    <a
-      href={href}
-      className={`${base} ${variants[variant]} ${mono ? 'font-mono text-[14px] font-normal' : ''} ${className}`}
-    >
+  const classes = `${base} ${variants[variant]} ${mono ? 'font-mono text-[14px] font-normal' : ''} ${className}`
+  const content = (
+    <>
       {children}
       {arrow && <span className="font-mono">→</span>}
+    </>
+  )
+
+  if (href.startsWith('/')) {
+    return (
+      <Link to={href} className={classes}>
+        {content}
+      </Link>
+    )
+  }
+
+  return (
+    <a href={href} className={classes}>
+      {content}
     </a>
   )
 }

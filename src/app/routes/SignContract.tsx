@@ -1,5 +1,5 @@
 import { useState, useEffect, type ChangeEvent } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router'
 import { motion, AnimatePresence } from 'motion/react'
 import { useCart } from '../lib/cart'
 import { apiFetch } from '../lib/api'

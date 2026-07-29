@@ -14,6 +14,9 @@ dist-ssr
 .env
 railway-env.json
 
+# Supabase CLI local state
+supabase/.temp
+
 
 # Editor directories and files
 .vscode/*

@@ -1,6 +1,6 @@
 # Privacy Policy — Tycho Systems
 
-_Last updated: 2026-06-04_
+_Last updated: 2026-07-29_
 
 This policy explains what data we collect when you visit **tychosystem.com** or buy a product, and what we do with it. We aim to collect as little as possible.
 
@@ -19,10 +19,19 @@ Your purchase is processed by **Lemon Squeezy**, which acts as our Merchant of R
 
 Lemon Squeezy's own privacy practices apply to the payment data they hold. See: https://www.lemonsqueezy.com/privacy.
 
-### b. When you sign up for a free lead magnet or newsletter
-We collect your **email address** and the date you subscribed. We use it only to deliver the resource you asked for and, if you opted in, occasional product updates. You can unsubscribe at any time using the link in any email.
+### b. When you request a free guide (lead magnet)
+When you request one of our free guides (such as *The AI Operations Pain Map* or *The Practical AI Dictionary*), we collect the details you enter in the form: your **name**, **email address**, **role**, and — depending on the guide — optional context such as company name, team size, your main operational bottleneck, or your AI learning goals. We also record the campaign or page that brought you to the form (UTM parameters and referrer).
 
-**Legal basis:** your consent.
+We use this data to:
+
+- **Deliver the guide you asked for** and record that the request happened. *Legal basis: performance of your request (and our legitimate interest in keeping a record of it).*
+- **Choose which of the two guides fits your role**, using a simple deterministic rule — no profiling beyond the answers you gave.
+- **Send you occasional practical emails** about AI, automation, websites and business systems — **only if you tick the separate marketing checkbox**. That checkbox is optional and unticked by default; you receive the guide either way. We record the wording version and timestamp of your consent. You can unsubscribe at any time using the link in any email or by contacting us. *Legal basis: your consent.*
+
+Your contact details and form answers are stored in **HubSpot**, our customer-relationship system. On our own server we keep a minimal audit record that contains a **hashed** (unreadable) form of your email address rather than the address itself, together with the guide requested, the consent state, and the campaign attribution.
+
+### b2. When you sign up for a newsletter
+We collect your **email address** and the date you subscribed, and use it only for the updates you asked for. You can unsubscribe at any time. **Legal basis:** your consent.
 
 ### c. When you visit the site
 We use **Plausible Analytics**, a privacy-friendly analytics tool that does not use cookies, does not track you across sites, and does not collect personally identifiable information. It records aggregate metrics like page views, referrer, country, and browser type. See: https://plausible.io/data-policy.
@@ -48,6 +57,9 @@ The minimum third parties needed to operate the business:
 - **Lemon Squeezy** — payment processing + tax (Merchant of Record).
 - **Plausible Analytics** — anonymous site metrics.
 - **Fastmail** — email hosting for support correspondence.
+- **HubSpot** — customer-relationship management: stores lead-magnet and enquiry contact details, form answers, and consent records. See: https://legal.hubspot.com/privacy-policy.
+- **Resend** (or an equivalent transactional-email provider) — sends the one-off email that delivers a guide you requested.
+- **Supabase** — database hosting for our minimal audit records (hashed email, requested guide, consent state, attribution).
 - **Vercel** — website hosting (logs request metadata such as IP and user agent for delivery and security; standard for any CDN-fronted site).
 
 Each operates under their own privacy terms. We pick providers that meet GDPR standards.
@@ -55,7 +67,8 @@ Each operates under their own privacy terms. We pick providers that meet GDPR st
 ## 5. Retention
 
 - **Order data:** kept for as long as legally required for tax and consumer-protection records (typically 5 years in Norway), then deleted.
-- **Newsletter / lead-magnet emails:** kept until you unsubscribe.
+- **Newsletter / lead-magnet contacts:** kept while the relationship is active; if you unsubscribe (or never consented to marketing), we keep only what is needed to honour the unsubscribe and record that the guide was delivered. You can request full deletion at any time.
+- **Lead-magnet audit records:** the hashed request records on our server are kept for up to 24 months, then deleted.
 - **Support emails:** kept while they may still be relevant; deleted on request.
 
 ## 6. Your rights (GDPR)

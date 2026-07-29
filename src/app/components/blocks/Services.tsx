@@ -40,12 +40,12 @@ export function Services() {
             >
               <div className='mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10'>
                 <svg className='h-5 w-5 text-violet-400' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.5}>
-                  <path strokeLinecap='round' strokeLinejoin='round' d={iconPaths[s.icon] ?? iconPaths.star} />
+                  <path strokeLinecap='round' strokeLinejoin='round' d={iconPaths.star} />
                 </svg>
               </div>
               <div className='space-y-1.5'>
                 <div className='text-sm font-semibold text-[var(--text-primary)]'>{s.title}</div>
-                <div className='text-xs text-[var(--text-secondary)] leading-relaxed'>{s.desc}</div>
+                <div className='text-xs text-[var(--text-secondary)] leading-relaxed'>{s.shortDesc}</div>
               </div>
             </motion.div>
           ))}
