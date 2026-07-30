@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import { site } from '../../config/site'
 import { useSeo } from '../lib/seo'
 import { useRecaptcha } from '../lib/recaptcha'
+import { apiFetch } from '../lib/api'
 import { SiteNav } from '../components/home/SiteNav'
 import { SiteFooter } from '../components/home/SiteFooter'
 import { SectionLabel } from '../components/ui/SectionLabel'
@@ -40,9 +41,10 @@ export function WebsiteCheck() {
     try {
       const recaptchaToken = await getToken('website_check')
 
-      const res = await fetch('/api/contact', {
+      // apiFetch prepends VITE_API_URL so this reaches the API origin (Railway)
+      // in production instead of the static host, which would 404 with HTML.
+      const res = await apiFetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name:         data.get('name') as string,
           businessName: data.get('business') as string,
@@ -56,8 +58,9 @@ export function WebsiteCheck() {
         }),
       })
 
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Something went wrong.')
+      // Parse defensively: a misrouted request could return HTML, not JSON.
+      const json = (await res.json().catch(() => null)) as { error?: string } | null
+      if (!res.ok) throw new Error(json?.error || 'Something went wrong. Please try again.')
 
       navigate('/thank-you')
     } catch (err) {
