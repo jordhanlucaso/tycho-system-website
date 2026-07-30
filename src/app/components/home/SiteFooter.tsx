@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { site } from '../../../config/site'
 import { emails, mailto, emailSubjects } from '../../../config/contact'
+import { HashLink } from '../layout/HashLink'
 import { Logo } from '../ui/Logo'
 
 const navigate = [
@@ -9,6 +10,8 @@ const navigate = [
   { href: '#services', label: 'Services' },
   { href: '/resources', label: 'Resources' },
 ]
+
+const navLinkClass = 'text-[14px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]'
 
 /**
  * Footer: brand + tagline, Navigate / Contact link columns, and a mono bottom
@@ -21,12 +24,12 @@ export function SiteFooter() {
     <footer className="border-t border-[var(--border-primary)]">
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-start justify-between gap-x-12 gap-y-8 px-[clamp(20px,6vw,80px)] py-[clamp(40px,5vw,60px)]">
         <div className="max-w-[300px]">
-          <a href="#top" className="mb-4 flex items-center gap-[11px]">
+          <HashLink hash="top" className="mb-4 flex items-center gap-[11px]">
             <Logo size={24} />
             <span className="font-display text-[16px] font-semibold text-[var(--text-primary)]">
               {site.agencyName}
             </span>
-          </a>
+          </HashLink>
           <p className="m-0 text-[13.5px] leading-[1.6] text-[var(--text-faint)]">
             Practical AI automation, websites and business systems for small businesses — and the
             people behind them.
@@ -38,15 +41,17 @@ export function SiteFooter() {
             <div className="mb-1 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-fainter)]">
               Navigate
             </div>
-            {navigate.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-[14px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navigate.map((link) =>
+              link.href.startsWith('#') ? (
+                <HashLink key={link.href} hash={link.href.slice(1)} className={navLinkClass}>
+                  {link.label}
+                </HashLink>
+              ) : (
+                <Link key={link.href} to={link.href} className={navLinkClass}>
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
           <div className="flex flex-col gap-[11px]">
@@ -65,12 +70,9 @@ export function SiteFooter() {
             >
               {emails.support}
             </a>
-            <a
-              href="#contact"
-              className="text-[14px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-            >
+            <HashLink hash="contact" className={navLinkClass}>
               Start a project
-            </a>
+            </HashLink>
           </div>
 
           <div className="flex flex-col gap-[11px]">
