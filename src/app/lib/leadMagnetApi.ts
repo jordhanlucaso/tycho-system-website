@@ -1,8 +1,6 @@
 import type { AudienceSegment, ResourceSlug, RoleCategory } from '../../config/leadMagnets'
 import type { Attribution } from './attribution'
-
-// Same convention as lib/api.ts: VITE_API_URL in production, Vite proxy in dev.
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? ''
+import { API_BASE } from './api'
 
 export type LeadMagnetSubscriptionRequest = {
   firstName: string
