@@ -6,7 +6,7 @@ These terms govern your use of the Tycho Systems website (**tychosystem.com**) a
 
 ## 1. Who we are
 
-The Tycho Systems brand is operated by **Tycho Systems Oliveira e Silva ENK**, a Norwegian sole proprietorship (enkeltpersonforetak). You can contact us at **felix@tychosystem.com** for any question about these terms, your purchase, or your account.
+The Tycho Systems brand is operated by **Tycho Systems Oliveira e Silva ENK**, a Norwegian sole proprietorship (enkeltpersonforetak). You can contact us at **billing@tychosystem.com** for any question about these terms, your purchase, or your account.
 
 For the purposes of payment processing, **Lemon Squeezy** acts as the Merchant of Record. They handle the transaction, collect any applicable VAT/sales tax, and issue your receipt.
 
@@ -64,4 +64,4 @@ These terms are governed by Norwegian law. If a dispute can't be resolved amicab
 
 ## 9. Contact
 
-Questions, refunds, or anything else: **felix@tychosystem.com**.
+Questions, refunds, or anything else: **billing@tychosystem.com**.

@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { site } from '../../../config/site'
+import { emails, mailto, emailSubjects } from '../../../config/contact'
 import { Logo } from '../ui/Logo'
 
 const navigate = [
@@ -53,10 +54,16 @@ export function SiteFooter() {
               Contact
             </div>
             <a
-              href={`mailto:${site.email}`}
+              href={mailto(emails.contact)}
               className="text-[14px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
             >
-              {site.email}
+              {emails.contact}
+            </a>
+            <a
+              href={mailto(emails.support, emailSubjects.support)}
+              className="text-[14px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+            >
+              {emails.support}
             </a>
             <a
               href="#contact"

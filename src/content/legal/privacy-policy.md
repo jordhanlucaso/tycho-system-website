@@ -6,7 +6,7 @@ This policy explains what data we collect when you visit **tychosystem.com** or 
 
 ## 1. Who is the data controller
 
-**Tycho Systems Oliveira e Silva ENK**, a Norwegian sole proprietorship (enkeltpersonforetak). Contact: **felix@tychosystem.com**.
+**Tycho Systems Oliveira e Silva ENK**, a Norwegian sole proprietorship (enkeltpersonforetak). Contact: **privacy@tychosystem.com**.
 
 Because Norway is part of the EEA, the **GDPR** (and Norwegian Personal Data Act) apply to how we handle personal data.
 
@@ -83,7 +83,7 @@ You have the right to:
 - **Withdraw consent** at any time (for newsletter, lead magnet, etc.).
 - **Complain** to the Norwegian Data Protection Authority (Datatilsynet) if you think we've mishandled your data.
 
-To exercise any of these, email **felix@tychosystem.com** and we'll respond within 30 days.
+To exercise any of these, email **privacy@tychosystem.com** and we'll respond within 30 days.
 
 ## 7. International transfers
 
@@ -95,4 +95,4 @@ When this policy changes materially we'll update the **Last updated** date at th
 
 ## 9. Contact
 
-Privacy questions or rights requests: **felix@tychosystem.com**.
+Privacy questions or rights requests: **privacy@tychosystem.com**.

@@ -1,4 +1,5 @@
-import { automationCare, site } from '../../../config/site'
+import { automationCare } from '../../../config/site'
+import { emails, mailto } from '../../../config/contact'
 import { track } from '../../lib/analytics'
 
 /**
@@ -42,7 +43,7 @@ export function AutomationCare() {
           ))}
         </ul>
         <a
-          href={`mailto:${site.email}?subject=${encodeURIComponent('Automation Care')}`}
+          href={mailto(emails.contact, 'Automation Care')}
           onClick={() => track('audit_cta_clicked', { cta: 'automation_care' })}
           className="inline-flex items-center gap-2 rounded-[11px] border px-[22px] py-[12px] text-[15px] font-semibold text-[var(--gold)] transition-colors hover:bg-[color-mix(in_srgb,var(--gold)_10%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
           style={{ borderColor: 'color-mix(in srgb, var(--gold) 40%, transparent)' }}

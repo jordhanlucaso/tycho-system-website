@@ -6,7 +6,7 @@ We sell digital downloads. Once a product is delivered, it's yours — but we be
 
 ## The short version
 
-If a product isn't useful to you, email **felix@tychosystem.com** within **14 days** of your purchase and we'll refund it. No interrogation, no hoops.
+If a product isn't useful to you, email **billing@tychosystem.com** within **14 days** of your purchase and we'll refund it. No interrogation, no hoops.
 
 ## The detail
 
@@ -29,7 +29,7 @@ If you're in the EEA, you may have additional statutory rights. Under EU consume
 
 ## How to ask for a refund
 
-Just email **felix@tychosystem.com** with:
+Just email **billing@tychosystem.com** with:
 
 - The email address you used to purchase, OR
 - Your order ID from the receipt

@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import { Container } from '../layout/Container'
 import { site } from '../../../config/site'
+import { emails, mailto, emailSubjects } from '../../../config/contact'
 
 export function Contact() {
   return (
@@ -24,7 +25,7 @@ export function Contact() {
 
             <div className='space-y-3'>
               <a
-                href={`mailto:${site.email}`}
+                href={mailto(emails.contact)}
                 className='glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:bg-[var(--bg-surface-hover)]'
               >
                 <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/10'>
@@ -33,10 +34,26 @@ export function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <div className='text-xs text-[var(--text-muted)]'>Email</div>
-                  <div className='text-sm font-medium text-[var(--text-primary)]'>{site.email}</div>
+                  <div className='text-xs text-[var(--text-muted)]'>General enquiries</div>
+                  <div className='text-sm font-medium text-[var(--text-primary)]'>{emails.contact}</div>
                 </div>
               </a>
+              <div className='grid gap-3 sm:grid-cols-2'>
+                <a
+                  href={mailto(emails.founder)}
+                  className='glass flex flex-col gap-0.5 rounded-xl p-4 transition-colors hover:bg-[var(--bg-surface-hover)]'
+                >
+                  <span className='text-xs text-[var(--text-muted)]'>Talk to the founder</span>
+                  <span className='text-sm font-medium text-[var(--text-primary)]'>{emails.founder}</span>
+                </a>
+                <a
+                  href={mailto(emails.support, emailSubjects.support)}
+                  className='glass flex flex-col gap-0.5 rounded-xl p-4 transition-colors hover:bg-[var(--bg-surface-hover)]'
+                >
+                  <span className='text-xs text-[var(--text-muted)]'>Existing client support</span>
+                  <span className='text-sm font-medium text-[var(--text-primary)]'>{emails.support}</span>
+                </a>
+              </div>
               <div className='glass flex items-center gap-3 rounded-xl p-4'>
                 <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/10'>
                   <svg className='h-4 w-4 text-violet-400' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.5}>
@@ -90,8 +107,8 @@ export function Contact() {
 
             <p className='text-center text-xs text-[var(--text-faint)]'>
               Or email us directly at{' '}
-              <a href={`mailto:${site.email}`} className='text-violet-400 hover:text-violet-300 transition-colors'>
-                {site.email}
+              <a href={mailto(emails.contact)} className='text-violet-400 hover:text-violet-300 transition-colors'>
+                {emails.contact}
               </a>
             </p>
           </motion.div>

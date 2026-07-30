@@ -1,7 +1,7 @@
 # Handoff: Tycho Systems website redesign
 
 ## Overview
-A full redesign of the Tycho Systems marketing homepage (https://tychosystems.com) — a studio that builds modern websites (and now AI agents) for local businesses and individuals. The redesign introduces a distinctive **"Web Observatory"** identity inspired by the astronomer Tycho Brahe: deep navy skies, precision-instrument geometry, technical monospace labels, and orbital motion. The goals: feel unique (not generic), build trust, make the process legible, and showcase work.
+A full redesign of the Tycho Systems marketing homepage (https://tychosystem.com) — a studio that builds modern websites (and now AI agents) for local businesses and individuals. The redesign introduces a distinctive **"Web Observatory"** identity inspired by the astronomer Tycho Brahe: deep navy skies, precision-instrument geometry, technical monospace labels, and orbital motion. The goals: feel unique (not generic), build trust, make the process legible, and showcase work.
 
 ## About the design files
 The files in this bundle are **design references created in HTML** — prototypes showing the intended look and behavior. They are **not production code to copy directly**: the `.dc.html` files use a custom preview runtime (`support.js`) and inline styles for live editing. Your task is to **recreate these designs in the target codebase** using its existing framework, components, and styling conventions (React/Next, Astro, Vue, plain HTML/CSS — whatever the repo uses). If the repo has no framework yet, choose the most appropriate one and implement there.
@@ -85,7 +85,7 @@ Slightly raised section bg. Eyebrow `[ What we build ]`, H2 "Everything a small 
 - **Ongoing care** (glyph `↻`, azure) — "Hosting, updates, and support so your site never goes stale or breaks quietly."
 
 ### 7. CTA
-Centered, generous padding, a bottom azure radial glow. Eyebrow `[ Set a course ]`, H2 **"Ready to put your business on the map?"**, sub-paragraph "Tell us where you are and where you want to be. We'll chart the route from there.", primary button "Start a project →" + a mono outline button showing the email `hello@tychosystems.com`.
+Centered, generous padding, a bottom azure radial glow. Eyebrow `[ Set a course ]`, H2 **"Ready to put your business on the map?"**, sub-paragraph "Tell us where you are and where you want to be. We'll chart the route from there.", primary button "Start a project →" + a mono outline button showing the email `hello@tychosystem.com`.
 
 ### 8. Footer
 Top hairline. Left: logo + name + tagline "Modern websites for local businesses — and the people behind them." Two link columns: **Navigate** (Work / Process / Services) and **Contact** (email / Start a project). Bottom strip (mono, faint): "© <year> Tycho Systems" left, "LAT 0.00 · LON 0.00 · CHARTED WITH PRECISION" right.
@@ -121,7 +121,7 @@ Ship the **3D solar system** as the default hero. If wiring the toggle is cheap 
 - No external image assets ship with the design — the logo, hero visuals, and all icons are inline SVG/CSS (recreate them as components).
 - Portfolio images are **user-supplied screenshots** (3 needed) — currently placeholders.
 - Fonts: Space Grotesk, IBM Plex Sans, IBM Plex Mono (Google Fonts / Fontsource).
-- Email used throughout: `hello@tychosystems.com` (confirm before shipping).
+- Email used throughout: `hello@tychosystem.com` (confirm before shipping).
 
 ## Files in this bundle
 - `Tycho Systems.dc.html` — homepage reference

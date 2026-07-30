@@ -5,8 +5,8 @@
  *
  * Env:
  *   TRANSACTIONAL_EMAIL_API_KEY   — provider API key (unset = email disabled)
- *   TRANSACTIONAL_EMAIL_FROM      — e.g. "Tycho Systems <felix@tychosystem.com>"
- *   TRANSACTIONAL_EMAIL_REPLY_TO  — optional reply-to address
+ *   TRANSACTIONAL_EMAIL_FROM      — e.g. "Tycho Systems <resources@tychosystem.com>"
+ *   TRANSACTIONAL_EMAIL_REPLY_TO  — optional reply-to address (e.g. contact@tychosystem.com)
  */
 
 export type TransactionalEmail = {

@@ -1,5 +1,10 @@
 import { Router } from 'express'
 import { supabase } from '../lib/supabase.js'
+import { createEmailProviderFromEnv } from '../lib/email.js'
+import {
+  categoryForFormSource,
+  resolveNotificationRecipient,
+} from '../config/contact.js'
 
 export const contactRouter = Router()
 
@@ -43,6 +48,7 @@ contactRouter.post('/', async (req, res) => {
       category,
       email,
       message,
+      source,
       recaptchaToken,
     } = req.body as {
       businessName?: string
@@ -50,6 +56,7 @@ contactRouter.post('/', async (req, res) => {
       category?: string
       email?: string
       message?: string
+      source?: string
       recaptchaToken?: string
     }
 
@@ -86,6 +93,35 @@ contactRouter.post('/', async (req, res) => {
     if (error) {
       console.error('Contact form lead insert error:', error)
       // Don't expose DB errors to client — still return success if it was a non-critical error
+    }
+
+    // Internal notification. The SERVER decides the destination from the form's
+    // source hint (never a client-supplied address), so the browser can neither
+    // choose nor see where the notification is routed. Best-effort: a delivery
+    // failure must never fail the visitor's submission.
+    const notificationCategory = categoryForFormSource(source)
+    const notifyTo = resolveNotificationRecipient(notificationCategory)
+    const emailProvider = createEmailProviderFromEnv()
+    if (emailProvider) {
+      try {
+        await emailProvider.send({
+          to: notifyTo,
+          subject: `New ${notificationCategory.replace(/_/g, ' ')} — ${businessName}`,
+          text: [
+            `Category: ${notificationCategory}`,
+            `Business: ${businessName}`,
+            city ? `City: ${city}` : '',
+            category ? `Category tag: ${category}` : '',
+            `Reply-to: ${email}`,
+            '',
+            message,
+          ]
+            .filter(Boolean)
+            .join('\n'),
+        })
+      } catch (err) {
+        console.error('Contact notification email failed:', err instanceof Error ? err.message : 'unknown')
+      }
     }
 
     res.json({ success: true })
