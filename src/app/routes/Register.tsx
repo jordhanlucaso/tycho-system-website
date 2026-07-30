@@ -123,7 +123,7 @@ export function Register() {
             <form onSubmit={handleSubmit} className={OAUTH_PROVIDERS.length ? 'space-y-4' : 'mt-6 space-y-4'}>
               <div>
                 <label className='block text-sm font-medium text-[var(--text-body)]'>Email</label>
-                <input name='email' type='email' required className={inputClass} placeholder='you@example.com' />
+                <input name='email' type='email' required className={inputClass} placeholder='you@company.com' />
               </div>
               <div>
                 <label className='block text-sm font-medium text-[var(--text-body)]'>Password</label>

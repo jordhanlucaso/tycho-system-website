@@ -1,3 +1,5 @@
+import { emails } from './contact'
+
 export type SiteConfig = {
   agencyName: string
   tagline: string
@@ -15,7 +17,9 @@ export const site: SiteConfig = {
     'AI-assisted workflows, websites, integrations and internal tools for small businesses.',
   description:
     'Tycho Systems builds AI-assisted workflows, websites, integrations and internal tools that help small businesses reduce manual administration and operate more effectively.',
-  email: 'felix@tychosystem.com',
+  // General public enquiry address. Sourced from the central contact config so
+  // there is one place to change a mailbox. See src/config/contact.ts.
+  email: emails.contact,
   location: 'Remote (US clients welcome)',
   siteUrl: 'https://tychosystem.com',
   ctas: { primary: 'Get the AI Operations Pain Map', secondary: 'Explore our services' },

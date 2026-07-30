@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router'
 import { businessPainOptions, labelFor, leadMagnets } from '../../../config/leadMagnets'
 import type { AudienceSegment } from '../../../config/leadMagnets'
 import { site } from '../../../config/site'
+import { emails, mailto } from '../../../config/contact'
 import { track } from '../../lib/analytics'
 import { useSeo } from '../../lib/seo'
 import { LEAD_MAGNET_RESULT_KEY } from '../../lib/leadMagnetApi'
@@ -30,7 +31,7 @@ const copy = {
     resource: leadMagnets.ai_operations_pain_map,
     secondaryActions: [
       { label: 'View services', to: '/#services' },
-      { label: 'Book a workflow audit', href: `mailto:${site.email}?subject=${encodeURIComponent('Workflow audit request')}`, event: 'booking_clicked' as const },
+      { label: 'Book a workflow audit', href: mailto(emails.contact, 'Workflow audit request'), event: 'booking_clicked' as const },
     ],
   },
   ai_builder_learner: {
@@ -155,8 +156,8 @@ export function LeadMagnetThankYou({ variant }: LeadMagnetThankYouProps) {
             <p className="mt-8 rounded-[12px] border border-[var(--border-primary)] bg-[var(--bg-surface)] p-4 text-[14px] leading-[1.65] text-[var(--text-muted)]">
               We have also emailed you a copy so you can find it later. If it has not arrived
               within a few minutes, check your spam folder — or email{' '}
-              <a href={`mailto:${site.email}`} className="text-[var(--azure)] underline underline-offset-2">
-                {site.email}
+              <a href={mailto(emails.contact)} className="text-[var(--azure)] underline underline-offset-2">
+                {emails.contact}
               </a>{' '}
               and we will send it directly.
             </p>

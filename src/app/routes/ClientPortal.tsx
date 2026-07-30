@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { motion } from 'motion/react'
 import { useAuth } from '../lib/auth'
+import { emails, mailto, emailSubjects } from '../../config/contact'
 import { Container } from '../components/layout/Container'
 import { Navbar } from '../components/layout/Navbar'
 
@@ -86,7 +87,7 @@ export function ClientPortal() {
             <div className='mt-8 rounded-xl border border-[var(--border-subtle)] p-4'>
               <p className='text-xs text-[var(--text-muted)]'>
                 Need help?{' '}
-                <a href='mailto:felix@tychosystem.com' className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
+                <a href={mailto(emails.support, emailSubjects.support)} className='text-[var(--azure)] hover:text-[var(--azure-hover)] transition-colors'>
                   Email us directly
                 </a>{' '}
                 or{' '}

@@ -10,7 +10,7 @@
 ---
 
 ```
-I'm redesigning the Tycho Systems website (https://tychosystems.com). I have a
+I'm redesigning the Tycho Systems website (https://tychosystem.com). I have a
 finished high-fidelity design and a written spec. Your job is to implement this
 design in THIS repository, using the stack and conventions already present here.
 
@@ -87,7 +87,7 @@ through the remaining sections.
 - If your site is **not** yet a code repo (e.g. it's on a no-code/site builder),
   this prompt won't apply directly — tell me and I can prepare a different export
   (static HTML/CSS, or platform-specific instructions).
-- The email used throughout the design is `hello@tychosystems.com` — change it
+- The email used throughout the design is `hello@tychosystem.com` — change it
   in the spec if that's wrong before handing off.
 - Portfolio images are placeholders. Have 3 real project screenshots ready and
   point Claude Code at them, or it will leave labeled gaps.

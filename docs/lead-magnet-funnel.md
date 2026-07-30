@@ -82,33 +82,70 @@ follows the final segment; cross-delivery is appended to
 `classificationReason` and explained on the thank-you page. Tests:
 `server/src/lib/lead-magnets/classification.test.ts`.
 
-## 5. HubSpot contact properties (create these manually)
+## 5. HubSpot contact properties (provisioned by script)
 
-All single-line text unless noted. Settings → Properties → Contact properties,
-group “Tycho Funnel”:
+The 17 `tycho_*` contact properties are created by
+`scripts/setup-hubspot-properties.mjs` — do **not** hand-create them. The script
+derives every property, label and dropdown option from the application source of
+truth (`server/src/lib/lead-magnets/types.ts` and `src/config/leadMagnets.ts`)
+and writes them into the `tycho_funnel` group ("Tycho Funnel").
 
-```text
-tycho_audience_segment        (dropdown: business_leader, ai_builder_learner)
-tycho_role_category           (dropdown: the 9 RoleCategory values)
-tycho_requested_resource      (dropdown: ai_operations_pain_map, ai_dictionary)
-tycho_primary_business_pain
-tycho_team_size
-tycho_hours_lost_per_week
-tycho_ai_experience
-tycho_primary_interest
-tycho_current_goal
-tycho_source_platform
-tycho_source_campaign
-tycho_source_content_id
-tycho_last_conversion         (date/time or text — server writes ISO 8601)
-tycho_classification_reason
-tycho_marketing_consent       (dropdown: true, false)
-tycho_consent_text_version
-tycho_consent_timestamp       (text — ISO 8601)
-```
+Dropdown (enumeration) properties, with the exact internal values the server
+writes: `tycho_audience_segment` (business_leader, ai_builder_learner),
+`tycho_role_category` (the 9 RoleCategory values), `tycho_requested_resource`
+(ai_operations_pain_map, ai_dictionary), `tycho_primary_business_pain`,
+`tycho_team_size`, `tycho_hours_lost_per_week`, `tycho_ai_experience`,
+`tycho_primary_interest`, `tycho_current_goal`, and `tycho_marketing_consent`
+(true, false). Text properties: `tycho_source_platform`, `tycho_source_campaign`,
+`tycho_source_content_id`, `tycho_classification_reason`,
+`tycho_consent_text_version`. Datetime properties (server writes ISO 8601):
+`tycho_last_conversion`, `tycho_consent_timestamp`.
 
 Audience segment and marketing consent are deliberately separate properties.
 **Never treat the segment as consent.**
+
+### 5.1 Setup
+
+```bash
+# Token is read from the environment, or from server/.env / .env if present.
+# It is never printed by the script.
+HUBSPOT_PRIVATE_APP_TOKEN=... npm run hubspot:setup-properties
+
+# Preview without writing anything:
+node scripts/setup-hubspot-properties.mjs --dry-run
+```
+
+The script is idempotent: it creates the group if missing, reads all existing
+contact properties first, batch-creates only the ones that are absent, and skips
+those already present. If an existing property's type, field type or dropdown
+options differ from the expected definition it **reports the mismatch and exits
+non-zero without changing anything** — resolve those by hand (see rollback).
+
+### 5.2 Verify
+
+```bash
+npm run hubspot:verify-properties     # reads every tycho_* property back and
+                                      # prints an ok / mismatched / missing summary
+```
+
+### 5.3 Rollback / fixing mismatches
+
+The script never deletes or edits properties, so rollback is manual and
+deliberate. In HubSpot: **Settings → Properties → Contact properties**, filter by
+the "Tycho Funnel" group.
+
+- **Remove a property:** open it → *Delete*. Deleting a property permanently
+  removes its stored values on all contacts — export first if you need the data.
+- **Remove everything:** delete each `tycho_*` property, then delete the
+  "Tycho Funnel" group (a group can only be deleted once it is empty).
+- **Fix a mismatch the script flagged:** dropdown options can be added/renamed
+  in place (Edit → the option list). A property's *type* or *field type* cannot
+  be changed after creation — to correct those you must delete the property and
+  re-run `npm run hubspot:setup-properties` to recreate it cleanly.
+
+A private app token with `crm.schemas.contacts.read` +
+`crm.schemas.contacts.write` scopes is required to create/inspect properties
+(the runtime funnel only needs the contacts/companies object scopes).
 
 ## 6. HubSpot active lists (segments)
 
@@ -162,6 +199,37 @@ Server (`server/.env.example`): `PUBLIC_SITE_URL`,
 variables. CRM and email are optional: unset = skipped with a logged warning
 (useful in dev), set = failures surface.
 
+Recommended production transactional values (domain **tychosystem.com**):
+
+```bash
+TRANSACTIONAL_EMAIL_FROM="Tycho Systems <resources@tychosystem.com>"
+TRANSACTIONAL_EMAIL_REPLY_TO=contact@tychosystem.com
+```
+
+These are configuration only — the server reads them from the environment and
+never hard-codes production addresses in logic.
+
+## 9a. Business email + notification routing
+
+Public addresses are centralised in `src/config/contact.ts`; the server mirrors
+them in `server/src/config/contact.ts`, which owns the notification routing
+table (`notificationRecipients`). The **server** decides every destination — a
+form may hint at a category, but it can never supply or read the target address.
+
+| Notification category | Destination |
+| --- | --- |
+| General contact / workflow audit | contact@tychosystem.com |
+| Support | support@tychosystem.com |
+| Billing | billing@tychosystem.com |
+| Privacy | privacy@tychosystem.com |
+| Partnerships | partners@tychosystem.com |
+| PDF delivery failures | support@tychosystem.com |
+| Critical system alerts | jordhan@tychosystem.com |
+
+Billing and the founder/critical-alert address are intentionally **not**
+exposed in the site's structured data (only customer support, general contact
+and privacy appear as Schema.org `ContactPoint` entries).
+
 ## 10. PDF generation
 
 Sources: `src/content/resources/ai-operations-pain-map.md` and
@@ -203,7 +271,9 @@ afterwards.
 ## 13. Deployment checklist
 
 1. Run migration `server/supabase/migrations/005_lead_magnet_requests.sql`.
-2. Create HubSpot properties (§5), lists (§6), subscription types (§7).
+2. Create HubSpot properties with `npm run hubspot:setup-properties`, verify with
+   `npm run hubspot:verify-properties` (§5), then create lists (§6) and
+   subscription types (§7).
 3. Set server env vars on Railway; set `PUBLIC_SITE_URL`.
 4. Verify sender domain with the email provider (SPF/DKIM) before setting
    `TRANSACTIONAL_EMAIL_API_KEY`.
@@ -228,7 +298,8 @@ afterwards.
 
 ## 15. Manual tasks still to complete in HubSpot
 
-- [ ] Create the 17 contact properties (§5).
+- [ ] Create the 17 contact properties: `npm run hubspot:setup-properties`,
+      then confirm with `npm run hubspot:verify-properties` (§5).
 - [ ] Create the two active lists (§6).
 - [ ] Create the two subscription types (§7) if the plan supports them.
 - [ ] Create a private app with contacts+companies read/write scopes; copy the

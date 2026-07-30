@@ -11,6 +11,8 @@
     "preview": "vite preview",
     "gen:mockup": "bun scripts/generate-mockup.ts",
     "gen:pdfs": "node scripts/generate-resource-pdfs.mjs",
+    "hubspot:setup-properties": "node scripts/setup-hubspot-properties.mjs",
+    "hubspot:verify-properties": "node scripts/setup-hubspot-properties.mjs --verify",
     "test": "vitest run",
     "test:watch": "vitest",
     "dev:server": "cd server && bun run dev"

@@ -1,4 +1,4 @@
-import { site } from '../../../config/site'
+import { emails, mailto } from '../../../config/contact'
 import { Button } from '../ui/Button'
 import { SectionLabel } from '../ui/SectionLabel'
 
@@ -23,16 +23,16 @@ export function Cta() {
           Tell us where you are and where you want to be. We'll chart the route from there.
         </p>
         <div className="mt-[34px] flex flex-wrap justify-center gap-3">
-          <Button href={`mailto:${site.email}`} variant="primary" arrow className="px-[26px] py-[14px]">
+          <Button href={mailto(emails.hello)} variant="primary" arrow className="px-[26px] py-[14px]">
             Start a project
           </Button>
           <Button
-            href={`mailto:${site.email}`}
+            href={mailto(emails.hello)}
             variant="secondary"
             mono
             className="px-[22px] py-[14px]"
           >
-            {site.email}
+            {emails.hello}
           </Button>
         </div>
       </div>
