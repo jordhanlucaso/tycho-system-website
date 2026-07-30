@@ -15,6 +15,7 @@ import {
 import type { ResourceSlug, RoleCategory, SelectOption } from '../../../config/leadMagnets'
 import { track } from '../../lib/analytics'
 import { getAttribution } from '../../lib/attribution'
+import { useRecaptcha } from '../../lib/recaptcha'
 import {
   LEAD_MAGNET_RESULT_KEY,
   submitLeadMagnetRequest,
@@ -153,6 +154,7 @@ function SelectField({
  */
 export function LeadMagnetForm({ resource, submitCta }: LeadMagnetFormProps) {
   const navigate = useNavigate()
+  const { getToken } = useRecaptcha()
   const [values, setValues] = useState<FormValues>(emptyValues)
   const [errors, setErrors] = useState<Partial<Record<keyof FormValues, string>>>({})
   const [step, setStep] = useState<1 | 2>(1)
@@ -247,6 +249,7 @@ export function LeadMagnetForm({ resource, submitCta }: LeadMagnetFormProps) {
     })
 
     try {
+      const recaptchaToken = await getToken('lead_magnet')
       const response = await submitLeadMagnetRequest({
         firstName: values.firstName.trim(),
         lastName: values.lastName.trim() || undefined,
@@ -264,6 +267,7 @@ export function LeadMagnetForm({ resource, submitCta }: LeadMagnetFormProps) {
         marketingConsent: values.marketingConsent,
         consentTextVersion: CONSENT_TEXT_VERSION,
         website: values.website,
+        recaptchaToken,
         source: getAttribution(),
       })
 

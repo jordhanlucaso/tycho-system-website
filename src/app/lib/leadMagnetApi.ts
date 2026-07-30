@@ -28,6 +28,9 @@ export type LeadMagnetSubscriptionRequest = {
   /** Honeypot — must stay empty; bots that fill it are rejected server-side. */
   website?: string
 
+  /** reCAPTCHA v3 token, verified server-side. Omitted when reCAPTCHA is unconfigured. */
+  recaptchaToken?: string
+
   source?: Attribution
 }
 

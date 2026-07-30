@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { supabase } from '../lib/supabase.js'
 import { createCrmClientFromEnv } from '../lib/hubspot.js'
 import { createEmailProviderFromEnv } from '../lib/email.js'
+import { verifyRecaptcha } from '../lib/recaptcha.js'
 import { processLeadMagnetSubscription } from '../lib/lead-magnets/service.js'
 import type {
   LeadMagnetDeps,
@@ -73,6 +74,28 @@ leadMagnetsRouter.post('/subscribe', async (req, res) => {
       res.status(429).json({
         ok: false,
         error: 'Too many requests. Please wait a few minutes and try again.',
+      })
+      return
+    }
+
+    // Bot verification (reCAPTCHA v3). The token never influences classification
+    // or storage — it only gates the request. Skipped when no secret is set.
+    const recaptchaToken =
+      typeof req.body === 'object' && req.body !== null
+        ? (req.body as Record<string, unknown>).recaptchaToken
+        : undefined
+    const verification = await verifyRecaptcha(
+      typeof recaptchaToken === 'string' ? recaptchaToken : undefined,
+      { expectedAction: 'lead_magnet' }
+    )
+    if (!verification.ok) {
+      log('warn', 'lead_magnet.recaptcha_rejected', {
+        reason: verification.reason,
+        score: verification.score,
+      })
+      res.status(400).json({
+        ok: false,
+        error: 'We could not verify your request. Please refresh the page and try again.',
       })
       return
     }

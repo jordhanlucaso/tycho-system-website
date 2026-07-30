@@ -1,22 +1,12 @@
-import { useState, useEffect, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 import { motion } from 'motion/react'
 import { site } from '../../config/site'
 import { useSeo } from '../lib/seo'
+import { useRecaptcha } from '../lib/recaptcha'
 import { SiteNav } from '../components/home/SiteNav'
 import { SiteFooter } from '../components/home/SiteFooter'
 import { SectionLabel } from '../components/ui/SectionLabel'
-
-const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined
-
-declare global {
-  interface Window {
-    grecaptcha?: {
-      ready: (cb: () => void) => void
-      execute: (siteKey: string, options: { action: string }) => Promise<string>
-    }
-  }
-}
 
 const inputClass = 'mt-2 w-full rounded-xl border border-[var(--border-primary)] bg-[var(--bg-surface)] px-4 py-3 text-sm text-[var(--text-body)] outline-none placeholder:text-[var(--text-faint)] focus:border-[color-mix(in_srgb,var(--azure)_50%,transparent)] focus:ring-1 focus:ring-[color-mix(in_srgb,var(--azure)_30%,transparent)]'
 
@@ -28,6 +18,7 @@ const nextSteps = [
 
 export function WebsiteCheck() {
   const navigate = useNavigate()
+  const { getToken } = useRecaptcha()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -38,25 +29,6 @@ export function WebsiteCheck() {
     path: '/website-check',
   })
 
-  useEffect(() => {
-    if (!SITE_KEY || document.getElementById('recaptcha-script')) return
-    const script = document.createElement('script')
-    script.id = 'recaptcha-script'
-    script.src = `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`
-    script.async = true
-    document.head.appendChild(script)
-  }, [])
-
-  async function getToken(): Promise<string | undefined> {
-    if (!SITE_KEY || !window.grecaptcha) return undefined
-    return new Promise((resolve) => {
-      window.grecaptcha!.ready(async () => {
-        try { resolve(await window.grecaptcha!.execute(SITE_KEY, { action: 'website_check' })) }
-        catch { resolve(undefined) }
-      })
-    })
-  }
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setSubmitting(true)
@@ -66,7 +38,7 @@ export function WebsiteCheck() {
     const data = new FormData(form)
 
     try {
-      const recaptchaToken = await getToken()
+      const recaptchaToken = await getToken('website_check')
 
       const res = await fetch('/api/contact', {
         method: 'POST',
