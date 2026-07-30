@@ -61,6 +61,7 @@ The minimum third parties needed to operate the business:
 - **Resend** (or an equivalent transactional-email provider) — sends the one-off email that delivers a guide you requested.
 - **Supabase** — database hosting for our minimal audit records (hashed email, requested guide, consent state, attribution).
 - **Vercel** — website hosting (logs request metadata such as IP and user agent for delivery and security; standard for any CDN-fronted site).
+- **Google reCAPTCHA** — invisible spam/bot protection on our contact and resource-request forms. Google may process the interaction (including IP and device signals) to score the request. See: https://policies.google.com/privacy.
 
 Each operates under their own privacy terms. We pick providers that meet GDPR standards.
 
