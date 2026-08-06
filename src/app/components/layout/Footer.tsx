@@ -3,6 +3,7 @@ import { Container } from './Container'
 import { HashLink } from './HashLink'
 import { Logo } from '../ui/Logo'
 import { site } from '../../../config/site'
+import { CookieSettingsButton } from '../consent/CookieSettingsButton'
 
 export function Footer() {
   return (
@@ -36,6 +37,10 @@ export function Footer() {
             <Link to='/refunds' className='transition-colors hover:text-[var(--text-primary)]'>
               Refunds
             </Link>
+            <Link to='/cookies' className='transition-colors hover:text-[var(--text-primary)]'>
+              Cookies
+            </Link>
+            <CookieSettingsButton />
           </div>
         </div>
         <div className='border-t border-[var(--border-subtle)] py-6 font-mono text-[11.5px] tracking-[0.05em] text-[var(--text-fainter)]'>

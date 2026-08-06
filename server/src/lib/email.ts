@@ -14,6 +14,13 @@ export type TransactionalEmail = {
   subject: string
   text: string
   html?: string
+  /**
+   * Extra SMTP headers. Used by the marketing sender for RFC 8058 one-click
+   * unsubscribe (`List-Unsubscribe` / `List-Unsubscribe-Post`), which Resend
+   * passes through via its `headers` field. Never set these by hand on a
+   * transactional message.
+   */
+  headers?: Record<string, string>
 }
 
 export interface TransactionalEmailProvider {
@@ -50,6 +57,7 @@ export class ResendEmailProvider implements TransactionalEmailProvider {
         subject: email.subject,
         text: email.text,
         ...(email.html ? { html: email.html } : {}),
+        ...(email.headers ? { headers: email.headers } : {}),
         ...(this.replyTo ? { reply_to: this.replyTo } : {}),
       }),
     })
@@ -65,6 +73,20 @@ export class ResendEmailProvider implements TransactionalEmailProvider {
 export function createEmailProviderFromEnv(): TransactionalEmailProvider | null {
   const apiKey = process.env.TRANSACTIONAL_EMAIL_API_KEY
   const from = process.env.TRANSACTIONAL_EMAIL_FROM
+  if (!apiKey || !from) return null
+  return new ResendEmailProvider(apiKey, from, process.env.TRANSACTIONAL_EMAIL_REPLY_TO)
+}
+
+/**
+ * Provider for marketing sends. Identical transport, but a separate `from` so
+ * bulk mail can use its own address (commonly a subdomain) without putting the
+ * reputation of transactional delivery — receipts, contracts, password resets —
+ * at risk. Falls back to the transactional sender when MARKETING_EMAIL_FROM is
+ * unset.
+ */
+export function createMarketingEmailProviderFromEnv(): TransactionalEmailProvider | null {
+  const apiKey = process.env.TRANSACTIONAL_EMAIL_API_KEY
+  const from = process.env.MARKETING_EMAIL_FROM || process.env.TRANSACTIONAL_EMAIL_FROM
   if (!apiKey || !from) return null
   return new ResendEmailProvider(apiKey, from, process.env.TRANSACTIONAL_EMAIL_REPLY_TO)
 }

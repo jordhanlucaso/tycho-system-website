@@ -249,6 +249,38 @@ details summary::-webkit-details-marker {
   color: var(--azure-hover);
 }
 
+/* ── Tables (cookie inventory). Wide on purpose, so scroll the table rather
+   than the page: the body must never scroll sideways on a phone. ── */
+.legal-prose table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  margin-top: 1.25rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  -webkit-overflow-scrolling: touch;
+}
+.legal-prose th,
+.legal-prose td {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--border-primary);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  min-width: 8rem;
+}
+.legal-prose th {
+  background: var(--bg-surface);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
 /* ── Reduced motion: stop the starfield twinkle (handled in JS) and freeze
    every orbital/float animation. The data attribute mirrors the design
    reference's `data-tycho-motion="off"` toggle. */

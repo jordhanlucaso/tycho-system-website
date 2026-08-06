@@ -4,6 +4,13 @@ Enrolment: joining the matching active list (segment + explicit marketing
 consent). Contacts without marketing consent receive only the transactional
 delivery email. No false scarcity anywhere.
 
+> **Unsubscribe is mandatory in every email below.** Any of these sent from the
+> application must go through `sendMarketingEmail()`, which checks the
+> suppression list at the sending boundary and appends the unsubscribe footer
+> and one-click headers. Any sent from HubSpot must carry HubSpot's own
+> unsubscribe link. Opting out clears `tycho_marketing_consent`, which is what
+> these active lists filter on. See `docs/consent-and-unsubscribe.md`.
+
 ## Business Leaders — "Business Systems Briefing"
 
 **Email 1 — Immediate (delivery follow-up).**

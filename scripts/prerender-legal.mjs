@@ -20,6 +20,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const pages = [
   { md: 'terms-of-service.md', route: 'terms', title: 'Terms of Service — Tycho Systems' },
   { md: 'privacy-policy.md', route: 'privacy', title: 'Privacy Policy — Tycho Systems' },
+  { md: 'cookie-policy.md', route: 'cookies', title: 'Cookie Policy — Tycho Systems' },
   { md: 'refund-policy.md', route: 'refunds', title: 'Refund Policy — Tycho Systems' },
 ]
 
@@ -59,6 +60,9 @@ function shell(title, body) {
   em { color: #93A0BD; }
   code { background: rgba(255,255,255,0.06); border-radius: 0.3rem; padding: 0.1rem 0.4rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; }
   a { text-underline-offset: 4px; }
+  table { display: block; overflow-x: auto; width: 100%; margin-top: 1.25rem; border-collapse: collapse; font-size: 0.9rem; -webkit-overflow-scrolling: touch; }
+  th, td { padding: 0.6rem 0.85rem; border: 1px solid rgba(255,255,255,0.08); text-align: left; vertical-align: top; line-height: 1.6; color: #C7D0E4; min-width: 8rem; }
+  th { background: rgba(255,255,255,0.03); font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B7795; white-space: nowrap; }
   footer { border-top: 1px solid rgba(255,255,255,0.08); }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; padding-top: 20px; padding-bottom: 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: #6B7795; }
 </style>
@@ -86,7 +90,12 @@ function shell(title, body) {
     <span style="flex:1;"></span>
     <a href="/terms">Terms</a>
     <a href="/privacy">Privacy</a>
+    <a href="/cookies">Cookies</a>
     <a href="/refunds">Refunds</a>
+    <!-- These pages are static HTML with no JavaScript, so the preference
+         panel cannot be opened in place. /#cookie-settings boots the app and
+         opens it there. -->
+    <a href="/#cookie-settings">Cookie settings</a>
   </div>
 </footer>
 </body>

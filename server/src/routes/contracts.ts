@@ -1,5 +1,10 @@
 import { Router } from 'express'
-import { renderContractText, buildDocumentName, type ContractItem } from '../lib/contract-template.js'
+import {
+  renderContractText,
+  buildDocumentName,
+  computeContractTotals,
+  type ContractItem,
+} from '../lib/contract-template.js'
 import { supabase } from '../lib/supabase.js'
 import { stripe } from '../lib/stripe.js'
 
@@ -56,8 +61,9 @@ contractsRouter.post('/create', async (req, res) => {
     const ctx = buildCtx(customerName, customerEmail, customerBusiness, customerPhone, items)
     const contractText = renderContractText(ctx)
 
-    const oneTimeTotal = items.filter((i) => !i.recurring).reduce((s, i) => s + i.priceInCents, 0)
-    const depositTotal = items.reduce((s, i) => s + (i.depositPriceInCents ?? i.priceInCents), 0)
+    // Same helper the agreement text uses, so the stored figures and the
+    // rendered document can never disagree.
+    const { oneTimeTotal, monthlyTotal } = computeContractTotals(items)
 
     const { data, error } = await supabase
       .from('contracts')
@@ -71,7 +77,7 @@ contractsRouter.post('/create', async (req, res) => {
         customer_phone:       customerPhone || null,
         items_json:           items,
         one_time_total_cents: oneTimeTotal,
-        recurring_total_cents: depositTotal,
+        recurring_total_cents: monthlyTotal,
       })
       .select('id')
       .single()
@@ -148,9 +154,9 @@ contractsRouter.post('/:id/sign', async (req, res) => {
 })
 
 // ─── POST /api/contracts/:id/payment ────────────────────────────────────────
-// Step 3: verify contract is signed, create a single Stripe Checkout session.
-// Mixed carts (one-time + recurring) are handled in one subscription session —
-// Stripe charges one-time items on the first invoice automatically.
+// Step 3: verify contract is signed, create a single Stripe Checkout session
+// for the one-time deposit. Monthly plans in the same contract are not charged
+// here — see the note on chargeableItems below.
 contractsRouter.post('/:id/payment', async (req, res) => {
   try {
     const contractId = req.params.id
@@ -176,9 +182,25 @@ contractsRouter.post('/:id/payment', async (req, res) => {
 
     const allItems: ContractItem[] = contract.items_json
 
-    // Checkout is deposit-only, always one-time payment mode.
-    // Stripe charges depositPriceInCents (not full project price).
-    const lineItems = allItems.map((item) => ({
+    // Checkout is deposit-only, always one-time payment mode: Stripe charges
+    // depositPriceInCents, not the full project price.
+    //
+    // Monthly plans are deliberately excluded. They carry no deposit price, so
+    // including them here would charge a full month up front as a one-off and
+    // still never create a subscription (this session is `mode: 'payment'`).
+    // Per Section 9 of the agreement, a plan is set up on its own billing
+    // schedule after delivery.
+    const chargeableItems = allItems.filter((item) => !item.recurring)
+
+    if (chargeableItems.length === 0) {
+      res.status(400).json({
+        error:
+          'This contract has no one-time work to charge. Monthly plans are billed separately after delivery.',
+      })
+      return
+    }
+
+    const lineItems = chargeableItems.map((item) => ({
       price_data: {
         currency: 'usd',
         product_data: { name: item.invoiceLabel || item.name },

@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Per-recipient unsubscribe links. Nothing here is useful to a crawler, and the
+# page should never appear in search results.
+Disallow: /unsubscribe
+
 Sitemap: https://tychosystem.com/sitemap.xml

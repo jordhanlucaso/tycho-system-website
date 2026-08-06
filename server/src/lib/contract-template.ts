@@ -38,7 +38,44 @@ function fmt(cents: number): string {
   return `$${(cents / 100).toLocaleString('en-US')}`
 }
 
+export type ContractTotals = {
+  /** Full price of all one-time work. Excludes monthly plans. */
+  oneTimeTotal: number
+  /** What Stripe charges at checkout: one-time deposits only. */
+  depositTotal: number
+  /** Combined monthly plan price. Billed on its own schedule, never at checkout. */
+  monthlyTotal: number
+}
+
+/**
+ * The single source of truth for contract money.
+ *
+ * Monthly plans must never reach the deposit: they have no
+ * `depositPriceInCents` (it is one-time only, see src/config/pricing.ts), so
+ * summing the deposit across every item would silently fall back to the full
+ * monthly price and bill it once, up front — producing a contract whose
+ * "deposit due on signing" could exceed its "total project fee".
+ *
+ * Both the rendered agreement and the Stripe checkout session derive their
+ * amounts from here, so the document and the charge cannot drift apart.
+ */
+export function computeContractTotals(items: ContractItem[]): ContractTotals {
+  const oneTime = items.filter((i) => !i.recurring)
+  const recurring = items.filter((i) => i.recurring)
+
+  return {
+    oneTimeTotal: oneTime.reduce((sum, i) => sum + i.priceInCents, 0),
+    depositTotal: oneTime.reduce((sum, i) => sum + (i.depositPriceInCents ?? i.priceInCents), 0),
+    monthlyTotal: recurring.reduce((sum, i) => sum + i.priceInCents, 0),
+  }
+}
+
+/** Exhibit A. One-time work only — monthly plans are described in Exhibit B. */
 function buildScopeOfWork(items: ContractItem[]): string {
+  if (items.length === 0) {
+    return 'No one-time project work is included in this Agreement.\n'
+  }
+
   const lines: string[] = []
 
   for (const item of items) {
@@ -80,18 +117,77 @@ function buildScopeOfWork(items: ContractItem[]): string {
   return lines.join('\n')
 }
 
+/**
+ * Exhibit B. Monthly plans, with their own pricing and cancellation terms.
+ *
+ * Always rendered, even when no plan is selected, so section and exhibit
+ * numbering does not shift with the contents of the cart — a signed agreement
+ * whose clause numbers depend on what was bought is a drafting hazard.
+ */
+function buildMonthlyPlanExhibit(items: ContractItem[], monthlyTotal: number): string {
+  if (items.length === 0) {
+    return 'No monthly plan is included in this Agreement.\n'
+  }
+
+  const lines: string[] = []
+
+  for (const item of items) {
+    lines.push(`${item.contractTitle}`)
+    lines.push('─'.repeat(50))
+    lines.push(`SKU:              ${item.sku}`)
+    lines.push(`Monthly price:    ${fmt(item.priceInCents)} per month`)
+
+    if (item.features?.length) {
+      lines.push('')
+      lines.push('Included in plan:')
+      item.features.forEach((f) => lines.push(`  • ${f}`))
+    }
+
+    if (item.outOfScope?.length) {
+      lines.push('')
+      lines.push('Explicitly out of plan:')
+      item.outOfScope.forEach((f) => lines.push(`  ✕ ${f}`))
+    }
+
+    lines.push('')
+  }
+
+  lines.push(`Total monthly:    ${fmt(monthlyTotal)} per month`)
+  lines.push('Billing:          Monthly via Stripe auto-pay')
+  lines.push('Starts:           After delivery and acceptance of the Exhibit A work')
+  lines.push("Cancellation:     30 days' written notice")
+
+  return lines.join('\n')
+}
+
 /** Returns the full rendered contract as a plain-text string with all values substituted. */
 export function renderContractText(ctx: ContractContext): string {
   const now = new Date()
   const date = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
   const oneTimeItems = ctx.items.filter((i) => !i.recurring)
-  const oneTimeTotal = oneTimeItems.reduce((s, i) => s + i.priceInCents, 0)
-  const depositTotal = ctx.items.reduce((s, i) => s + (i.depositPriceInCents ?? i.priceInCents), 0)
+  const recurringItems = ctx.items.filter((i) => i.recurring)
+  const { oneTimeTotal, depositTotal, monthlyTotal } = computeContractTotals(ctx.items)
 
   const deliveryTimeline = oneTimeItems[0]?.delivery ?? 'To be agreed'
   const revisionRounds = oneTimeItems[0]?.revisions ?? 'As per package'
-  const scopeOfWork = buildScopeOfWork(ctx.items)
+  const scopeOfWork = buildScopeOfWork(oneTimeItems)
+  const monthlyPlanExhibit = buildMonthlyPlanExhibit(recurringItems, monthlyTotal)
+
+  // Section 9 always exists so the numbering of 10-15 is stable, whether or not
+  // a plan was selected.
+  const monthlyPlanClause = recurringItems.length
+    ? `9.1 Monthly plan selected: ${recurringItems.map((i) => i.contractTitle).join(', ')} (see Exhibit B).
+9.2 Monthly plan price: ${fmt(monthlyTotal)} per month, billed via Stripe auto-pay,
+    beginning after delivery and acceptance of the work in Exhibit A.
+9.3 Out-of-plan work is billed at ${ctx.hourlyRate}/hour or quoted as a fixed add-on.
+9.4 Client may cancel the monthly plan on 30 days' written notice. Non-payment may
+    result in suspension of the plan.
+9.5 Monthly plan fees are separate from the project fee in 3.1 and are not included
+    in the deposit in 3.2.`
+    : `9.1 No monthly plan is included in this Agreement (see Exhibit B).
+9.2 A monthly care plan may be added later by separate written agreement, at the
+    rates then in effect.`
 
   const milestonesSection = oneTimeItems.flatMap((item) => {
     if (!item.remainingMilestones?.length) return []
@@ -104,7 +200,7 @@ export function renderContractText(ctx: ContractContext): string {
   }).join('\n')
 
   return `WEB DEVELOPMENT SERVICES AGREEMENT
-(Fixed-Price Project)
+(Fixed-Price Project + Optional Monthly Plan)
 
 This Web Development Services Agreement ("Agreement") is entered into on ${date}
 by and between:
@@ -130,7 +226,10 @@ Phone:    ${ctx.customerPhone || 'N/A'}
 
 3. PRICING, INVOICING & PAYMENTS
 3.1 Total project fee: ${fmt(oneTimeTotal)} (USD) + applicable taxes/fees (if any).
+    Monthly plan fees, if any, are separate and are covered by Section 9.
 3.2 Deposit due on signing: ${fmt(depositTotal)} (non-refundable; reserves schedule).
+    This is the amount charged at checkout. It covers one-time work only and
+    never includes a monthly plan.
 3.3 Payment schedule per package (see Exhibit A for exact milestones):
 ${milestonesSection || '    As described in Exhibit A.'}
 3.4 Payments will be made via Stripe (card/ACH where available).
@@ -164,31 +263,36 @@ ${milestonesSection || '    As described in Exhibit A.'}
     billed to Client or paid directly by Client.
 8.2 Provider is not responsible for downtime caused by third-party services.
 
-9. CONFIDENTIALITY
+9. MONTHLY PLAN (OPTIONAL)
+${monthlyPlanClause}
+
+10. CONFIDENTIALITY
 Both parties agree to keep non-public information confidential and use it only to
 perform this Agreement.
 
-10. LIMITATION OF LIABILITY
+11. LIMITATION OF LIABILITY
 Provider's total liability is limited to the total fees paid by Client under this
 Agreement in the last 3 months. Provider is not liable for indirect, incidental,
 or consequential damages.
 
-11. TERMINATION
-11.1 Client may terminate at any time. Client will pay for completed/accepted
+12. TERMINATION
+12.1 Client may terminate at any time. Client will pay for completed/accepted
      milestones and work in progress at ${ctx.hourlyRate}/hour. The initial deposit
      remains non-refundable.
-11.2 Provider may terminate if Client materially breaches this Agreement and fails
+12.2 Provider may terminate if Client materially breaches this Agreement and fails
      to cure within 7 days after written notice.
+12.3 Termination of the project does not by itself cancel a monthly plan; a plan is
+     cancelled under Section 9.4.
 
-12. PORTFOLIO RIGHTS
+13. PORTFOLIO RIGHTS
 Provider may display the completed work in its portfolio after launch, unless
 Client requests confidentiality in writing.
 
-13. ELECTRONIC SIGNATURES
+14. ELECTRONIC SIGNATURES
 This Agreement may be executed electronically. Electronic and typed signatures are
 legally binding under the US ESIGN Act (15 U.S.C. § 7001) and applicable state law.
 
-14. GOVERNING LAW & VENUE
+15. GOVERNING LAW & VENUE
 This Agreement is governed by the laws of ${ctx.governingState}.
 Any disputes shall be brought in the courts of ${ctx.governingCounty}.
 
@@ -201,6 +305,12 @@ Total project price:  ${fmt(oneTimeTotal)}
 Deposit due today:    ${fmt(depositTotal)}
 Estimated delivery:   ${deliveryTimeline}
 Revision rounds:      ${revisionRounds}
+
+════════════════════════════════════════════════════════════════
+
+EXHIBIT B — MONTHLY PLAN
+
+${monthlyPlanExhibit}
 
 ════════════════════════════════════════════════════════════════
 
