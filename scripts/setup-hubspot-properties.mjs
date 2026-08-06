@@ -183,6 +183,10 @@ const PROPERTIES = [
   enumProp('tycho_marketing_consent', 'Tycho — Marketing consent', marketingConsentOptions),
   textProp('tycho_consent_text_version', 'Tycho — Consent text version'),
   datetimeProp('tycho_consent_timestamp', 'Tycho — Consent timestamp'),
+  // Written by the unsubscribe flow alongside tycho_marketing_consent=false, so
+  // an active list filtered on consent drops the contact on the next refresh.
+  datetimeProp('tycho_unsubscribed_at', 'Tycho — Unsubscribed at'),
+  textProp('tycho_unsubscribe_source', 'Tycho — Unsubscribe source'),
 ]
 
 const MANAGED_NAMES = new Set(PROPERTIES.map((p) => p.name))

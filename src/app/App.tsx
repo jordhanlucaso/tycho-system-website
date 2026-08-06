@@ -38,7 +38,10 @@ import { AuthCallback } from './routes/AuthCallback'
 import { NotFound } from './routes/NotFound'
 import { Terms } from './routes/Terms'
 import { Privacy } from './routes/Privacy'
+import { Cookies } from './routes/Cookies'
 import { Refunds } from './routes/Refunds'
+import { Unsubscribe } from './routes/Unsubscribe'
+import { ConsentProvider } from './components/consent/ConsentProvider'
 
 export default function App() {
   return (
@@ -79,7 +82,9 @@ export default function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/terms' element={<Terms />} />
             <Route path='/privacy' element={<Privacy />} />
+            <Route path='/cookies' element={<Cookies />} />
             <Route path='/refunds' element={<Refunds />} />
+            <Route path='/unsubscribe' element={<Unsubscribe />} />
 
             {/* Admin dashboard */}
             <Route path='/admin' element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
@@ -108,6 +113,10 @@ export default function App() {
 
             <Route path='*' element={<NotFound />} />
           </Routes>
+          {/* Site-wide cookie banner + preference panel (inside the router so
+              it can link to the policy pages, outside <Routes> so it persists
+              across navigation). */}
+          <ConsentProvider />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

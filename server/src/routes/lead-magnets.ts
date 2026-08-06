@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase.js'
 import { createCrmClientFromEnv } from '../lib/hubspot.js'
 import { createEmailProviderFromEnv } from '../lib/email.js'
 import { verifyRecaptcha } from '../lib/recaptcha.js'
+import { createSupabaseSubscriptionStore } from '../lib/marketing/subscriptions.js'
 import { processLeadMagnetSubscription } from '../lib/lead-magnets/service.js'
 import type {
   LeadMagnetDeps,
@@ -61,6 +62,7 @@ function buildDeps(): LeadMagnetDeps {
     crm: createCrmClientFromEnv(),
     email: createEmailProviderFromEnv(),
     store,
+    subscriptions: createSupabaseSubscriptionStore(supabase),
     siteUrl: (process.env.PUBLIC_SITE_URL || process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, ''),
     log,
   }

@@ -6,6 +6,7 @@ import { RESOURCES } from './types.js'
 import type { LeadMagnetSubscriptionResponse } from './types.js'
 import type { CrmClient } from '../hubspot.js'
 import type { TransactionalEmailProvider } from '../email.js'
+import type { MarketingSubscriptionStore } from '../marketing/subscriptions.js'
 
 export type LeadMagnetRequestRecord = {
   email_hash: string
@@ -43,6 +44,12 @@ export type LeadMagnetDeps = {
   crm: CrmClient | null
   email: TransactionalEmailProvider | null
   store: LeadMagnetStore | null
+  /**
+   * The application's own marketing suppression list. Kept in step with the
+   * `tycho_marketing_consent` property written to HubSpot below, so the
+   * final-boundary guard in sendMarketingEmail agrees with the CRM.
+   */
+  subscriptions?: MarketingSubscriptionStore | null
   /** Public site origin used to build absolute download URLs, no trailing slash. */
   siteUrl: string
   log: Logger
@@ -192,7 +199,43 @@ export async function processLeadMagnetSubscription(
     deps.log('warn', 'lead_magnet.email_skipped_not_configured', { emailHash })
   }
 
-  // 3. Local audit record (idempotent). Failure degrades the audit trail but
+  // 3. Marketing subscription state, mirroring exactly what was written to
+  //    HubSpot above so the two never disagree about who is marketable.
+  //
+  //    Ticking the box is an explicit opt-in, and is the only thing that can
+  //    (re)subscribe someone — requesting a guide, buying, or contacting
+  //    support never does. Leaving it unticked records an opt-out, matching
+  //    `tycho_marketing_consent: 'false'`, which is what the nurture lists
+  //    filter on. Failure here is logged and surfaced but never blocks the
+  //    guide the visitor actually asked for.
+  if (deps.subscriptions) {
+    try {
+      if (input.marketingConsent) {
+        await deps.subscriptions.subscribe({
+          emailHash,
+          crmContactId: contactId,
+          consentSource: `lead_magnet:${input.requestedResource}`,
+          consentTextVersion: input.consentTextVersion,
+          at: now,
+        })
+      } else {
+        await deps.subscriptions.unsubscribe({
+          emailHash,
+          source: 'form_not_opted_in',
+          at: now,
+          crmSyncStatus: crmStatus === 'synced' ? 'synced' : 'skipped',
+        })
+      }
+    } catch (err) {
+      warnings.push('subscription_state_failed')
+      deps.log('error', 'lead_magnet.subscription_state_failed', {
+        emailHash,
+        error: err instanceof Error ? err.message : 'unknown',
+      })
+    }
+  }
+
+  // 4. Local audit record (idempotent). Failure degrades the audit trail but
   //    should not block delivery.
   if (deps.store) {
     try {

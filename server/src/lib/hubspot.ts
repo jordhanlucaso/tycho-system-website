@@ -24,10 +24,20 @@ export type UpsertContactResult = {
   created: boolean
 }
 
+export type MarketingOptOutResult = {
+  /** False when no contact exists for the address — still a success. */
+  contactFound: boolean
+}
+
 export interface CrmClient {
   readonly name: string
   upsertContactByEmail(email: string, properties: HubSpotContactProperties): Promise<UpsertContactResult>
   upsertCompanyAndAssociate(contactId: string, companyName: string): Promise<void>
+  /**
+   * Withdraw marketing consent for an address. Idempotent, and a no-op when
+   * the CRM has never seen the address.
+   */
+  setMarketingOptOut(email: string, source: string, at: Date): Promise<MarketingOptOutResult>
 }
 
 export class HubSpotClient implements CrmClient {
@@ -109,6 +119,57 @@ export class HubSpotClient implements CrmClient {
     if (!res.ok) throw new HubSpotError(`Contact create failed (${res.status})`, res.status)
     const data = (await res.json()) as { id: string }
     return { contactId: data.id, created: true }
+  }
+
+  /**
+   * Mark a contact as opted out of marketing.
+   *
+   * Two layers, because they do different jobs:
+   * 1. `tycho_marketing_consent = 'false'` — this is what the nurture active
+   *    lists filter on (see docs/email-sequences.md), so clearing it is what
+   *    actually removes the contact from the sequences.
+   * 2. HubSpot's own subscription opt-out, when HUBSPOT_MARKETING_SUBSCRIPTION_ID
+   *    is configured. That is portal-level and applies to any HubSpot marketing
+   *    email, including ones sent outside these workflows.
+   *
+   * Layer 2 is optional because the subscription type id is portal-specific and
+   * cannot be inferred from this repository. Layer 1 alone already stops the
+   * documented sequences.
+   */
+  async setMarketingOptOut(email: string, source: string, at: Date): Promise<MarketingOptOutResult> {
+    const contactId = await this.findContactIdByEmail(email)
+
+    if (contactId) {
+      const res = await this.request(`/crm/v3/objects/contacts/${contactId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          properties: {
+            tycho_marketing_consent: 'false',
+            tycho_unsubscribed_at: at.toISOString(),
+            tycho_unsubscribe_source: source,
+          },
+        }),
+      })
+      if (!res.ok) throw new HubSpotError(`Opt-out update failed (${res.status})`, res.status)
+    }
+
+    const subscriptionId = process.env.HUBSPOT_MARKETING_SUBSCRIPTION_ID
+    if (subscriptionId) {
+      const res = await this.request('/communication-preferences/v3/unsubscribe', {
+        method: 'POST',
+        body: JSON.stringify({ emailAddress: email, subscriptionId }),
+      })
+      // 404/400 here usually means "this address was never subscribed to that
+      // type", which is the desired end state anyway — do not fail the opt-out.
+      if (!res.ok && res.status !== 404 && res.status !== 400) {
+        throw new HubSpotError(
+          `Subscription opt-out failed (${res.status})`,
+          res.status
+        )
+      }
+    }
+
+    return { contactFound: contactId !== null }
   }
 
   /** Best-effort company upsert + association (callers treat failure as a warning). */

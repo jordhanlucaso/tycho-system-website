@@ -11,6 +11,7 @@ import { salesRouter } from './routes/sales.js'
 import { contractsRouter } from './routes/contracts.js'
 import { contactRouter } from './routes/contact.js'
 import { leadMagnetsRouter } from './routes/lead-magnets.js'
+import { unsubscribeRouter } from './routes/unsubscribe.js'
 import { startHealthCheckCron } from './lib/healthcheck.js'
 
 const app = express()
@@ -54,6 +55,7 @@ app.use('/api/sales', salesRouter)
 app.use('/api/contracts', contractsRouter)
 app.use('/api/contact', contactRouter)
 app.use('/api/lead-magnets', leadMagnetsRouter)
+app.use('/api/unsubscribe', unsubscribeRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)

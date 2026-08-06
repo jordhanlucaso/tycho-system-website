@@ -3,6 +3,7 @@ import { site } from '../../../config/site'
 import { emails, mailto, emailSubjects } from '../../../config/contact'
 import { HashLink } from '../layout/HashLink'
 import { Logo } from '../ui/Logo'
+import { CookieSettingsButton } from '../consent/CookieSettingsButton'
 
 const navigate = [
   { href: '#work', label: 'Work' },
@@ -97,6 +98,13 @@ export function SiteFooter() {
             >
               Refunds
             </Link>
+            <Link
+              to="/cookies"
+              className="text-[14px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+            >
+              Cookies
+            </Link>
+            <CookieSettingsButton className="text-[14px] text-[var(--text-muted)]" />
           </div>
         </div>
       </div>

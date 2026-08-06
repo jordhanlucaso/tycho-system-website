@@ -4,6 +4,7 @@ import type { LeadMagnetDeps, LeadMagnetRequestRecord } from './service.js'
 import { HubSpotError } from '../hubspot.js'
 import type { CrmClient } from '../hubspot.js'
 import type { TransactionalEmailProvider } from '../email.js'
+import type { MarketingSubscriptionStore } from '../marketing/subscriptions.js'
 
 const validBody = {
   firstName: 'Ada',
@@ -25,6 +26,7 @@ function makeCrm(overrides: Partial<CrmClient> = {}): CrmClient {
     name: 'mock-crm',
     upsertContactByEmail: vi.fn().mockResolvedValue({ contactId: 'c-1', created: true }),
     upsertCompanyAndAssociate: vi.fn().mockResolvedValue(undefined),
+    setMarketingOptOut: vi.fn().mockResolvedValue({ contactFound: true }),
     ...overrides,
   }
 }
@@ -246,5 +248,92 @@ describe('hashEmail', () => {
   it('is stable and non-reversible-looking', () => {
     expect(hashEmail('ada@example.com')).toBe(hashEmail('ada@example.com'))
     expect(hashEmail('ada@example.com')).toMatch(/^[a-f0-9]{64}$/)
+  })
+})
+
+describe('marketing subscription state', () => {
+  function makeSubscriptions() {
+    const calls: Array<{ kind: 'subscribe' | 'unsubscribe'; input: unknown }> = []
+    const store: MarketingSubscriptionStore & { calls: typeof calls } = {
+      calls,
+      get: vi.fn().mockResolvedValue(null),
+      subscribe: vi.fn(async (input) => {
+        calls.push({ kind: 'subscribe', input })
+      }),
+      unsubscribe: vi.fn(async (input) => {
+        calls.push({ kind: 'unsubscribe', input })
+      }),
+    }
+    return store
+  }
+
+  it('records an opt-in when the marketing box is ticked', async () => {
+    const subscriptions = makeSubscriptions()
+    await processLeadMagnetSubscription(makeDeps({ subscriptions }), {
+      ...validBody,
+      marketingConsent: true,
+    })
+
+    expect(subscriptions.calls).toHaveLength(1)
+    expect(subscriptions.calls[0].kind).toBe('subscribe')
+    expect(subscriptions.calls[0].input).toMatchObject({
+      emailHash: hashEmail('ada@example.com'),
+      consentSource: 'lead_magnet:ai_operations_pain_map',
+      consentTextVersion: '2026-07-lead-magnet-v1',
+    })
+  })
+
+  it('does not subscribe someone who only wanted the guide', async () => {
+    const subscriptions = makeSubscriptions()
+    const result = await processLeadMagnetSubscription(makeDeps({ subscriptions }), {
+      ...validBody,
+      marketingConsent: false,
+    })
+
+    // The guide is still delivered — refusing marketing costs the visitor
+    // nothing.
+    expect(result.status).toBe(200)
+    if (result.status === 200) expect(result.body.marketingEnrolled).toBe(false)
+
+    expect(subscriptions.subscribe).not.toHaveBeenCalled()
+    expect(subscriptions.calls[0]?.kind).toBe('unsubscribe')
+  })
+
+  it('only resubscribes on a fresh explicit opt-in, never on another form alone', async () => {
+    const subscriptions = makeSubscriptions()
+    const deps = makeDeps({ subscriptions })
+
+    await processLeadMagnetSubscription(deps, { ...validBody, marketingConsent: true })
+    // A later request for the other guide, box left unticked.
+    await processLeadMagnetSubscription(deps, {
+      ...validBody,
+      requestedResource: 'ai_dictionary',
+      marketingConsent: false,
+    })
+
+    expect(subscriptions.calls.map((c) => c.kind)).toEqual(['subscribe', 'unsubscribe'])
+
+    // Ticking it again is a new explicit opt-in, and that does resubscribe.
+    await processLeadMagnetSubscription(deps, { ...validBody, marketingConsent: true })
+    expect(subscriptions.calls.map((c) => c.kind)).toEqual([
+      'subscribe',
+      'unsubscribe',
+      'subscribe',
+    ])
+  })
+
+  it('still delivers the guide when the subscription write fails', async () => {
+    const subscriptions = makeSubscriptions()
+    subscriptions.subscribe = vi.fn().mockRejectedValue(new Error('db down'))
+
+    const result = await processLeadMagnetSubscription(makeDeps({ subscriptions }), {
+      ...validBody,
+      marketingConsent: true,
+    })
+
+    expect(result.status).toBe(200)
+    if (result.status === 200) {
+      expect(result.body.warnings).toContain('subscription_state_failed')
+    }
   })
 })

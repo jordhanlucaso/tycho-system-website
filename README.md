@@ -39,5 +39,7 @@ sender/reply-to are configured via env (`server/.env.example`), not in code.
 - Lead-magnet funnel docs (setup, HubSpot properties, deployment checklist):
   `docs/lead-magnet-funnel.md`
 - Nurture email copy: `docs/email-sequences.md` · Social link routing: `docs/social-content-links.md`
+- Cookie consent and marketing unsubscribe (inventory, enforcement, token design,
+  source of truth): `docs/consent-and-unsubscribe.md`
 - Environment templates: `.env.example` (frontend) and `server/.env.example` (server).
   Never commit real secrets.
