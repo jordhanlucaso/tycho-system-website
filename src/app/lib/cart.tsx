@@ -49,7 +49,14 @@ type CartContextValue = {
   oneTimeTotal: number
   /** Monthly recurring total (informational — not charged at checkout) */
   recurringTotal: number
-  /** Deposit total — what Stripe actually charges at checkout */
+  /**
+   * Deposit total — what Stripe actually charges at checkout.
+   *
+   * One-time items only. Monthly plans have no deposit price, so including
+   * them would fall back to their full monthly price and quote a deposit
+   * larger than the project fee. Mirrors `computeContractTotals` in
+   * server/src/lib/contract-template.ts, which produces the signed figure.
+   */
   depositTotal: number
   itemCount: number
 }
@@ -85,7 +92,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     hasItem:      (id)   => state.items.some((i) => i.id === id),
     oneTimeTotal:  state.items.filter((i) => !i.recurring).reduce((s, i) => s + i.priceInCents, 0),
     recurringTotal: state.items.filter((i) => i.recurring).reduce((s, i) => s + i.priceInCents, 0),
-    depositTotal:  state.items.reduce((s, i) => s + (i.depositPriceInCents ?? i.priceInCents), 0),
+    depositTotal:  state.items.filter((i) => !i.recurring).reduce((s, i) => s + (i.depositPriceInCents ?? i.priceInCents), 0),
     itemCount:     state.items.length,
   }
 

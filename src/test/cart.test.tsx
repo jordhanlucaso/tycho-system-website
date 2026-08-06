@@ -11,6 +11,7 @@ function CartTestHarness() {
       <span data-testid='count'>{cart.itemCount}</span>
       <span data-testid='one-time'>{cart.oneTimeTotal}</span>
       <span data-testid='recurring'>{cart.recurringTotal}</span>
+      <span data-testid='deposit'>{cart.depositTotal}</span>
       <span data-testid='is-open'>{String(cart.isOpen)}</span>
       {tiers.map((t) => (
         <button key={t.id} data-testid={`add-${t.id}`} onClick={() => cart.addItem(t)}>
@@ -103,6 +104,29 @@ describe('Cart', () => {
       await userEvent.click(screen.getByTestId('add-care-plan'))
     })
     expect(screen.getByTestId('one-time').textContent).toBe('199000')
+    expect(screen.getByTestId('recurring').textContent).toBe('14900')
+  })
+
+  it('keeps the monthly plan out of the deposit charged at checkout', async () => {
+    renderCart()
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('add-starter-website'))
+      await userEvent.click(screen.getByTestId('add-care-plan'))
+    })
+
+    // starter-website deposit is 99000; the 14900/mo care plan has no deposit
+    // price, so summing across every item would quote 113900 — a deposit
+    // larger than nothing the client agreed to pay up front.
+    expect(screen.getByTestId('deposit').textContent).toBe('99000')
+  })
+
+  it('charges no deposit for a plan-only cart', async () => {
+    renderCart()
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('add-care-plan'))
+    })
+
+    expect(screen.getByTestId('deposit').textContent).toBe('0')
     expect(screen.getByTestId('recurring').textContent).toBe('14900')
   })
 
