@@ -33,12 +33,12 @@ export function Home() {
 
   return (
     <div
-      className="min-h-screen overflow-hidden bg-[var(--bg-primary)] font-sans text-[var(--text-body)]"
+      className="min-h-screen overflow-hidden font-sans text-[var(--text-body)]"
       data-tycho-motion={prefersReducedMotion ? 'off' : 'on'}
     >
       <SiteNav />
       <main>
-        <Hero heroVisual="2D orbit" animate={!prefersReducedMotion} />
+        <Hero heroVisual="2D orbit" starfield="Off" animate={!prefersReducedMotion} />
         <AudienceLine />
         <Process />
         <SelectedWork />

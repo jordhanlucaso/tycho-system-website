@@ -79,6 +79,12 @@
   --glow-border-to: rgba(60, 111, 214, 0.04);
 }
 
+/* Base page colour — sits behind the fixed site-wide starfield canvas
+   (SiteStarfield, z-index -1), which is transparent. */
+body {
+  background: var(--bg-primary);
+}
+
 /* ── Grid pattern background ── */
 .bg-grid {
   background-image:
