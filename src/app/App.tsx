@@ -42,12 +42,16 @@ import { Cookies } from './routes/Cookies'
 import { Refunds } from './routes/Refunds'
 import { Unsubscribe } from './routes/Unsubscribe'
 import { ConsentProvider } from './components/consent/ConsentProvider'
+import { SiteStarfield } from './components/home/SiteStarfield'
+import { usePrefersReducedMotion } from './lib/usePrefersReducedMotion'
 
 export default function App() {
+  const prefersReducedMotion = usePrefersReducedMotion()
   return (
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
+          <SiteStarfield animate={!prefersReducedMotion} />
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/m/:slug' element={<MockupPage />} />
