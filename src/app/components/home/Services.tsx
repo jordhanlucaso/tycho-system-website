@@ -48,7 +48,7 @@ export function Services() {
           Practical systems that reduce repetitive work.
         </h2>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-[18px]">
+        <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2">
           {services.map((service) => (
             <article
               key={service.id}

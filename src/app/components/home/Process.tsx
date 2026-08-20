@@ -25,7 +25,7 @@ export function Process() {
         </p>
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-px overflow-hidden rounded-2xl border border-[var(--border-primary)] bg-[var(--border-primary)]">
+      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-[var(--border-primary)] bg-[var(--border-primary)] sm:grid-cols-2 lg:grid-cols-3">
         {processSteps.map((step) => (
           <StepCard key={step.index} {...step} />
         ))}
