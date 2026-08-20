@@ -61,7 +61,7 @@ export function SelectedWork() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
         {work.map((item) => (
           <WorkFigure key={item.label} item={item} />
         ))}
