@@ -6,39 +6,81 @@ type WorkItem = {
   year: string
   /** Real screenshot. When omitted, a labeled placeholder is shown instead. */
   image?: { src: string; alt: string }
+  /** Live site the figure links to. When set, the figure opens it in a new tab. */
+  href?: string
 }
 
-// Real project screenshots are user-supplied — drop them in here when ready.
+// Real project screenshots live in public/work/. Placeholders stay until their
+// screenshots are ready.
 const work: WorkItem[] = [
-  { label: 'RESTAURANT — full redesign', year: "'25" },
-  { label: 'HOME SERVICES — new build', year: "'25" },
+  {
+    label: 'RESTAURANT — full redesign',
+    year: "'25",
+    image: {
+      src: '/work/restaurante-chino-playa.jpg',
+      alt: 'Restaurante Chino Playa website homepage',
+    },
+    href: 'https://restaurantechinoplaya.com',
+  },
+  {
+    label: 'HOME DESIGN — Shopify store',
+    year: "'25",
+    image: {
+      src: '/work/elehomedesign.jpg',
+      alt: 'EleHomeDesign Shopify storefront homepage',
+    },
+    href: 'https://elehomedesign.com',
+  },
   { label: 'WELLNESS STUDIO — booking site', year: "'24" },
 ]
 
+function WorkMedia({ item }: { item: WorkItem }) {
+  return item.image ? (
+    <img
+      src={item.image.src}
+      alt={item.image.alt}
+      loading="lazy"
+      className="block aspect-[16/11] w-full object-cover"
+    />
+  ) : (
+    <div
+      className="flex aspect-[16/11] w-full items-center justify-center font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-faint)]"
+      role="img"
+      aria-label={`${item.label} — screenshot coming soon`}
+    >
+      [ screenshot ]
+    </div>
+  )
+}
+
 function WorkFigure({ item }: { item: WorkItem }) {
+  const card = (
+    <div className="overflow-hidden rounded-2xl border border-[var(--border-primary)] bg-[var(--surface-solid)] transition-colors group-hover:border-[color-mix(in_srgb,var(--azure)_45%,var(--border-primary))]">
+      <WorkMedia item={item} />
+    </div>
+  )
+
   return (
     <figure className="m-0">
-      <div className="overflow-hidden rounded-2xl border border-[var(--border-primary)] bg-[var(--surface-solid)]">
-        {item.image ? (
-          <img
-            src={item.image.src}
-            alt={item.image.alt}
-            loading="lazy"
-            className="block aspect-[16/11] w-full object-cover"
-          />
-        ) : (
-          <div
-            className="flex aspect-[16/11] w-full items-center justify-center font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-faint)]"
-            role="img"
-            aria-label={`${item.label} — screenshot coming soon`}
-          >
-            [ screenshot ]
-          </div>
-        )}
-      </div>
+      {item.href ? (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${item.label} — visit the live site (opens in a new tab)`}
+          className="group block rounded-2xl outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[var(--azure)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+        >
+          {card}
+        </a>
+      ) : (
+        <div className="group">{card}</div>
+      )}
       <figcaption className="mt-[14px] flex justify-between gap-3 font-mono text-[12px] tracking-[0.04em] text-[var(--text-faint)]">
         <span className="text-[var(--text-secondary)]">{item.label}</span>
-        <span>{item.year}</span>
+        <span>
+          {item.year}
+          {item.href ? <span aria-hidden="true"> ↗</span> : null}
+        </span>
       </figcaption>
     </figure>
   )
