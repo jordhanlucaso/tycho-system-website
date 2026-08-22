@@ -58,6 +58,14 @@ export function SiteStarfield({ animate = true, count = 2600 }: SiteStarfieldPro
       h = window.innerHeight
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
+      // Pin the CSS box to the exact viewport pixel size. A fixed element's
+      // `height: 100%` can resolve against the *document* height (not the
+      // viewport) in some browsers, stretching the shorter bitmap vertically
+      // into streaks. Setting explicit px keeps the CSS box 1:1 with the
+      // bitmap regardless of scrollbars, mobile URL-bar (dvh) or any ancestor
+      // that happens to establish a containing block.
+      canvas.style.width = `${w}px`
+      canvas.style.height = `${h}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
@@ -140,9 +148,12 @@ export function SiteStarfield({ animate = true, count = 2600 }: SiteStarfieldPro
       aria-hidden="true"
       style={{
         position: 'fixed',
-        inset: 0,
-        width: '100%',
-        height: '100%',
+        top: 0,
+        left: 0,
+        // Exact px size is applied in resize(); these viewport-unit values are
+        // just the pre-JS fallback so the first paint is never full-page-tall.
+        width: '100vw',
+        height: '100vh',
         pointerEvents: 'none',
         zIndex: -1,
       }}
