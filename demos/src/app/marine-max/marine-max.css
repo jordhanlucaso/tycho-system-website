@@ -1,0 +1,1424 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════════
+   MARINE MAX — designsystem
+   Konsept: VERKSTED · SJØ · ÉN MANN
+   See engagements/marine-max/design/marine-max-design-direction.md
+
+   Scoped under `.mm`, exactly as eik.css is scoped under `.eik` and stabukk.css under
+   `.sbk`. Three brand systems share one Next.js app on demo.tychosystem.com; without the
+   scope their `:root` tokens and base element rules would overwrite each other in whichever
+   order the bundler happened to emit them.
+
+   Reset, `.skip-link`, `.visually-hidden` and the Tycho demo layer are NOT here — they live
+   in app/globals.css and are shared by every client. Tailwind is imported there for its
+   reset only; every brand decision below is hand-written.
+   ═══════════════════════════════════════════════════════════════════════════════════════ */
+
+
+.mm {
+  /* Palette — a Norwegian boat workshop in November, not a marina brochure. */
+  --dypvann: #0c1a24;       /* deep, cold, slightly green. NOT corporate navy */
+  --dypvann-dyp: #081219;
+  --grafitt: #28313a;
+  --stal: #5c6874;
+  --stal-lys: #8a949e;      /* 5.9:1 on --dypvann — secondary text on dark */
+
+  --lyshavn: #f3f0ea;       /* warm off-white. Screens at a marina in sun are punishing */
+  --lyshavn-dyp: #e5e0d6;
+  --kritt: #fbfaf7;
+
+  /* Safety orange — the colour of marine safety equipment, not a decorative accent.
+     Bound to primary actions and the acute path ONLY. Its scarcity is what makes it work. */
+  /* Split four ways by contrast requirement, not by taste. Measured, not eyeballed —
+     the QA sweep computes every one of these per element and fails the run below AA. */
+  /* ENFORCED: orange marks things you can ACT ON that advance the conversion — primary
+     buttons, the phone path, inline links, error alerts, focus. It is NOT used for section
+     numbers, step numbers, list bullets or legends. The pre-build critique predicted this
+     exact drift (design doc §13); the post-build review found it and pulled it back. */
+  --varsel: #e2571c;        /* graphics, borders, display-size type. Never small text */
+  --varsel-dyp: #c4460f;    /* button FILL: white on it = 4.96:1 */
+  --varsel-tekst: #aa3a0b;  /* small orange text on light: 5.56:1 lyshavn / 4.81:1 lyshavn-dyp */
+  --varsel-lys: #f4813f;    /* small orange text on dark: 6.78:1 on --dypvann */
+
+  --blekk: #141a1f;         /* body text on light */
+  --blekk-svak: #4b5560;    /* 7.2:1 on --lyshavn */
+
+  --linje: #cfc9bd;         /* hairline on light */
+  --linje-mork: #33404b;    /* hairline on dark */
+
+  --skrift: var(--font-barlow), system-ui, sans-serif;
+  --skrift-display: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+  --skrift-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --skall: 1240px;
+  --kant: clamp(1.15rem, 4vw, 3.5rem);
+  --seksjon: clamp(3.5rem, 8vw, 7rem);
+
+  /* Height of the fixed mobile action bar. Body padding reserves it so it never covers
+     content. Set to 0 at ≥768px where the bar is hidden. */
+  --handlingslinje: 60px;
+}
+
+
+.mm {
+  background: var(--lyshavn);
+  color: var(--blekk);
+  font-family: var(--skrift);
+  font-size: 17px; /* the reader is 47 and outdoors */
+  line-height: 1.6;
+  padding-bottom: var(--handlingslinje);
+}
+
+
+@media (min-width: 768px) {
+  .mm {
+    --handlingslinje: 0px;
+  }
+}
+
+
+.mm h1,
+.mm h2,
+.mm h3,
+.mm h4 {
+  font-family: var(--skrift-display);
+  font-weight: 700;
+  /* 1.02 is the tempting value for condensed caps and it is wrong for Norwegian: the ring
+     on Å and the stroke through Ø sit above cap height, so a tight leading makes them
+     collide with the descenders of the line above. Set by the language, like the typeface. */
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+
+.mm p {
+  margin: 0 0 1.15em;
+  max-width: 66ch; /* measure capped independently of the container */
+}
+
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--varsel);
+  outline-offset: 2px;
+}
+
+
+.mm-shell {
+  max-width: var(--skall);
+  margin: 0 auto;
+  padding-inline: var(--kant);
+}
+
+
+/* ── Typographic scale ────────────────────────────────────────────────────────────────── */
+
+/* Barlow Condensed fits "BÅTSERVICE PÅ NØTTERØY" on one line at 375px. That is a
+   typographic decision made by the Norwegian language, not by taste. */
+/* Per-glyph correction for Barlow Condensed's Ø sidebearing. See <Disp> in Primitives. */
+.mm-o {
+  margin-right: -0.062em;
+}
+
+
+.mm-d1 {
+  font-size: clamp(2.9rem, 12vw, 6.4rem);
+  letter-spacing: 0.005em;
+  line-height: 1.1; /* extra room again at display size — the collision scales with the type */
+}
+
+
+.mm-d2 {
+  font-size: clamp(2rem, 6vw, 3.6rem);
+}
+
+
+.mm-d3 {
+  font-size: clamp(1.4rem, 3.4vw, 2rem);
+}
+
+
+.mm-d4 {
+  font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+}
+
+
+.mm-lead {
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  line-height: 1.45;
+  max-width: 34ch;
+}
+
+
+.mm-body {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+
+/* The instrument-panel voice. Every piece of technical data wears it. */
+.mm-mono {
+  font-family: var(--skrift-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  line-height: 1.4;
+}
+
+
+.mm-mono--dim {
+  color: var(--blekk-svak);
+}
+
+
+.mm-on-dark .mm-mono--dim {
+  color: var(--stal-lys);
+}
+
+
+.mm-varsel {
+  color: var(--varsel-tekst);
+}
+
+
+.mm-on-dark .mm-varsel {
+  color: var(--varsel-lys);
+}
+
+
+/* ── Bands and rules ──────────────────────────────────────────────────────────────────── */
+/* Sections are separated by full-bleed hairlines and background bands — never by shadowed
+   cards. This is the single most consequential anti-template decision in the system. */
+
+.mm-band {
+  padding-block: var(--seksjon);
+  border-top: 1px solid var(--linje);
+}
+
+
+.mm-band--dark {
+  background: var(--dypvann);
+  color: var(--lyshavn);
+  border-top-color: var(--linje-mork);
+}
+
+
+.mm-band--deep {
+  background: var(--dypvann-dyp);
+  color: var(--lyshavn);
+  border-top-color: var(--linje-mork);
+}
+
+
+.mm-band--alt {
+  background: var(--lyshavn-dyp);
+}
+
+
+.mm-band--flush {
+  border-top: 0;
+}
+
+
+/* The title-block column: a technical-drawing convention, not a web-template one. */
+.mm-seksjon {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+
+@media (min-width: 1024px) {
+  .mm-seksjon {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+}
+
+
+.mm-seksjon__merke {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+
+.mm-seksjon__merke .mm-mono {
+  margin: 0;
+}
+
+
+.mm-hr {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--linje);
+}
+
+
+.mm-on-dark .mm-hr,
+.mm-band--dark .mm-hr,
+.mm-band--deep .mm-hr {
+  background: var(--linje-mork);
+}
+
+
+/* ── Engine plate ─────────────────────────────────────────────────────────────────────── */
+/* The riveted metal data plate on every marine engine. Native to the domain without being
+   an illustration of it, and designed to hold gaps: an unconfirmed value is a legitimate
+   visual state, not a broken one. */
+
+.mm-plate {
+  position: relative;
+  border: 1px solid var(--linje);
+  background: var(--kritt);
+}
+
+
+.mm-band--dark .mm-plate,
+.mm-band--deep .mm-plate,
+.mm-on-dark .mm-plate {
+  border-color: var(--linje-mork);
+  background: rgb(255 255 255 / 0.03);
+}
+
+
+/* Corner notch — the plate reads as stamped metal rather than as a card. */
+.mm-plate::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 1px solid var(--varsel);
+  border-left: 1px solid var(--varsel);
+}
+
+
+.mm-plate__hode {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--linje);
+  color: var(--blekk-svak);
+}
+
+
+.mm-band--dark .mm-plate__hode,
+.mm-band--deep .mm-plate__hode,
+.mm-on-dark .mm-plate__hode {
+  border-bottom-color: var(--linje-mork);
+  color: var(--stal-lys);
+}
+
+
+.mm-plate__rad {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.15rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--linje);
+}
+
+
+@media (min-width: 560px) {
+  .mm-plate__rad {
+    grid-template-columns: 42% minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+  }
+}
+
+
+.mm-band--dark .mm-plate__rad,
+.mm-band--deep .mm-plate__rad,
+.mm-on-dark .mm-plate__rad {
+  border-bottom-color: var(--linje-mork);
+}
+
+
+.mm-plate__rad:last-child {
+  border-bottom: 0;
+}
+
+
+.mm-plate__verdi {
+  font-family: var(--skrift-mono);
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  overflow-wrap: break-word;
+}
+
+
+/* ── The visible gap ──────────────────────────────────────────────────────────────────── */
+/* A marked blank builds more trust than plausible filler: it proves that everything NOT
+   marked is real. */
+
+.mm-mangler {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px dashed var(--stal);
+  color: var(--blekk-svak);
+  font-family: var(--skrift-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgb(0 0 0 / 0.035) 5px,
+    rgb(0 0 0 / 0.035) 10px
+  );
+}
+
+
+.mm-on-dark .mm-mangler,
+.mm-band--dark .mm-mangler,
+.mm-band--deep .mm-mangler {
+  border-color: var(--stal);
+  color: var(--stal-lys);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgb(255 255 255 / 0.05) 5px,
+    rgb(255 255 255 / 0.05) 10px
+  );
+}
+
+
+/* ── Buttons ──────────────────────────────────────────────────────────────────────────── */
+
+.mm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 52px;
+  padding: 0 1.5rem;
+  border: 1px solid transparent;
+  font-family: var(--skrift-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+
+.mm-btn--primar {
+  background: var(--varsel-dyp);
+  color: #fff;
+}
+
+
+.mm-btn--primar:hover {
+  background: var(--varsel);
+}
+
+
+.mm-btn--sekundar {
+  background: transparent;
+  border-color: var(--blekk);
+  color: var(--blekk);
+}
+
+
+.mm-btn--sekundar:hover {
+  background: var(--blekk);
+  color: var(--lyshavn);
+}
+
+
+.mm-on-dark .mm-btn--sekundar,
+.mm-band--dark .mm-btn--sekundar,
+.mm-band--deep .mm-btn--sekundar {
+  border-color: var(--lyshavn);
+  color: var(--lyshavn);
+}
+
+
+.mm-on-dark .mm-btn--sekundar:hover,
+.mm-band--dark .mm-btn--sekundar:hover,
+.mm-band--deep .mm-btn--sekundar:hover {
+  background: var(--lyshavn);
+  color: var(--dypvann);
+}
+
+
+.mm-btn:disabled {
+  cursor: not-allowed;
+  background: var(--linje);
+  border-color: var(--linje);
+  color: var(--blekk-svak);
+}
+
+
+.mm-btn-rad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+
+.mm-lenke {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 0.45rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid var(--varsel);
+  padding-bottom: 1px;
+}
+
+
+.mm-lenke:hover {
+  color: var(--varsel-tekst);
+}
+
+
+.mm-on-dark .mm-lenke:hover {
+  color: var(--varsel-lys);
+}
+
+
+/* ── Header ───────────────────────────────────────────────────────────────────────────── */
+
+.mm-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--dypvann);
+  color: var(--lyshavn);
+  border-bottom: 1px solid var(--linje-mork);
+}
+
+
+.mm-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 64px;
+}
+
+
+/* The name-plus-category-plus-place lockup. See research §3.4 — this is how the business
+   stops competing with a NYSE-listed American company for its own name. */
+.mm-merke {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
+  /* 44px minimum: the wordmark is a link, and links are targets. */
+  min-height: 44px;
+  margin-right: auto;
+  text-decoration: none;
+  line-height: 1;
+}
+
+
+.mm-merke b {
+  font-family: var(--skrift-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+.mm-merke span {
+  font-family: var(--skrift-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stal-lys);
+}
+
+
+.mm-nav {
+  display: none;
+  gap: 1.4rem;
+}
+
+
+@media (min-width: 1024px) {
+  .mm-nav {
+    display: flex;
+  }
+}
+
+
+.mm-nav a {
+  font-family: var(--skrift-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: var(--lyshavn);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 2px solid transparent;
+}
+
+
+.mm-nav a:hover,
+.mm-nav a[aria-current="page"] {
+  border-bottom-color: var(--varsel);
+}
+
+
+.mm-header__ring {
+  display: none;
+}
+
+
+@media (min-width: 768px) {
+  .mm-header__ring {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--skrift-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: var(--lyshavn);
+    border: 1px solid var(--linje-mork);
+    padding: 0 0.9rem;
+  }
+
+  .mm-header__ring:hover {
+    border-color: var(--varsel);
+  }
+}
+
+
+.mm-burger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 0.6rem;
+  background: none;
+  border: 1px solid var(--linje-mork);
+  color: var(--lyshavn);
+  font-family: var(--skrift-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+
+@media (min-width: 1024px) {
+  .mm-burger {
+    display: none;
+  }
+}
+
+
+.mm-burger i {
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  margin: 3px 0;
+}
+
+
+/* ── Drawer ───────────────────────────────────────────────────────────────────────────── */
+
+.mm-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: var(--dypvann);
+  color: var(--lyshavn);
+  display: flex;
+  flex-direction: column;
+  padding: var(--kant);
+  overflow-y: auto;
+}
+
+
+.mm-drawer__topp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--linje-mork);
+}
+
+
+.mm-drawer__lukk {
+  min-height: 44px;
+  padding: 0 0.75rem;
+  background: none;
+  border: 1px solid var(--linje-mork);
+  color: var(--lyshavn);
+  font-family: var(--skrift-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  cursor: pointer;
+}
+
+
+.mm-drawer__nav {
+  display: flex;
+  flex-direction: column;
+  padding-block: 0.5rem;
+}
+
+
+.mm-drawer__nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--linje-mork);
+  font-family: var(--skrift-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+
+.mm-drawer__nav a i {
+  font-family: var(--skrift-mono);
+  font-size: 0.7rem;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  color: var(--stal-lys);
+}
+
+
+.mm-drawer__nav a[aria-current="page"] {
+  color: var(--varsel-lys);
+}
+
+
+.mm-drawer__fot {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+
+/* ── Mobile action bar ────────────────────────────────────────────────────────────────── */
+/* Two actions, never more. The acute customer is standing next to a dead engine. */
+
+.mm-handling {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--dypvann-dyp);
+  border-top: 1px solid var(--linje-mork);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+
+@media (min-width: 768px) {
+  .mm-handling {
+    display: none;
+  }
+}
+
+
+.mm-handling a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 60px;
+  font-family: var(--skrift-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: var(--lyshavn);
+}
+
+
+.mm-handling a + a {
+  background: var(--varsel-dyp);
+  color: #fff;
+}
+
+
+/* ── Content components ───────────────────────────────────────────────────────────────── */
+
+.mm-tjenester {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--linje);
+}
+
+
+.mm-band--dark .mm-tjenester,
+.mm-band--deep .mm-tjenester {
+  border-top-color: var(--linje-mork);
+}
+
+
+/* Rule-separated rows, not shadowed cards. */
+.mm-tjeneste {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: clamp(1.4rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--linje);
+}
+
+
+.mm-band--dark .mm-tjeneste,
+.mm-band--deep .mm-tjeneste {
+  border-bottom-color: var(--linje-mork);
+}
+
+
+@media (min-width: 768px) {
+  .mm-tjeneste {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+
+.mm-tjeneste h3 {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+}
+
+
+.mm-tjeneste p {
+  margin: 0;
+  color: var(--blekk-svak);
+  font-size: 0.97rem;
+}
+
+
+.mm-band--dark .mm-tjeneste p,
+.mm-band--deep .mm-tjeneste p {
+  color: var(--stal-lys);
+}
+
+
+.mm-steg {
+  display: grid;
+  gap: 0;
+  counter-reset: steg;
+}
+
+
+.mm-steg__rad {
+  display: grid;
+  gap: 0.4rem;
+  padding-block: clamp(1.3rem, 3vw, 1.9rem);
+  border-bottom: 1px solid var(--linje);
+}
+
+
+@media (min-width: 768px) {
+  .mm-steg__rad {
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 2rem;
+    align-items: baseline;
+  }
+}
+
+
+.mm-band--dark .mm-steg__rad,
+.mm-band--deep .mm-steg__rad {
+  border-bottom-color: var(--linje-mork);
+}
+
+
+.mm-steg__n {
+  font-family: var(--skrift-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--blekk-svak);
+}
+
+
+.mm-band--dark .mm-steg__n,
+.mm-band--deep .mm-steg__n {
+  color: var(--stal-lys);
+}
+
+
+.mm-symptom {
+  display: grid;
+  gap: 0.55rem;
+  padding-block: clamp(1.3rem, 3vw, 1.8rem);
+  border-bottom: 1px solid var(--linje);
+}
+
+
+@media (min-width: 900px) {
+  .mm-symptom {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr) minmax(0, 1.1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+
+.mm-symptom h3 {
+  font-size: clamp(1.15rem, 2.6vw, 1.4rem);
+}
+
+
+.mm-symptom p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--blekk-svak);
+}
+
+
+/* ── Photo briefs ─────────────────────────────────────────────────────────────────────── */
+/* Plainly labelled as briefs, never dressed up to look like content. The client should see
+   at a glance which parts of the site are waiting on him. */
+
+.mm-foto {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--linje);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--lyshavn-dyp),
+    var(--lyshavn-dyp) 8px,
+    var(--lyshavn) 8px,
+    var(--lyshavn) 16px
+  );
+  color: var(--blekk-svak);
+}
+
+
+.mm-band--dark .mm-foto,
+.mm-band--deep .mm-foto {
+  border-color: var(--linje-mork);
+  color: var(--stal-lys);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255 255 255 / 0.04),
+    rgb(255 255 255 / 0.04) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}
+
+
+.mm-foto[data-ratio="16:9"] { aspect-ratio: 16 / 9; }
+
+.mm-foto[data-ratio="4:3"]  { aspect-ratio: 4 / 3; }
+
+.mm-foto[data-ratio="1:1"]  { aspect-ratio: 1 / 1; }
+
+.mm-foto[data-ratio="3:4"]  { aspect-ratio: 3 / 4; }
+
+
+.mm-foto__merk {
+  align-self: flex-start;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid currentColor;
+  font-family: var(--skrift-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+
+.mm-foto__brief {
+  font-family: var(--skrift-mono);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+
+.mm-galleri {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+
+@media (min-width: 640px) {
+  .mm-galleri {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+@media (min-width: 1024px) {
+  .mm-galleri {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* ── Footer ───────────────────────────────────────────────────────────────────────────── */
+
+.mm-footer {
+  background: var(--dypvann-dyp);
+  color: var(--lyshavn);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+  border-top: 1px solid var(--linje-mork);
+}
+
+
+.mm-footer__grid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3rem);
+}
+
+
+@media (min-width: 768px) {
+  .mm-footer__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+
+@media (min-width: 1024px) {
+  .mm-footer__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+
+.mm-footer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+
+.mm-footer__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-family: var(--skrift-mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: var(--lyshavn);
+}
+
+
+.mm-footer__nav a:hover {
+  color: var(--varsel-lys);
+}
+
+
+.mm-footer__bunn {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linje-mork);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  color: var(--stal-lys);
+}
+
+
+/* ── Forms ────────────────────────────────────────────────────────────────────────────── */
+
+.mm-felt {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+
+.mm-felt > label,
+.mm-gruppe > legend {
+  font-family: var(--skrift-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--blekk-svak);
+  padding: 0;
+}
+
+
+.mm-felt__hint {
+  font-size: 0.85rem;
+  color: var(--blekk-svak);
+  margin: 0;
+}
+
+
+.mm-felt input[type="text"],
+.mm-felt input[type="tel"],
+.mm-felt input[type="email"],
+.mm-felt input[type="date"],
+.mm-felt input[type="number"],
+.mm-felt select,
+.mm-felt textarea {
+  width: 100%;
+  min-height: 50px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--stal);
+  border-radius: 0;
+  background: var(--kritt);
+  color: var(--blekk);
+  font-family: var(--skrift);
+  font-size: 16px; /* < 16px triggers iOS zoom-on-focus */
+  line-height: 1.4;
+}
+
+
+.mm-felt textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+
+/* The native file control renders browser-chrome text ("Choose Files / No file chosen"),
+   in the browser's UI language rather than the page's, and its target is only ~20px tall.
+   Photo capture is the highest-value field on this form and is used one-handed at a
+   marina, so the input is visually replaced by a full-width labelled drop target. The
+   input itself stays in the DOM, focusable and labelled — :focus-within moves the focus
+   ring onto the visible surface. */
+.mm-filvelger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-height: 88px;
+  padding: 1rem;
+  border: 1px dashed var(--stal);
+  background: var(--kritt);
+  cursor: pointer;
+}
+
+
+.mm-filvelger:hover {
+  border-color: var(--varsel-dyp);
+}
+
+
+.mm-filvelger:focus-within {
+  outline: 3px solid var(--varsel);
+  outline-offset: 2px;
+}
+
+
+.mm-filvelger input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+.mm-filvelger__knapp {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  background: var(--varsel-dyp);
+  color: #fff;
+  font-family: var(--skrift-display);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+
+.mm-filvelger__tekst {
+  font-family: var(--skrift-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--blekk-svak);
+}
+
+
+.mm-fieldset-blokk,
+.mm-felt,
+.mm-rutenett > * {
+  min-width: 0;
+}
+
+
+.mm-felt input[aria-invalid="true"],
+.mm-felt textarea[aria-invalid="true"],
+.mm-felt select[aria-invalid="true"] {
+  border-color: var(--varsel-dyp);
+  border-width: 2px;
+}
+
+
+.mm-feil {
+  font-family: var(--skrift-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--varsel-tekst);
+}
+
+
+.mm-gruppe {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.25rem;
+}
+
+
+.mm-valg {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+}
+
+
+@media (min-width: 560px) {
+  .mm-valg--todelt {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+.mm-valg label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  min-height: 48px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--linje);
+  background: var(--kritt);
+  cursor: pointer;
+  font-size: 0.97rem;
+}
+
+
+.mm-valg label:hover {
+  border-color: var(--stal);
+}
+
+
+.mm-valg input {
+  margin: 0.2rem 0 0;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--varsel-dyp);
+  flex-shrink: 0;
+}
+
+
+.mm-valg label:has(input:checked) {
+  border-color: var(--varsel-dyp);
+  border-width: 2px;
+  padding: calc(0.65rem - 1px) calc(0.85rem - 1px);
+}
+
+
+.mm-valg small {
+  display: block;
+  color: var(--blekk-svak);
+  font-size: 0.82rem;
+}
+
+
+.mm-rutenett {
+  display: grid;
+  gap: 0 1rem;
+}
+
+
+@media (min-width: 640px) {
+  .mm-rutenett {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+.mm-fieldset-blokk {
+  border: 1px solid var(--linje);
+  padding: clamp(1.1rem, 3vw, 1.75rem);
+  margin: 0 0 1.5rem;
+  background: var(--kritt);
+}
+
+
+.mm-fieldset-blokk > legend {
+  font-family: var(--skrift-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--blekk-svak);
+  padding: 0 0.5rem;
+  margin-left: -0.5rem;
+}
+
+
+/* WCAG G139 — error summary, focused on failed submit. */
+.mm-oppsummering {
+  border: 2px solid var(--varsel-dyp);
+  padding: 1rem 1.15rem;
+  margin-bottom: 1.5rem;
+  background: var(--kritt);
+}
+
+
+.mm-oppsummering h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+
+.mm-oppsummering ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+
+.mm-oppsummering a {
+  color: var(--varsel-tekst);
+}
+
+
+.mm-filer {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+
+.mm-fil {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--linje);
+  font-family: var(--skrift-mono);
+  font-size: 0.74rem;
+}
+
+
+.mm-fil button {
+  min-height: 32px;
+  padding: 0 0.6rem;
+  background: none;
+  border: 1px solid var(--stal);
+  color: var(--blekk);
+  font-family: var(--skrift-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+
+/* ── Misc ─────────────────────────────────────────────────────────────────────────────── */
+
+.mm-liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+
+.mm-liste li {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 0.75rem;
+  font-size: 0.97rem;
+}
+
+
+.mm-liste li::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 1px;
+  margin-top: 0.8em;
+  background: var(--stal);
+}
+
+
+.mm-band--dark .mm-liste li::before,
+.mm-band--deep .mm-liste li::before {
+  background: var(--stal);
+}
+
+
+.mm-stabel {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+
+.mm-kolonner {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+
+@media (min-width: 900px) {
+  .mm-kolonner {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+
+.mm-brodsmuler {
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--linje);
+}
+
+
+.mm-brodsmuler ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+.mm-brodsmuler a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--linje);
+}
+
+
+.mm-brodsmuler a:hover {
+  border-bottom-color: var(--varsel);
+}

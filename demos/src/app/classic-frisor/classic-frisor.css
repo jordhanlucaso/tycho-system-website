@@ -1,0 +1,688 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════
+   CLASSIC FRISØR — designsystem
+   Konsept: STOL · LYS · GATE
+   See engagements/classic-frisor/design/classic-frisor-design-direction.md
+
+   Scoped under `.cf`. Every rule sits inside that scope: four brand systems share this
+   app, and an unscoped `:root` block or bare element selector here would overwrite the
+   others in whatever order the bundler emits them.
+
+   Reset, `.skip-link`, `.visually-hidden` and the Tycho demo layer live in app/globals.css.
+   ═══════════════════════════════════════════════════════════════════════════════════ */
+
+.cf {
+  /* Warm, low-chroma daylight. A salon is a room people sit in looking at themselves —
+     the palette flatters skin rather than competing with it. */
+  --kalk: #f4f1ec;
+  --kalk-dyp: #e8e3da;
+  --papir: #fbf9f6;
+
+  --espresso: #2b2320;      /* 13.4:1 on kalk */
+  --espresso-myk: #4d423c;  /* 7.6:1 on kalk */
+
+  /* Muted clay. ENFORCED: marks the booking path and nothing else — not section numbers,
+     not bullets, not decorative rules. The pre-build critique (§12) predicted this would
+     drift; the post-build review checks it. Split by contrast requirement, measured. */
+  --leire: #a86a4f;         /* graphics, borders, display-size type. Never small text */
+  --leire-dyp: #8a5238;     /* button fill: white on it = 5.4:1 */
+  --leire-tekst: #7a4229;   /* small clay text on light = 6.4:1 */
+  --leire-lys: #d09b7e;     /* small clay text on espresso */
+
+  --salvie: #7d8b76;
+  --linje: #d9d2c7;
+  --linje-mork: #4a403b;
+
+  --skrift: var(--font-cf-text), system-ui, sans-serif;
+  --skrift-display: var(--font-cf-display), Georgia, serif;
+
+  --skall: 1180px;
+  --kant: clamp(1.15rem, 4vw, 3.5rem);
+  --seksjon: clamp(3.25rem, 7vw, 6.5rem);
+
+  /* Height of the fixed mobile action bar; reserved so it never covers content. */
+  --linje-hoyde: 60px;
+
+  background: var(--kalk);
+  color: var(--espresso);
+  font-family: var(--skrift);
+  font-size: 17px;
+  line-height: 1.65;
+  padding-bottom: var(--linje-hoyde);
+}
+
+@media (min-width: 768px) {
+  .cf {
+    --linje-hoyde: 0px;
+  }
+}
+
+.cf h1,
+.cf h2,
+.cf h3,
+.cf h4 {
+  font-family: var(--skrift-display);
+  font-weight: 400;
+  /* Norwegian compounds are long and Å's ring sits above cap height — tight leading
+     collides it with the descenders of the line above. Set by the language. */
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.cf p {
+  margin: 0 0 1.15em;
+  max-width: 66ch;
+}
+
+/* ── Shell ───────────────────────────────────────────────────────────────────────── */
+
+.cf-shell {
+  max-width: var(--skall);
+  margin: 0 auto;
+  padding-inline: var(--kant);
+}
+
+.cf-band {
+  padding-block: var(--seksjon);
+}
+
+.cf-band--alt { background: var(--kalk-dyp); }
+.cf-band--dyp { background: var(--espresso); color: var(--kalk); }
+.cf-band--flush { padding-top: clamp(2rem, 5vw, 3.5rem); }
+
+.cf-band--dyp h1,
+.cf-band--dyp h2,
+.cf-band--dyp h3 { color: var(--papir); }
+
+/* ── Typographic scale ───────────────────────────────────────────────────────────── */
+
+.cf-d1 {
+  font-size: clamp(2.5rem, 9vw, 4.75rem);
+  margin: 0;
+}
+
+.cf-d2 {
+  font-size: clamp(1.85rem, 5vw, 3rem);
+  margin: 0;
+}
+
+.cf-d3 {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  margin: 0;
+}
+
+.cf-lead {
+  font-size: clamp(1.075rem, 2.2vw, 1.3rem);
+  line-height: 1.55;
+  color: var(--espresso-myk);
+  max-width: 54ch;
+}
+
+.cf-band--dyp .cf-lead { color: #cfc6bd; }
+
+/* Data voice: prices, durations, hours. Tracked caps keep this a salon, not a mood board. */
+.cf-data {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+  margin: 0;
+}
+
+.cf-band--dyp .cf-data { color: #b3a89e; }
+
+.cf-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+  margin: 0 0 1rem;
+}
+
+.cf-band--dyp .cf-eyebrow { color: #b3a89e; }
+
+/* ── Section head ────────────────────────────────────────────────────────────────── */
+
+.cf-seksjon { margin-block: 0; }
+.cf-seksjon + .cf-seksjon { margin-top: var(--seksjon); }
+
+.cf-seksjon__hode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  border-top: 1px solid var(--linje);
+  padding-top: 1.1rem;
+  margin-bottom: 1.75rem;
+}
+
+.cf-band--dyp .cf-seksjon__hode { border-color: var(--linje-mork); }
+
+/* ── The price line — the signature element ──────────────────────────────────────── */
+
+.cf-prisliste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cf-pris {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 1rem;
+  align-items: baseline;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--linje);
+}
+
+.cf-band--dyp .cf-pris { border-color: var(--linje-mork); }
+
+.cf-pris__navn {
+  font-family: var(--skrift-display);
+  font-size: 1.16rem;
+  line-height: 1.25;
+}
+
+.cf-pris__belop {
+  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  text-align: right;
+  /* Deliberately NOT `white-space: nowrap`. It is right for "fra 650 kr" and wrong for the
+     long descriptors this cell also carries in the proposal tables, where it forced the
+     row past the viewport at 375px. A short price has nothing to wrap at anyway. */
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cf-pris__blurb {
+  grid-column: 1 / -1;
+  color: var(--espresso-myk);
+  font-size: 0.94rem;
+  margin: 0;
+  max-width: 52ch;
+}
+
+.cf-pris__tid {
+  grid-column: 1 / -1;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+}
+
+@media (min-width: 640px) {
+  .cf-pris {
+    grid-template-columns: 1fr auto auto;
+    column-gap: 2rem;
+  }
+  .cf-pris__tid {
+    grid-column: auto;
+    text-align: right;
+    min-width: 6rem;
+  }
+  .cf-pris__belop { min-width: 7rem; }
+  .cf-pris__blurb { grid-column: 1 / -1; }
+}
+
+/* ── The visible gap ─────────────────────────────────────────────────────────────── */
+
+/* An unconfirmed value renders as a marked gap, never as filler. Visible gaps are what
+   make everything unmarked credible. */
+.cf-mangler {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    rgba(122, 66, 41, 0.09) 4px,
+    rgba(122, 66, 41, 0.09) 8px
+  );
+  border: 1px dashed var(--linje);
+  border-radius: 2px;
+  padding: 0.22rem 0.5rem;
+  white-space: nowrap;
+}
+
+.cf-band--dyp .cf-mangler {
+  color: #b3a89e;
+  border-color: var(--linje-mork);
+}
+
+/* A whole band of concept content, labelled so it cannot be mistaken for fact. */
+.cf-demoband {
+  border: 1px dashed var(--linje);
+  border-radius: 3px;
+  padding: clamp(1.1rem, 3vw, 1.9rem);
+  background: var(--papir);
+}
+
+.cf-demoband__merke {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  /* Not the accent: this is a label, not an action. The dashed border carries the
+     "this is concept copy" signal on its own. */
+  color: var(--espresso-myk);
+  margin-bottom: 1rem;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────────────── */
+
+.cf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.7rem 1.5rem;
+  border-radius: 2px;
+  font-size: 0.83rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.cf-btn--primar {
+  background: var(--leire-dyp);
+  color: #fff;
+}
+
+.cf-btn--primar:hover { background: #74442d; }
+
+.cf-btn--sekundar {
+  border-color: var(--espresso);
+  color: var(--espresso);
+}
+
+.cf-btn--sekundar:hover { background: rgba(43, 35, 32, 0.06); }
+
+.cf-band--dyp .cf-btn--sekundar {
+  border-color: #8d817a;
+  color: var(--papir);
+}
+
+.cf-band--dyp .cf-btn--sekundar:hover { background: rgba(251, 249, 246, 0.09); }
+
+.cf-btn-rad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.cf-lenke {
+  color: var(--leire-tekst);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cf-band--dyp .cf-lenke { color: var(--leire-lys); }
+
+/* ── Header ──────────────────────────────────────────────────────────────────────── */
+
+.cf-topp {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(244, 241, 236, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linje);
+}
+
+.cf-topp__rad {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 64px;
+}
+
+.cf-merke {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  text-decoration: none;
+  color: inherit;
+  min-height: 44px;
+  justify-content: center;
+}
+
+.cf-merke__navn {
+  font-family: var(--skrift-display);
+  font-size: 1.16rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.cf-merke__sted {
+  font-size: 0.63rem;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+}
+
+.cf-topp__nav {
+  display: none;
+  gap: 1.6rem;
+  align-items: center;
+}
+
+.cf-topp__nav a:not(.cf-btn) {
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.86rem;
+  padding-block: 0.5rem;
+  border-bottom: 1px solid transparent;
+}
+
+.cf-topp__nav a:not(.cf-btn):hover { border-bottom-color: var(--espresso); }
+.cf-topp__nav a[aria-current="page"]:not(.cf-btn) { border-bottom-color: var(--espresso); }
+
+@media (min-width: 1024px) {
+  .cf-topp__nav { display: flex; }
+  .cf-burger { display: none; }
+}
+
+.cf-burger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.4rem 0.75rem;
+  background: none;
+  border: 1px solid var(--linje);
+  border-radius: 2px;
+  font-size: 0.74rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: inherit;
+  cursor: pointer;
+}
+
+.cf-skuff {
+  border-top: 1px solid var(--linje);
+  background: var(--kalk);
+  padding-block: 0.5rem 1.25rem;
+}
+
+.cf-skuff nav {
+  display: grid;
+}
+
+.cf-skuff a {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--linje);
+  font-size: 1rem;
+}
+
+.cf-skuff a:last-of-type { border-bottom: 0; }
+
+/* ── Mobile action bar ───────────────────────────────────────────────────────────── */
+
+.cf-handling {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--linje);
+  border-top: 1px solid var(--linje);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.cf-handling a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cf-handling__book { background: var(--leire-dyp); color: #fff; }
+.cf-handling__ring { background: var(--papir); color: var(--espresso); }
+
+@media (min-width: 768px) {
+  .cf-handling { display: none; }
+}
+
+/* ── Content ─────────────────────────────────────────────────────────────────────── */
+
+.cf-kolonner {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+}
+
+@media (min-width: 900px) {
+  .cf-kolonner { grid-template-columns: 1.15fr 1fr; align-items: start; }
+  .cf-kolonner--smal { grid-template-columns: 1fr 1.35fr; }
+}
+
+.cf-steg {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 700px) {
+  .cf-steg { grid-template-columns: repeat(2, 1fr); gap: 2rem 2.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .cf-steg { grid-template-columns: repeat(4, 1fr); }
+}
+
+.cf-steg__n {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  color: var(--espresso-myk);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.cf-steg h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.cf-steg p {
+  color: var(--espresso-myk);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ── Photo briefs ────────────────────────────────────────────────────────────────── */
+
+.cf-galleri {
+  display: grid;
+  gap: 1rem;
+  /* minmax(0, 1fr), not 1fr: a grid item defaults to `min-width: auto` and refuses to
+     shrink below its content, so a long unbreakable CLIENT_PHOTO_* token blows the
+     column past the viewport. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 700px) {
+  .cf-galleri { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+}
+
+.cf-foto {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.9rem;
+  border: 1px dashed var(--linje);
+  border-radius: 3px;
+  background: var(--papir);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 7px,
+    rgba(43, 35, 32, 0.035) 7px,
+    rgba(43, 35, 32, 0.035) 14px
+  );
+}
+
+.cf-foto { min-width: 0; }
+.cf-foto--4-5 { aspect-ratio: 4 / 5; }
+.cf-foto--1-1 { aspect-ratio: 1 / 1; }
+
+.cf-foto__token {
+  font-size: 0.62rem;
+  letter-spacing: 0.11em;
+  color: var(--espresso-myk);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.cf-foto__brief {
+  overflow-wrap: anywhere;
+  font-size: 0.83rem;
+  line-height: 1.35;
+  color: var(--espresso-myk);
+  margin: 0;
+}
+
+/* ── NAP plate ───────────────────────────────────────────────────────────────────── */
+
+.cf-plate {
+  border: 1px solid var(--linje);
+  border-radius: 3px;
+  background: var(--papir);
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+}
+
+.cf-band--dyp .cf-plate {
+  background: rgba(251, 249, 246, 0.05);
+  border-color: var(--linje-mork);
+}
+
+.cf-plate__tittel {
+  font-size: 0.68rem;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+  margin: 0 0 1rem;
+}
+
+.cf-band--dyp .cf-plate__tittel { color: #b3a89e; }
+
+.cf-plate dl {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, auto) 1fr;
+  gap: 0.6rem 1.25rem;
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+.cf-plate dt {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--espresso-myk);
+  padding-top: 0.2rem;
+}
+
+.cf-band--dyp .cf-plate dt { color: #b3a89e; }
+
+.cf-plate dd { margin: 0; }
+
+/* ── Breadcrumbs ─────────────────────────────────────────────────────────────────── */
+
+.cf-brodsmuler {
+  font-size: 0.78rem;
+  color: var(--espresso-myk);
+  padding-block: 1.1rem 0;
+}
+
+.cf-brodsmuler ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.cf-brodsmuler a {
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────────────── */
+
+.cf-footer {
+  background: var(--espresso);
+  color: #cfc6bd;
+  padding-block: var(--seksjon) 2.5rem;
+}
+
+.cf-footer h2 { color: var(--papir); }
+
+/* The footer is dark but is not a .cf-band--dyp, so it needs the light-on-dark tokens
+   in its own right. Without this .cf-data renders espresso-on-espresso at 1.58:1. */
+.cf-footer .cf-data,
+.cf-footer .cf-eyebrow { color: #b3a89e; }
+.cf-footer .cf-mangler { color: #b3a89e; border-color: var(--linje-mork); }
+
+.cf-footer__rutenett {
+  display: grid;
+  gap: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .cf-footer__rutenett { grid-template-columns: 1.3fr 1fr 1fr; gap: 3rem; }
+}
+
+.cf-footer__nav {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.cf-footer__nav a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.94rem;
+}
+
+.cf-footer__nav a:hover { color: var(--papir); }
+
+.cf-footer__bunn {
+  border-top: 1px solid var(--linje-mork);
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  color: #9a8f86;
+}

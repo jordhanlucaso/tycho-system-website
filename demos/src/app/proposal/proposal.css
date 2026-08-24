@@ -1,0 +1,274 @@
+/* ==========================================================================
+   TYCHO SYSTEMS — SALES PROPOSAL
+   Third identity. Neither Eik nor Stabukk: this is Tycho speaking, and it must
+   read as a document, not as one of the two brands.
+   ========================================================================== */
+
+.tsp {
+  --bg: #0e0f12;
+  --bg-raise: #16181d;
+  --bg-lift: #1e2128;
+  --fg: #f0f2f6;
+  --fg-dim: #a8adb8;
+  /* #6E747F measured 4.08:1 on the document ground — below AA for the 11px mono
+     label layer that carries the section numbering. Raised to 5.7:1. */
+  --fg-faint: #868d99;
+  --line: rgba(240, 242, 246, 0.12);
+  --line-strong: rgba(240, 242, 246, 0.26);
+  --accent: #2f6fed;
+  --accent-soft: rgba(47, 111, 237, 0.14);
+  --ok: #12a594;
+  --warn: #d97706;
+
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --max: 1080px;
+
+  --reveal-from: 10px;
+  --reveal-duration: 240ms;
+
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-tsp), ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+.tsp :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tsp ::selection { background: var(--accent); color: #fff; }
+
+.tsp-shell { max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+
+.tsp-mono {
+  font-family: var(--font-tsp-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+/* --- cover --------------------------------------------------------------- */
+
+.tsp-cover {
+  padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3rem, 7vw, 5rem);
+  border-bottom: 1px solid var(--line);
+}
+.tsp-cover h1 {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 1.5rem 0 1.25rem;
+  text-wrap: balance;
+}
+.tsp-cover p.lead {
+  font-size: clamp(1.0625rem, 1.7vw, 1.25rem);
+  color: var(--fg-dim);
+  max-width: 58ch;
+}
+.tsp-cover__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+/* --- toc ----------------------------------------------------------------- */
+
+.tsp-toc { display: grid; gap: 0; border-top: 1px solid var(--line); margin-top: 2.5rem; }
+.tsp-toc a {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--fg);
+  transition: color 160ms, padding-left 160ms;
+}
+.tsp-toc a:hover { color: var(--accent); padding-left: 0.4rem; }
+
+/* --- sections ------------------------------------------------------------ */
+
+.tsp-section { padding-block: clamp(3.5rem, 8vw, 6rem); border-bottom: 1px solid var(--line); }
+.tsp-section:last-of-type { border-bottom: none; }
+.tsp-section__head {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+.tsp-section h2 {
+  font-size: clamp(1.625rem, 3.6vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+.tsp-section h3 {
+  font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+.tsp-body { color: var(--fg-dim); max-width: 68ch; }
+.tsp-body + .tsp-body { margin-top: 1rem; }
+.tsp-body strong { color: var(--fg); font-weight: 600; }
+
+/* --- cards / lists ------------------------------------------------------- */
+
+.tsp-cards { display: grid; gap: 1rem; }
+@media (min-width: 760px) { .tsp-cards--2 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) { .tsp-cards--3 { grid-template-columns: repeat(3, 1fr); } }
+
+.tsp-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  background: var(--bg-raise);
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+}
+.tsp-card--accent { border-color: rgba(47, 111, 237, 0.4); background: var(--accent-soft); }
+
+.tsp-list { display: grid; gap: 0.75rem; }
+.tsp-list li {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: 0.75rem;
+  color: var(--fg-dim);
+}
+.tsp-list li::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(0.6em);
+}
+.tsp-list--check li::before {
+  content: "✓";
+  width: auto; height: auto; border-radius: 0; background: none;
+  color: var(--ok); transform: none; font-size: 0.875rem;
+}
+.tsp-list--gap li::before {
+  content: "✕";
+  width: auto; height: auto; border-radius: 0; background: none;
+  color: var(--warn); transform: none; font-size: 0.875rem;
+}
+
+/* --- comparison table ---------------------------------------------------- */
+
+.tsp-tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+.tsp-table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.9375rem; }
+.tsp-table th, .tsp-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.tsp-table thead th {
+  font-family: var(--font-tsp-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  font-weight: 400;
+  white-space: nowrap;
+}
+.tsp-table tbody tr:last-child td { border-bottom: none; }
+.tsp-table td:first-child { color: var(--fg); font-weight: 500; }
+.tsp-yes { color: var(--ok); }
+.tsp-no { color: var(--warn); }
+
+/* --- journey ------------------------------------------------------------- */
+
+.tsp-journey { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.tsp-journey__row {
+  display: grid;
+  gap: 0.5rem 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--line);
+}
+@media (min-width: 860px) {
+  .tsp-journey__row { grid-template-columns: 3rem 12rem 1fr 1fr; align-items: baseline; }
+}
+.tsp-journey__now { color: var(--warn); }
+.tsp-journey__next { color: var(--fg); }
+
+/* --- phases -------------------------------------------------------------- */
+
+.tsp-phase { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.tsp-phase__head {
+  padding: 1.1rem clamp(1.25rem, 2.5vw, 1.75rem);
+  background: var(--bg-lift);
+  border-bottom: 1px solid var(--line);
+}
+.tsp-phase__body { padding: clamp(1.25rem, 2.5vw, 1.75rem); display: grid; gap: 1rem; }
+.tsp-phase--1 { border-color: rgba(47, 111, 237, 0.4); }
+.tsp-phase--1 .tsp-phase__head { background: var(--accent-soft); }
+
+/* --- pipeline ------------------------------------------------------------ */
+
+.tsp-pipe { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: stretch; }
+.tsp-pipe__node {
+  flex: 1 1 132px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.85rem 0.9rem;
+  background: var(--bg-raise);
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+}
+.tsp-pipe__node b { font-size: 0.9375rem; font-weight: 600; }
+.tsp-pipe__node span { font-size: 0.8125rem; color: var(--fg-faint); }
+.tsp-pipe__node[data-phase="1"] { border-color: rgba(47, 111, 237, 0.45); background: var(--accent-soft); }
+
+/* --- next step ----------------------------------------------------------- */
+
+.tsp-next { background: var(--bg-raise); border-radius: 10px; padding: clamp(1.5rem, 4vw, 2.75rem); border: 1px solid var(--line); }
+.tsp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0.8rem 1.4rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.tsp-btn:hover { background: #2760d4; }
+.tsp-btn--line { background: transparent; border-color: var(--line-strong); color: var(--fg); }
+.tsp-btn--line:hover { background: rgba(240, 242, 246, 0.06); border-color: var(--fg); }
+
+.tsp-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+/* --- confirm list -------------------------------------------------------- */
+
+.tsp-confirm { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.tsp-confirm > div {
+  display: grid;
+  gap: 0.35rem 1.5rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+}
+@media (min-width: 820px) { .tsp-confirm > div { grid-template-columns: 22rem 1fr; } }
+.tsp-confirm dt { color: var(--fg); font-weight: 500; }
+.tsp-confirm dd { margin: 0; color: var(--fg-dim); font-size: 0.9375rem; }
+
+/* --- footer -------------------------------------------------------------- */
+
+.tsp-foot {
+  padding-block: 2.5rem 3rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  justify-content: space-between;
+}
