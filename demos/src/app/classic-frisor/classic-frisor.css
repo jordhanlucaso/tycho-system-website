@@ -554,6 +554,12 @@
 .cf-foto { min-width: 0; }
 .cf-foto--4-5 { aspect-ratio: 4 / 5; }
 .cf-foto--1-1 { aspect-ratio: 1 / 1; }
+.cf-foto--3-2 { aspect-ratio: 3 / 2; }
+
+/* A frame that anchors an argument column rather than filling a gallery cell. Capped so it
+   balances the column opposite instead of outgrowing it — the two-column bands set
+   `align-items: start`, so an oversized frame just moves the empty space to the other side. */
+.cf-foto-hylse { max-width: 24rem; }
 
 /* Hero: the text column and the first shot brief share the band.
  *

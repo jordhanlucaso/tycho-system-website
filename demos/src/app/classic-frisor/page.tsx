@@ -11,6 +11,7 @@ import {
 import {
   heroBrief,
   processSteps,
+  sectionBriefs,
   salon,
   treatments,
   workBriefs,
@@ -82,6 +83,14 @@ export default function Forsiden() {
                   ut om du har råd eller rekker det i lunsjen.
                   <DemoNote id="cf.02" />
                 </p>
+
+                <div className="cf-foto-hylse" style={{ marginTop: "2rem" }}>
+                  <FotoBrief
+                    brief={sectionBriefs.treatments.brief}
+                    token={sectionBriefs.treatments.token}
+                    ratio={sectionBriefs.treatments.ratio}
+                  />
+                </div>
               </div>
 
               <div>
@@ -118,6 +127,14 @@ export default function Forsiden() {
             <div className="cf-kolonner cf-kolonner--smal">
               <div>
                 <h2 className="cf-d2">Salongen i gata di</h2>
+
+                <div className="cf-foto-hylse" style={{ marginTop: "1.75rem" }}>
+                  <FotoBrief
+                    brief={sectionBriefs.street.brief}
+                    token={sectionBriefs.street.token}
+                    ratio={sectionBriefs.street.ratio}
+                  />
+                </div>
               </div>
               <div>
                 <p>

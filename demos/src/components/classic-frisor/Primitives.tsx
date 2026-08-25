@@ -110,10 +110,10 @@ export function FotoBrief({
 }: {
   brief: string;
   token: string;
-  ratio: "4:5" | "1:1";
+  ratio: "4:5" | "1:1" | "3:2";
 }) {
   return (
-    <figure className={`cf-foto cf-foto--${ratio === "4:5" ? "4-5" : "1-1"}`}>
+    <figure className={`cf-foto cf-foto--${ratio.replace(":", "-")}`}>
       <figcaption>
         <span className="cf-foto__token">{token}</span>
         <p className="cf-foto__brief">{brief}</p>

@@ -138,14 +138,34 @@ export const processSteps = [
 ] as const;
 
 /**
- * The first screen's shot brief. Section 03 argues the pictures will be the salon's own and
- * not a bildebank — an empty first viewport says the opposite, so the argument is made where
- * it is read. Desktop only: on a phone the first viewport belongs to the booking action.
+ * Shot briefs that anchor the argument sections. Every token here is a row in
+ * content/photo-shot-list.md — the page shows the client exactly the shoot they are being
+ * quoted for, which is the whole point of "Ekte bilder, ikke bildebank". Adding a frame
+ * without adding it to the shot list would break that promise.
+ *
+ * Frames, never photographs: §11 of the design direction rules out stock imagery.
  */
+
+/** Shot 2 — the chair and the mirror, empty, in daylight. The shot list calls it the hero. */
 export const heroBrief = {
-  brief: "Salongen innenfra — stolen, speilet, dagslys",
+  brief: "Stolen og speilet, tomt lokale, dagslys",
   ratio: "4:5" as const,
-  token: "CLIENT_PHOTO_SALON",
+  token: "CLIENT_PHOTO_HERO",
+};
+
+export const sectionBriefs = {
+  /** Shot 14 — a detail of the room. The shot list files it as texture between sections. */
+  treatments: {
+    brief: "Detalj i rommet — lyset, verktøyet, benken",
+    ratio: "1:1" as const,
+    token: "CLIENT_PHOTO_DETAIL",
+  },
+  /** Shot 1 — the exterior from across Smidsrødveien, so a customer recognises the door. */
+  street: {
+    brief: "Fasaden fra andre siden av Smidsrødveien",
+    ratio: "3:2" as const,
+    token: "CLIENT_PHOTO_EXTERIOR",
+  },
 };
 
 /** Photo briefs for the gallery — see content/photo-shot-list.md. */

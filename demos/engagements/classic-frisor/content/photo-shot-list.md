@@ -60,6 +60,24 @@ goes online. A verbal yes at the chair is not enough once it is on the internet.
 **Fourteen photographs, one session, roughly ninety minutes.** Shots 11 and 13 depend on
 answers in the questionnaire; do not shoot them speculatively.
 
+## Where each shot appears in the concept
+
+The frames on the demo are this list, rendered. Every `CLIENT_PHOTO_*` token on the site is a
+row above — that is what lets the page say *"Rammene under viser nøyaktig hvilke bilder som
+skal tas"* without it being a figure of speech.
+
+| Token | Shot | Where it appears |
+| --- | --- | --- |
+| `CLIENT_PHOTO_HERO` | 2 | Front page hero, desktop |
+| `CLIENT_PHOTO_DETAIL` | 14 | Front page, section 01 — treatments |
+| `CLIENT_PHOTO_EXTERIOR` | 1 | Front page, section 02 — why here |
+| `CLIENT_PHOTO_CUT` · `CLIENT_PHOTO_TEXTURE` · `CLIENT_PHOTO_HANDS` | 9 · 10 · 4 | Front page, section 03 — and /arbeid |
+| `CLIENT_PHOTO_COLOR_WORK` · `CLIENT_PHOTO_BEFORE_AFTER` · `CLIENT_PHOTO_WASH` | 11 · 12 · 8 | /arbeid |
+| `CLIENT_PHOTO_STYLIST` | 5 | /frisorene |
+
+Shots 3, 6, 7 and 13 are quoted for but not placed in the concept — they are the reserve for
+the Google profile and for the pages that follow confirmation.
+
 ## For Google Business Profile
 
 Google weights recency, so hold some back rather than uploading everything at once. Two or

@@ -232,6 +232,38 @@ on espresso, and the band grows to 618px.
 This is a frame, not a photograph, so §11's ban on stock models and hero video is untouched —
 and it is desktop-only, because §10 promises the first mobile viewport to the booking action.
 
+### Finding 8 — two argument columns were carrying nothing
+
+Raised on review after Findings 6 and 7: sections 01 and 02 still read as "empty apart from
+the titles and the text". Measured at 1440, that was literally true of one column in each.
+
+Section 02 was the worse of the two: the left column held a single heading and then 250px of
+nothing, opposite three paragraphs. Section 01 left a 300px hole under a two-line lead,
+opposite a 690px price card. `.cf-kolonner` sets `align-items: start`, so a short column does
+not fill — it just stops, and the band's 101px padding reads as part of the hole.
+
+Both now carry the shot brief the section is actually arguing:
+
+| Section | Frame | Why that one |
+| --- | --- | --- |
+| 01 Behandlinger | `CLIENT_PHOTO_DETAIL` (1:1) | Shot 14 is filed in the shot list as *texture between sections* |
+| 02 Hvorfor her | `CLIENT_PHOTO_EXTERIOR` (3:2) | Shot 1 — *so a customer recognises the door*. The section's claim is the street |
+
+Capped at `max-width: 24rem` via `.cf-foto-hylse`: uncapped, a 4:5 frame in a 541px column
+is 676px tall and simply moves the empty space to the other column.
+
+### Finding 9 — the hero frame cited a shot that did not exist
+
+Finding 7 introduced `CLIENT_PHOTO_SALON`. There is no such row in the shot list — shot 2,
+*the chair and the mirror, empty, in daylight*, is already designated the hero and is called
+`CLIENT_PHOTO_HERO`.
+
+That is not a cosmetic slip. Section 03 tells the client *"Rammene under viser nøyaktig
+hvilke bilder som skal tas"*, and the proposal quotes fourteen shots in one ninety-minute
+session. A token on the page with no row in the list makes both statements false. The hero
+now uses `CLIENT_PHOTO_HERO`, and the shot list carries a token-to-placement table so the
+next frame added has somewhere to be checked against.
+
 ### What the pre-build critique got wrong
 
 §12.3 worried Fraunces would cost too much on a 3G phone. Only two weights are requested and
