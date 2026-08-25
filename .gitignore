@@ -28,3 +28,13 @@ supabase/.temp
 *.njsproj
 *.sln
 *.sw?
+
+# graphify knowledge graph output (generated)
+graphify-out/
+
+# demos/ — nested Next.js app deployed separately to demo.tychosystem.com
+demos/.next
+demos/qa-screenshots/
+demos/qa-report.json
+demos/next-env.d.ts
+demos/tsconfig.tsbuildinfo
