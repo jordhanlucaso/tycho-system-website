@@ -206,9 +206,37 @@ Separately, `white-space: nowrap` on `.cf-pris__belop` is right for "fra 650 kr"
 for the long descriptors the same cell carries in the proposal tables — 82px of overflow at
 375. Removed; a short price has nothing to wrap at anyway.
 
+### Finding 6 — the shot-brief grid read as broken, not as a plan
+
+Raised on review: the page "looked quite off". Measured, the cause was mechanical. The
+frames carry two crops on purpose — `4:5` and `1:1`, because the ratio is part of the brief a
+photographer works from — but `.cf-galleri` left them top-aligned, so the shorter `1:1` frame
+ended **85px** above its neighbours and dropped its caption onto its own baseline. Three
+captions at three heights per row, twice over on `/arbeid`.
+
+Mixed crops are the intent; three baselines are not. `align-items: end` puts every brief on
+one line and lets the crop vary above it. Measured spread after the change: **0px** on every
+row of every gallery.
+
+### Finding 7 — the first screen argued against itself
+
+Section 03 says *Ekte bilder, ikke bildebank*. The first screen showed no imagery at all: at
+1440 the hero was 479px of text with an empty right half — the shortest hero of the four
+concepts on this host by a wide margin (Marine Max 693, Eik 872, Stabukk 1218).
+
+§12.5 predicted the exact failure: *"Placeholders must carry the shot brief or the page reads
+as unfinished rather than as awaiting the client."* The briefs did carry it; there simply was
+not one where the argument is made. The hero now holds `CLIENT_PHOTO_SALON`, inverted to read
+on espresso, and the band grows to 618px.
+
+This is a frame, not a photograph, so §11's ban on stock models and hero video is untouched —
+and it is desktop-only, because §10 promises the first mobile viewport to the booking action.
+
 ### What the pre-build critique got wrong
 
 §12.3 worried Fraunces would cost too much on a 3G phone. Only two weights are requested and
 `next/font` subsets them, so it did not turn out to be the problem the note anticipated.
-§12.4 and §12.5 held up: the data typography does keep it from reading as a wedding site,
-and the photo briefs do read as a work order rather than as an unfinished page.
+§12.4 held up: the data typography does keep it from reading as a wedding site. §12.5 was
+right about the risk and premature about the verdict — the briefs read as a work order only
+after Findings 6 and 7; until then the page did read as unfinished, which is precisely what
+the note warned about.

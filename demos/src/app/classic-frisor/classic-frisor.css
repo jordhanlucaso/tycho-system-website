@@ -518,6 +518,11 @@
 .cf-galleri {
   display: grid;
   gap: 1rem;
+  /* The frames carry different crops on purpose — the ratio is part of the shot brief, not
+     decoration. Top-aligned, that left each caption on its own baseline and the row read as
+     broken rather than as a plan. Aligning to the bottom puts every brief on one line and
+     lets the crop vary above it. */
+  align-items: end;
   /* minmax(0, 1fr), not 1fr: a grid item defaults to `min-width: auto` and refuses to
      shrink below its content, so a long unbreakable CLIENT_PHOTO_* token blows the
      column past the viewport. */
@@ -549,6 +554,42 @@
 .cf-foto { min-width: 0; }
 .cf-foto--4-5 { aspect-ratio: 4 / 5; }
 .cf-foto--1-1 { aspect-ratio: 1 / 1; }
+
+/* Hero: the text column and the first shot brief share the band.
+ *
+ * Section 03 argues the pictures will be the salon's own and never a bildebank. A first
+ * screen with no imagery at all argues the opposite, so the frame belongs here — as a brief,
+ * not as a stock photo, which §11 rules out.
+ *
+ * Desktop only. On a phone the first viewport is promised to the booking action (§10), and a
+ * 4:5 frame would push it under the fold. */
+.cf-hero-ramme { display: none; }
+
+@media (min-width: 900px) {
+  .cf-hero-rutenett {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.58fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .cf-hero-ramme { display: block; }
+}
+
+/* The frame has to read on espresso, not on kalk: the hatch and the dashed edge invert. */
+.cf-band--dyp .cf-foto {
+  border-color: rgba(244, 241, 236, 0.26);
+  background: rgba(244, 241, 236, 0.04);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 7px,
+    rgba(244, 241, 236, 0.055) 7px,
+    rgba(244, 241, 236, 0.055) 14px
+  );
+}
+
+.cf-band--dyp .cf-foto__token,
+.cf-band--dyp .cf-foto__brief { color: #cfc6bd; }
 
 .cf-foto__token {
   font-size: 0.62rem;

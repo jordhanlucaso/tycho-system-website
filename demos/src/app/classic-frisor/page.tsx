@@ -9,6 +9,7 @@ import {
   Seksjon,
 } from "@/components/classic-frisor/Primitives";
 import {
+  heroBrief,
   processSteps,
   salon,
   treatments,
@@ -35,7 +36,8 @@ export default function Forsiden() {
           what kind of business, where it is, and what to do next. Nothing above the
           booking action but the name of the service and the name of the street. */}
       <section className="cf-band cf-band--dyp cf-band--flush">
-        <div className="cf-shell">
+        <div className="cf-shell cf-hero-rutenett">
+          <div>
           <p className="cf-eyebrow">Smidsrødveien · Teie · Nøtterøy</p>
           <h1 className="cf-d1">
             Frisør på Teie
@@ -57,6 +59,11 @@ export default function Forsiden() {
           <p className="cf-data" style={{ marginTop: "2rem" }}>
             Åpningstider: <Mangler>Ikke bekreftet</Mangler>
           </p>
+          </div>
+
+          <div className="cf-hero-ramme">
+            <FotoBrief brief={heroBrief.brief} token={heroBrief.token} ratio={heroBrief.ratio} />
+          </div>
         </div>
       </section>
 

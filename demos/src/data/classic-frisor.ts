@@ -137,6 +137,17 @@ export const processSteps = [
   { n: "04", title: "Sett opp neste", body: "De fleste vet omtrent når de trenger neste time. Da tar vi den med en gang." },
 ] as const;
 
+/**
+ * The first screen's shot brief. Section 03 argues the pictures will be the salon's own and
+ * not a bildebank — an empty first viewport says the opposite, so the argument is made where
+ * it is read. Desktop only: on a phone the first viewport belongs to the booking action.
+ */
+export const heroBrief = {
+  brief: "Salongen innenfra — stolen, speilet, dagslys",
+  ratio: "4:5" as const,
+  token: "CLIENT_PHOTO_SALON",
+};
+
 /** Photo briefs for the gallery — see content/photo-shot-list.md. */
 export const workBriefs = [
   { id: "w1", brief: "Ferdig klipp bakfra, dagslys", ratio: "4:5" as const, token: "CLIENT_PHOTO_CUT" },
