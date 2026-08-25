@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { DemoNote } from "@/components/demo/DemoLayer";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { Brodsmuler, Mangler, NapPlate, Seksjon } from "@/components/classic-frisor/Primitives";
-import { booking, treatments, treatmentGroups } from "@/data/classic-frisor";
+import {
+  Brodsmuler,
+  FotoBrief,
+  Mangler,
+  NapPlate,
+  Seksjon,
+} from "@/components/classic-frisor/Primitives";
+import {
+  booking,
+  sectionBriefs,
+  treatments,
+  treatmentGroups,
+} from "@/data/classic-frisor";
 import { isConfirmed } from "@/data/types";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
@@ -99,7 +110,17 @@ export default function BestillTime() {
               </Seksjon>
             </div>
 
-            <NapPlate title="Kontakt" />
+            <div className="cf-sidespor">
+              <NapPlate title="Kontakt" />
+
+              <div className="cf-foto-hylse" style={{ marginTop: "1.5rem" }}>
+                <FotoBrief
+                  brief={sectionBriefs.booking.brief}
+                  token={sectionBriefs.booking.token}
+                  ratio={sectionBriefs.booking.ratio}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>

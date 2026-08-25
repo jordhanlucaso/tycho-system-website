@@ -1,6 +1,13 @@
 import { DemoNote } from "@/components/demo/DemoLayer";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { Brodsmuler, Mangler, NapPlate, Seksjon } from "@/components/classic-frisor/Primitives";
+import {
+  Brodsmuler,
+  FotoBrief,
+  Mangler,
+  NapPlate,
+  Seksjon,
+} from "@/components/classic-frisor/Primitives";
+import { sectionBriefs } from "@/data/classic-frisor";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 
@@ -42,7 +49,17 @@ export default function Kontakt() {
       <section className="cf-band cf-band--flush">
         <div className="cf-shell">
           <div className="cf-kolonner">
-            <NapPlate title="Kontaktopplysninger" />
+            <div>
+              <NapPlate title="Kontaktopplysninger" />
+
+              <div className="cf-foto-hylse" style={{ marginTop: "1.5rem" }}>
+                <FotoBrief
+                  brief={sectionBriefs.contact.brief}
+                  token={sectionBriefs.contact.token}
+                  ratio={sectionBriefs.contact.ratio}
+                />
+              </div>
+            </div>
 
             <div>
               <Seksjon merke="Hvorfor står det tomt">

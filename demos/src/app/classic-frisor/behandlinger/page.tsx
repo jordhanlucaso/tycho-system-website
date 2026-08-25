@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { DemoNote } from "@/components/demo/DemoLayer";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { Brodsmuler, DemoBand, PrisRad, Seksjon } from "@/components/classic-frisor/Primitives";
-import { treatmentGroups, treatments, openQuestions } from "@/data/classic-frisor";
+import {
+  Brodsmuler,
+  DemoBand,
+  FotoBrief,
+  PrisRad,
+  Seksjon,
+} from "@/components/classic-frisor/Primitives";
+import {
+  openQuestions,
+  sectionBriefs,
+  treatmentGroups,
+  treatments,
+} from "@/data/classic-frisor";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 
@@ -32,12 +43,24 @@ export default function Behandlinger() {
 
       <section className="cf-band cf-band--flush">
         <div className="cf-shell">
-          <h1 className="cf-d1">Behandlinger</h1>
-          <p className="cf-lead" style={{ marginTop: "1.25rem" }}>
-            Pris og tid ved hver behandling. Ingen av frisørene i Smidsrødveien publiserer
-            dette i dag — det er den enkleste fordelen som finnes å ta.
-            <DemoNote id="cf.06" />
-          </p>
+          <div className="cf-kolonner">
+            <div>
+              <h1 className="cf-d1">Behandlinger</h1>
+              <p className="cf-lead" style={{ marginTop: "1.25rem" }}>
+                Pris og tid ved hver behandling. Ingen av frisørene i Smidsrødveien
+                publiserer dette i dag — det er den enkleste fordelen som finnes å ta.
+                <DemoNote id="cf.06" />
+              </p>
+            </div>
+
+            <div className="cf-foto-hylse">
+              <FotoBrief
+                brief={sectionBriefs.treatmentList.brief}
+                token={sectionBriefs.treatmentList.token}
+                ratio={sectionBriefs.treatmentList.ratio}
+              />
+            </div>
+          </div>
         </div>
       </section>
 

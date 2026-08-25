@@ -555,11 +555,24 @@
 .cf-foto--4-5 { aspect-ratio: 4 / 5; }
 .cf-foto--1-1 { aspect-ratio: 1 / 1; }
 .cf-foto--3-2 { aspect-ratio: 3 / 2; }
+.cf-foto--16-9 { aspect-ratio: 16 / 9; }
 
 /* A frame that anchors an argument column rather than filling a gallery cell. Capped so it
    balances the column opposite instead of outgrowing it — the two-column bands set
    `align-items: start`, so an oversized frame just moves the empty space to the other side. */
 .cf-foto-hylse { max-width: 24rem; }
+
+/* The booking page's left column runs five times the height of the contact plate, so the
+   plate cannot fill its column by any amount of stacking. Sticking it keeps the phone number
+   beside the reader the whole way down instead of scrolled off at the top — which is the
+   point of the page — and the frame beneath gives the rail something to stand on. */
+@media (min-width: 900px) {
+  .cf-sidespor {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+  }
+}
 
 /* Hero: the text column and the first shot brief share the band.
  *

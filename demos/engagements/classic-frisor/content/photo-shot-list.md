@@ -73,10 +73,14 @@ skal tas"* without it being a figure of speech.
 | `CLIENT_PHOTO_EXTERIOR` | 1 | Front page, section 02 — why here |
 | `CLIENT_PHOTO_CUT` · `CLIENT_PHOTO_TEXTURE` · `CLIENT_PHOTO_HANDS` | 9 · 10 · 4 | Front page, section 03 — and /arbeid |
 | `CLIENT_PHOTO_COLOR_WORK` · `CLIENT_PHOTO_BEFORE_AFTER` · `CLIENT_PHOTO_WASH` | 11 · 12 · 8 | /arbeid |
+| `CLIENT_PHOTO_CONSULT` | 7 | /behandlinger — where a customer decides what to ask for |
 | `CLIENT_PHOTO_STYLIST` | 5 | /frisorene |
+| `CLIENT_PHOTO_WORKING` | 6 | /bestill-time — what is being booked |
+| `CLIENT_PHOTO_ROOM` | 3 | /kontakt — honest about scale |
 
-Shots 3, 6, 7 and 13 are quoted for but not placed in the concept — they are the reserve for
-the Google profile and for the pages that follow confirmation.
+Thirteen of the fourteen shots are placed. Only 13, the product shelf, is not — it is
+conditional on §4.8 confirming that products are sold, so it has no frame to sit in until
+that is answered. Nothing is quoted for that the client cannot see a place for.
 
 ## For Google Business Profile
 

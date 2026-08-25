@@ -166,6 +166,24 @@ export const sectionBriefs = {
     ratio: "3:2" as const,
     token: "CLIENT_PHOTO_EXTERIOR",
   },
+  /** Shot 7 — the consultation. This is the page where a customer decides what to ask for. */
+  treatmentList: {
+    brief: "Samtalen ved stolen — hender og hår, før klippen",
+    ratio: "3:2" as const,
+    token: "CLIENT_PHOTO_CONSULT",
+  },
+  /** Shot 6 — the stylist working, from behind the chair. What the customer is booking. */
+  booking: {
+    brief: "Frisøren i arbeid, bakfra — ingen ansikter",
+    ratio: "3:2" as const,
+    token: "CLIENT_PHOTO_WORKING",
+  },
+  /** Shot 3 — the room, wide. Honest about scale: small is fine when it looks chosen. */
+  contact: {
+    brief: "Hele lokalet, vidvinkel — ærlig om størrelsen",
+    ratio: "16:9" as const,
+    token: "CLIENT_PHOTO_ROOM",
+  },
 };
 
 /** Photo briefs for the gallery — see content/photo-shot-list.md. */

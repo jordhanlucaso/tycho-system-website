@@ -264,6 +264,34 @@ session. A token on the page with no row in the list makes both statements false
 now uses `CLIENT_PHOTO_HERO`, and the shot list carries a token-to-placement table so the
 next frame added has somewhere to be checked against.
 
+### Finding 10 — the same hole on the remaining pages
+
+Findings 8 and 9 were the front page. Measuring the imbalance between the two columns of
+every `.cf-kolonner` on the rest of the site found the same shape of defect:
+
+| Page | Imbalance before | After |
+| --- | --- | --- |
+| `/bestill-time` | 842px | 509px, and the rail now sticks |
+| `/kontakt` | 261px | 32px |
+| `/behandlinger` | no columns at all, no imagery | 54px |
+| `/frisorene` | 46px | unchanged — already carried shot 5 |
+| `/arbeid` | none | unchanged — six frames |
+
+Each page took the shot the shot list had already quoted for and not yet placed: shot 7, the
+consultation, on `/behandlinger`, where a customer decides what to ask for; shot 6, the
+stylist working, on `/bestill-time`, which is what is being booked; shot 3, the room wide, on
+`/kontakt`, where the honest answer to *how big is this place* belongs.
+
+`/bestill-time` could not be fixed by a frame alone. Its left column runs 1048px against a
+206px contact plate — five times the height, so no amount of stacking fills it. The plate is
+now a sticky rail: it pins at `top: 2rem` and travels with the reader, which is the point of
+a booking page, and releases at the end of its container. Static below 900px, where the
+columns stack and the persistent bottom bar already carries the action.
+
+Thirteen of the fourteen quoted shots now have a placement. Only 13, the product shelf, does
+not, because it is conditional on §4.8 — the client can no longer be quoted for a photograph
+they cannot see a place for.
+
 ### What the pre-build critique got wrong
 
 §12.3 worried Fraunces would cost too much on a 3G phone. Only two weights are requested and

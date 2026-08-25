@@ -110,7 +110,7 @@ export function FotoBrief({
 }: {
   brief: string;
   token: string;
-  ratio: "4:5" | "1:1" | "3:2";
+  ratio: "4:5" | "1:1" | "3:2" | "16:9";
 }) {
   return (
     <figure className={`cf-foto cf-foto--${ratio.replace(":", "-")}`}>
