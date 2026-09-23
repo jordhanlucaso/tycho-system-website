@@ -158,11 +158,20 @@ async function cmdStatus() {
   }
 
   for (const e of ENGAGEMENTS) {
-    if (!existsSync(path.join(ROOT, "engagements", e.slug))) {
-      problems.push(`${e.slug}: no engagements/${e.slug}/ docs folder`);
-    }
-    if (!existsSync(path.join(ROOT, "src/app/proposal", e.slug, "page.tsx"))) {
-      problems.push(`${e.slug}: no proposal at ${proposalPath(e)}`);
+    // An engagement without a `proposalNote` has no sales document by declaration, so
+    // neither the docs folder nor the proposal route is expected. What is still checked
+    // is the reverse: a proposal on disk that the registry does not know about.
+    if (e.proposalNote) {
+      if (!existsSync(path.join(ROOT, "engagements", e.slug))) {
+        problems.push(`${e.slug}: no engagements/${e.slug}/ docs folder`);
+      }
+      if (!existsSync(path.join(ROOT, "src/app/proposal", e.slug, "page.tsx"))) {
+        problems.push(`${e.slug}: no proposal at ${proposalPath(e)}`);
+      }
+    } else if (existsSync(path.join(ROOT, "src/app/proposal", e.slug, "page.tsx"))) {
+      problems.push(
+        `${e.slug}: a proposal exists at ${proposalPath(e)} but the registry has no proposalNote`,
+      );
     }
   }
 

@@ -13,12 +13,12 @@
  * fetched as a separate chunk that a normal visitor never requests. `scripts/qa.mjs`
  * asserts it against the raw served HTML, not against the DOM — the DOM is what missed it.
  *
- * Ids are namespaced per client (`mm.`, `eik.`, `sbk.`, `cf.`) so several concepts share one
+ * Ids are namespaced per client (`cr.`, `eik.`, `sbk.`, `cf.`) so several concepts share one
  * registry without one client's annotation ever surfacing on another's page.
  *
  * They are deliberately opaque rather than slugified titles. The id is the one part of an
  * annotation that *has* to cross the RSC boundary, so it lands in the flight payload of
- * every page — and `mm.det-eneste-tillitssignalet-vi-kan` would put a readable fragment of
+ * every page — and `eik.det-eneste-tillitssignalet-vi-kan` would put a readable fragment of
  * Tycho's sales commentary into view-source on the client's own site. The id only needs to
  * be stable; the readable form is the `title` field sitting right next to it.
  */
@@ -33,120 +33,36 @@ export interface DemoNoteContent {
 
 export const DEMO_NOTES: Record<string, DemoNoteContent> = {
 
-  /* ── Marine Max ──────────────────────────────────────────────────────────────── */
-  "mm.01": {
-    category: "lokal-seo",
-    title: "Én side per hensikt, ikke én per stedsnavn",
-    body:
-      "Denne siden svarer på søk som «båtmotor service Nøtterøy» og «motorservice båt Tønsberg». Vi lager ikke egne sider per tettsted — det er en doorway-struktur, og for én bedrift med ett verksted er det dessuten usant. Stedsnavnene ligger i teksten og i de strukturerte dataene.",
-  },
-  "mm.02": {
-    category: "lokal-seo",
-    title: "Den eneste symptomsiden i markedet",
-    body:
-      "Alle konkurrentene organiserer nettsiden rundt sin egen tjenesteliste. Ingen har en side som svarer på «motoren starter ikke» — som er nøyaktig det kunden skriver inn i Google mens han står ved båten. Dette er det største innholdshullet i markedet, og det kan fylles uten å påstå noe som helst om Marine Max.",
-  },
-  "mm.03": {
-    category: "lokal-seo",
-    title: "Samme adresse, tegn for tegn, overalt",
-    body:
-      "Adressen skrives helt likt på nettsiden, i Google-profilen og i katalogene — inkludert «ø» i Nøtterøy, og postnummer før poststed. For Google er «Notteroy» og «Nøtterøy» to forskjellige enheter, og hver inkonsekvente oppføring svekker signalet om at bedriften finnes der den sier den finnes.",
-  },
-  "mm.04": {
-    category: "tillit",
-    title: "Kontrollerbart, og derfor sterkere",
-    body:
-      "Alt på denne siden kan slås opp på brreg.no av hvem som helst på ett minutt. Det er hele poenget. En påstand som kan kontrolleres, veier tyngre enn en påstand som høres bra ut — og de to mest synlige konkurrentene i området ble registrert i henholdsvis 2022 og 2023.",
-  },
-  "mm.05": {
-    category: "tillit",
-    title: "Det billigste konkurransefortrinnet som finnes",
-    body:
-      "Ingen av verkstedene i Tønsberg- og Færder-området viser et menneske på nettsiden sin. Ikke ett. For et enmannsforetak er ansiktet det sterkeste tillitssignalet som finnes — og det er strukturelt umulig for et verksted med fem ansatte å kopiere.",
-  },
-  "mm.06": {
-    category: "lokal-seo",
-    title: "Vi kjemper ikke om ordet «marine max»",
-    body:
-      "Det amerikanske selskapet er børsnotert med over 130 utsalgssteder. Å bruke innholdsbudsjettet på å rangere for merkenavnet ville vært bortkastet — og søket beskriver uansett ikke det Trond selger. Vi konkurrerer i stedet på «båtservice Nøtterøy» og «båtmotor service Tønsberg», der ingen amerikansk kjede er relevant. Se research/marine-max-research.md §3.",
-  },
-  "mm.07": {
+  /* ── Calloway Roofing ─────────────────────────────────────────────────────────── */
+  "cr.01": {
     category: "konvertering",
-    title: "Hva, hvor, hva nå — på under ett sekund",
+    title: "Prisen for en time er ett telefonnummer",
     body:
-      "De tre spørsmålene en besøkende har, besvart før første scroll: hva slags bedrift dette er, hvor den ligger, og hvordan man kommer i kontakt. Ingen av konkurrentene i området svarer på alle tre i første skjermbilde.",
+      "Heltbildet har to handlinger og ingen tredje. Den som allerede har bestemt seg ringer; den som ikke har det, ber om befaring. Tillitsmerket under knappene bærer ett tall og ett stedsnavn — begge hentet fra konfigurasjonen, ikke skrevet inn i komponenten, nettopp fordi et tall som følger malen videre til neste kunde blir en løgn der.",
   },
-  "mm.08": {
-    category: "tillit",
-    title: "Det eneste tillitssignalet vi kan bevise i dag",
+  "cr.02": {
+    category: "lead",
+    title: "To felt, ikke tolv",
     body:
-      "Marine Max har vært registrert siden 2005. De to mest synlige konkurrentene i området ble registrert i 2022 og 2023. Alle kan kontrollere det på brreg.no — og nettopp fordi det kan kontrolleres, er det sterkere enn en påstand om «lang erfaring». Vi skriver ikke «20 års erfaring», for registeret dokumenterer et foretak, ikke en person.",
+      "Kortet som overlapper heltbildet spør om adresse og telefon. Ingenting annet. Den som står med en lekkasje fyller ikke ut et skjema med ni felt på mobil — og alt annet kan spørres om i telefonen etterpå. Det lange skjemaet finnes fortsatt nederst, for den som vil skrive det ned selv.",
   },
-  "mm.09": {
-    category: "tillit",
-    title: "Vi har med vilje ikke fylt ut listen",
-    body:
-      "De fleste nettsider i denne bransjen lister ti–femten tjenester. Vi lister fire, fordi det er det vi kan belegge fra Enhetsregisteret. Resten står i spørreskjemaet til Trond. En kort, sann liste konverterer bedre enn en lang liste kunden ikke tror på — og den gir ingen henvendelser han må avvise.",
-  },
-  "mm.10": {
-    category: "tillit",
-    title: "Hvorfor vi holder igjen",
-    body:
-      "I et lite lokalsamfunn der kundene snakker sammen, er en påstand du ikke kan innfri en belastning, ikke en fordel. Punktene over er strukturelle fakta om foretaksformen og adressen — de kan ikke motbevises. Når Trond svarer på spørreskjemaet, kan denne seksjonen bli langt sterkere.",
-  },
-  "mm.11": {
-    category: "konvertering",
-    title: "Den sterkeste siden som ennå ikke finnes",
-    body:
-      "Ingen av konkurrentene i området viser før-og-etter-bilder av eget arbeid. To bilder tatt fra samme sted, før og etter en jobb, er det mest overbevisende en verkstedside kan vise — og det koster ingenting utover å huske mobilen. Se content/photo-shot-list.md.",
-  },
-  "mm.12": {
+  "cr.03": {
     category: "lokal-seo",
-    title: "Stedsnavn i teksten, ikke én side per sted",
+    title: "Én tjeneste, ett kort, én intensjon",
     body:
-      "Det er fristende å lage /batservice-notteroy, /batservice-tonsberg, /batservice-tjome. Det er en doorway-struktur — i strid med Googles retningslinjer, og for en bedrift med ett verksted er det dessuten usant. Stedsnavnene hører hjemme i teksten og i de strukturerte dataene.",
+      "Seks tjenester med hver sin overskrift og to linjer tekst. Det er strukturen en søkemotor kan lese som seks separate tilbud, og strukturen en kunde kan skanne på fem sekunder. På en ekte kundeleveranse blir hvert kort sin egen landingsside med samme overskrift.",
   },
-  "mm.13": {
-    category: "lead",
-    title: "Ett bilde erstatter fire spørsmål",
-    body:
-      "Ingen av konkurrentene ber om bilder. Motorskiltet inneholder merke, modell, årsmodell og serienummer — nøyaktig, i motsetning til det kunden husker. Det er den enkeltendringen i skjemaet som sparer Trond mest tid.",
-  },
-  "mm.14": {
-    category: "konvertering",
-    title: "Ærlige plassholdere, ikke lånte bilder",
-    body:
-      "Vi kunne fylt siden med kjøpte arkivbilder av båtmotorer. Vi lar være. Kunden kjenner igjen et arkivbilde, og et arkivbilde av en annens verksted er verdiløst som bevis. Rammene viser i stedet Trond nøyaktig hva han skal ta bilde av — det er en arbeidsordre, ikke en pynt.",
-  },
-  "mm.15": {
+  "cr.04": {
     category: "tillit",
-    title: "En liste over hull, midt på tjenestesiden",
+    title: "Én omtale som sier noe konkret",
     body:
-      "Dette er uvanlig — og det er poenget. Konkurrentene lister tjenester de kanskje utfører. Vi viser tydelig hva vi ikke vet. Når kunden ser at hullene er merket, blir alt som ikke er merket troverdig. Seksjonen forsvinner så snart Trond har svart på spørreskjemaet.",
+      "Én omtale som nevner råte over verandaen slår ti som sier «kjempefornøyd». Stjernene er dekorative og merket som det for skjermlesere — det ligger ingen aggregateRating i strukturerte data, fordi en vurdering oppfunnet i en mal er et regelbrudd hos Google og en løgn hos kunden.",
   },
-  "mm.16": {
-    category: "lead",
-    title: "Hastegrad utledes, den spørres ikke om",
-    body:
-      "Spør du kunden hvor mye det haster, svarer alle «veldig». Systemet utleder det i stedet av to felter: typen henvendelse, og om motoren starter. En reparasjon der motoren ikke starter er akutt. En planlagt service er ikke. Trond får sortert innboksen uten at kunden har måttet vurdere seg selv.",
-  },
-  "mm.17": {
-    category: "lead",
-    title: "Hvor båten står avgjør om jobben er mulig",
-    body:
-      "En båt i sjøen med død motor må kanskje løftes. En båt på henger kan kjøres til verkstedet. Det ene er en helt annen jobb enn det andre — og ingen av skjemaene i området spør om det. Uten dette feltet må Trond ringe for å finne det ut.",
-  },
-  "mm.18": {
-    category: "lead",
-    title: "Ett bilde erstatter fire spørsmål",
-    body:
-      "Motorskiltet inneholder merke, modell, årsmodell og serienummer. Kunden trenger ikke vite hva noe av det heter — bare peke kameraet. På mobil åpner feltet kameraet direkte. Ingen av konkurrentene tar imot bilder i det hele tatt.",
-  },
-  "mm.19": {
+  "cr.05": {
     category: "automatisering",
-    title: "Dette er hele salgsargumentet",
+    title: "Skjemaet er ferdig koblet, men ikke her",
     body:
-      "Under ser du hva Trond ville fått på SMS i fase 2 — nok til å avgjøre om han skal avbryte jobben han står i, uten å åpne en PC. «Ferdigstillingsgrad» måler hvor mye av jobben som er kjent før noen tar en telefon. Det er den eneste tallverdien i hele prosjektet som faktisk måler noe: spart telefontid.",
+      "I den ekte byggen validerer skjemaet i nettleseren, validerer igjen på serveren, og sendes videre til den adressen kunden oppgir — Zapier, Make, et CRM. På denne demoverten er det ingen mottaker, så skjemaet validerer og bekrefter lokalt: en salgsdemo har ingen forsvarlig plass å legge en ekte persons telefonnummer.",
   },
 
   /* ── Eik Tattoo & Piercing ───────────────────────────────────────────────────── */

@@ -51,16 +51,35 @@ export const CATEGORY_LABEL: Record<DemoCategory, string> = {
   automatisering: "Automatisering",
 };
 
+/**
+ * The same six categories for the English-language concepts on this host.
+ *
+ * The chips are Tycho's voice, not the client's, but a chip reading "Konvertering" over an
+ * English annotation in front of an Alabama roofer is the sort of detail that costs a
+ * meeting. `DemoProvider` takes `lang` and defaults to Norwegian, so no existing concept
+ * changes behaviour.
+ */
+export const CATEGORY_LABEL_EN: Record<DemoCategory, string> = {
+  konvertering: "Conversion",
+  "lokal-seo": "Local SEO",
+  tillit: "Trust",
+  lead: "Lead capture",
+  portefolje: "Portfolio",
+  automatisering: "Automation",
+};
+
 interface DemoContextValue {
   enabled: boolean;
   setEnabled: (value: boolean) => void;
   register: (id: string) => number;
+  labels: Record<DemoCategory, string>;
 }
 
 const DemoContext = createContext<DemoContextValue>({
   enabled: false,
   setEnabled: () => {},
   register: () => 0,
+  labels: CATEGORY_LABEL,
 });
 
 const STORAGE_KEY = "tycho.demo";
@@ -92,7 +111,14 @@ function writeDemoState(value: boolean) {
   for (const listener of listeners) listener();
 }
 
-export function DemoProvider({ children }: { children: ReactNode }) {
+export function DemoProvider({
+  children,
+  lang = "nb",
+}: {
+  children: ReactNode;
+  /** "en" swaps the category chips. Defaults to Norwegian — the host's first language. */
+  lang?: "nb" | "en";
+}) {
   const enabled = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [order] = useState<Map<string, number>>(() => new Map());
 
@@ -114,9 +140,11 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     [order],
   );
 
+  const labels = lang === "en" ? CATEGORY_LABEL_EN : CATEGORY_LABEL;
+
   const value = useMemo(
-    () => ({ enabled, setEnabled, register }),
-    [enabled, setEnabled, register],
+    () => ({ enabled, setEnabled, register, labels }),
+    [enabled, setEnabled, register, labels],
   );
 
   return (
@@ -140,7 +168,7 @@ export function useDemo() {
  * indirection is the requirement, not a refactor.
  */
 export function DemoNote({ id, align = "start" }: { id: string; align?: "start" | "end" }) {
-  const { enabled, register } = useDemo();
+  const { enabled, register, labels } = useDemo();
   const reactId = useId();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<DemoNoteContent | null>(null);
@@ -169,7 +197,7 @@ export function DemoNote({ id, align = "start" }: { id: string; align?: "start" 
       >
         <span className={`tsd-swatch tsd-swatch--${content.category}`} aria-hidden="true" />
         <span className="tsd-note__num">{index}</span>
-        <span className="tsd-note__cat">{CATEGORY_LABEL[content.category]}</span>
+        <span className="tsd-note__cat">{labels[content.category]}</span>
       </button>
       {open ? (
         <span className="tsd-note__body" role="note">

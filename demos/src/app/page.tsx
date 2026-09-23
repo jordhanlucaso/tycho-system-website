@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LIVE_ENGAGEMENTS, proposalPath } from "@/data/engagements";
+import { LIVE_ENGAGEMENTS, hasProposal, proposalPath } from "@/data/engagements";
 import { pageMetadata } from "@/lib/seo";
 
 /**
@@ -25,7 +25,8 @@ const DEMOS = LIVE_ENGAGEMENTS.flatMap((engagement) =>
     place: engagement.place,
     note: concept.blurb,
     pages: `${concept.routes.length} sider`,
-    proposal: proposalPath(engagement),
+    // Absent for an engagement with no sales document — see hasProposal().
+    proposal: hasProposal(engagement) ? proposalPath(engagement) : null,
   })),
 );
 
@@ -111,17 +112,23 @@ export default function Hub() {
                 >
                   {demo.note}
                 </span>
-                <Link
-                  href={demo.proposal}
-                  style={{
-                    fontFamily: mono,
-                    fontSize: "0.75rem",
-                    color: "#7aa5f5",
-                    textDecoration: "none",
-                  }}
-                >
-                  Salgsunderlag →
-                </Link>
+                {demo.proposal ? (
+                  <Link
+                    href={demo.proposal}
+                    style={{
+                      fontFamily: mono,
+                      fontSize: "0.75rem",
+                      color: "#7aa5f5",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Salgsunderlag →
+                  </Link>
+                ) : (
+                  <span style={{ fontFamily: mono, fontSize: "0.75rem", color: "#868d99" }}>
+                    Uten salgsunderlag
+                  </span>
+                )}
               </div>
             </li>
           ))}

@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Per-client Tailwind theme tokens. They have to be reachable from this entry — Tailwind
+   reads `@theme` only from the file that imports Tailwind — so the import lives here
+   while every rule that uses them stays inside its client's own scoped stylesheet. */
+@import "./calloway-roofing/theme.css";
+
 /* ==========================================================================
    Global base — deliberately minimal.
    This file owns only: reset, a11y primitives, and the Tycho demo layer.
@@ -7,61 +12,69 @@
    drift into sharing a look through a shared stylesheet.
    ========================================================================== */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* In @layer base, and this matters. An unlayered rule beats every layered one whatever
+   its specificity, and Tailwind emits its utilities into @layer utilities — so an
+   unlayered `:where(a) { color: inherit }` silently overrides `text-white/65` on every
+   link in a concept built from utilities. Layering the reset restores the order everyone
+   expects: reset < utilities. The hand-written concept stylesheets are unlayered and so
+   still win over this, exactly as before. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
-}
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
 
-body {
-  margin: 0;
-  overflow-x: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
 
-img,
-picture,
-svg,
-video {
-  display: block;
-  max-width: 100%;
-}
+  img,
+  picture,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
-  color: inherit;
-}
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
 
-h1,
-h2,
-h3,
-h4,
-p,
-figure,
-blockquote,
-dl,
-dd {
-  margin: 0;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
 
-ul[class],
-ol[class] {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+  ul[class],
+  ol[class] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-:where(a) {
-  color: inherit;
+  :where(a) {
+    color: inherit;
+  }
 }
 
 /* Visible for keyboard users, invisible for mouse users. */

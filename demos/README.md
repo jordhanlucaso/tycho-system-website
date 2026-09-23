@@ -12,18 +12,22 @@ host is therefore blocked from indexing — see [Indexing](#indexing).
 | Path | Client | What it is |
 | --- | --- | --- |
 | `/` | — | Internal hub. `noindex`. |
-| `/marine-max` | Marine Max, Nøtterøy | Boat and engine repair. 8 routes. Symptom-led repair page, structured service request. |
 | `/eik` | Eik Tattoo & Piercing, Tønsberg | 9 routes. Light editorial direction, branching consultation flow. |
 | `/stabukk` | Stabukk Tattoo Studio, Tønsberg | 6 routes. Press-black art-catalogue direction, single-page brief. |
+| `/classic-frisor` | Classic Frisør, Teie | 6 routes. Prices in plain text where no competitor publishes them, booking in the first screen. |
+| `/calloway-roofing` | — (template) | 2 routes. The white-label roofing template, not a real business. English, Tailwind, one config hex re-skins it. No proposal. |
 | `/proposal` | — | Index of the sales documents. `noindex`. |
-| `/proposal/marine-max` | Marine Max | Ten-section sales document. |
 | `/proposal/tatovering-tonsberg` | Eik + Stabukk | Nine sections with a client switcher. |
+| `/proposal/classic-frisor` | Classic Frisør | Ten-section sales document. |
 
 Append `?demo=true` to any client URL for the Tycho annotation layer. It persists for the
 session and is removed with `?demo=false`.
 
 Research, design direction and sales material for each engagement live in
-`engagements/<slug>/`.
+`engagements/<slug>/`. An engagement with no `proposalNote` in the registry has no sales
+document by declaration — the hub hides the link, the index skips the row, and `status`
+stops asking for the docs folder. `calloway-roofing` is the one of those: it is a product
+demo, not a pitch to a named business.
 
 ## Lifecycle
 

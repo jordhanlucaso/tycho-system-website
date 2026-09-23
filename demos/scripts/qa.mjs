@@ -401,13 +401,6 @@ async function auditRawHtml(route) {
     fail(route, "-", "integrity", "TO_CONFIRM placeholder in served HTML");
   }
 
-  // An enkeltpersonforetak's registered name is the owner's personal name. It is deliberately
-  // absent from the Marine Max site and from its JSON-LD — including view-source, which is
-  // why this is checked here and not in the DOM. See src/data/marine.ts.
-  if (!route.startsWith("/proposal") && html.includes("Trond Erik Nielsen")) {
-    fail(route, "-", "privacy", "Registered personal name in served HTML");
-  }
-
   // Nothing on this host may be indexed while it hosts unapproved client concepts.
   if (!INDEXABLE && !/<meta name="robots"[^>]*noindex/i.test(html)) {
     fail(route, "-", "indexing", "No noindex directive in served HTML");
@@ -417,139 +410,6 @@ async function auditRawHtml(route) {
 }
 
 // --- interaction tests ------------------------------------------------------
-
-/** Marine Max: the drawer, which unmounts rather than hides. */
-async function testMarineNav(browser) {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  const page = await ctx.newPage();
-  await page.goto(`${BASE}/marine-max`, { waitUntil: "networkidle" });
-
-  const burger = page.locator(".mm-burger");
-  if ((await burger.count()) === 0) {
-    fail("/marine-max", "390", "mobile-nav", "No burger button at 390px");
-    return ctx.close();
-  }
-  await burger.click();
-
-  const drawer = page.locator("#mm-drawer");
-  if (!(await drawer.isVisible())) {
-    fail("/marine-max", "390", "mobile-nav", "Drawer did not open");
-    return ctx.close();
-  }
-
-  await page.keyboard.press("Escape");
-  if (await drawer.isVisible()) {
-    fail("/marine-max", "390", "mobile-nav", "Escape did not close the drawer");
-  }
-
-  await burger.click();
-  await page.locator("#mm-drawer nav a", { hasText: "Reparasjon" }).first().click();
-  await page.waitForURL("**/batreparasjon", { timeout: 8000 });
-  if (await page.locator("#mm-drawer").isVisible()) {
-    fail("/marine-max", "390", "mobile-nav", "Drawer stayed open after navigating");
-  }
-  await ctx.close();
-}
-
-/**
- * The phone path is the highest-value action on the marine site: the acute customer is
- * standing next to a dead engine. It has to work at 390 and be gone at 1440.
- */
-async function testCallLinks(browser) {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  const page = await ctx.newPage();
-  await page.goto(`${BASE}/marine-max`, { waitUntil: "networkidle" });
-
-  const bar = page.locator(".mm-handling");
-  if (!(await bar.isVisible())) {
-    fail("/marine-max", "390", "call-bar", "Mobile action bar not visible at 390px");
-    return ctx.close();
-  }
-
-  const ring = bar.locator('a[href^="tel:"]');
-  if ((await ring.count()) !== 1) {
-    fail("/marine-max", "390", "call-bar", "Expected exactly one tel: link in action bar");
-  }
-
-  const box = await bar.boundingBox();
-  if (box && box.height < 48) {
-    fail("/marine-max", "390", "call-bar", `Action bar only ${Math.round(box.height)}px high`);
-  }
-
-  // The fixed bar must not cover content: the scope element reserves its height.
-  const reserved = await page.evaluate(() => {
-    const scope = document.querySelector(".mm");
-    return scope ? getComputedStyle(scope).paddingBottom : "0px";
-  });
-  if (reserved === "0px") {
-    fail("/marine-max", "390", "call-bar", "Scope reserves no space for the fixed action bar");
-  }
-
-  await page.setViewportSize({ width: 1440, height: 900 });
-  if (await page.locator(".mm-handling").isVisible()) {
-    fail("/marine-max", "1440", "call-bar", "Action bar still visible at 1440px");
-  }
-  await ctx.close();
-}
-
-/** The structured service request — the commercial core of the marine concept. */
-async function testLeadForm(browser) {
-  const R = "/marine-max/bestill-service";
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  const page = await ctx.newPage();
-  await page.goto(BASE + R, { waitUntil: "networkidle" });
-
-  // Submitting empty must produce a focused error summary, not a silent failure.
-  await page.locator('button[type="submit"]').click();
-  const summary = page.locator('form [role="alert"]');
-  if ((await summary.count()) === 0) {
-    fail(R, "390", "lead-form", "No error summary on empty submit");
-    return ctx.close();
-  }
-
-  const focused = await page.evaluate(
-    () => document.activeElement?.getAttribute("role") === "alert",
-  );
-  if (!focused) fail(R, "390", "lead-form", "Error summary did not receive focus");
-
-  const links = await summary.locator("a").count();
-  if (links < 4) fail(R, "390", "lead-form", `Summary lists ${links} errors, expected >=4`);
-
-  // Invalid phone must be rejected.
-  await page.locator('input[value="reparasjon"]').check();
-  await page.locator("#felt-beskrivelse").fill("Motoren starter ikke i det hele tatt i dag.");
-  await page.locator('input[name="sted"][value="pa-henger"]').check();
-  await page.locator("#felt-navn").fill("Ola Testesen");
-  await page.locator("#felt-telefon").fill("123");
-  await page.locator('button[type="submit"]').click();
-  if ((await page.locator('form [role="alert"]').count()) === 0) {
-    fail(R, "390", "lead-form", "Invalid phone number was accepted");
-  }
-
-  // Valid submission.
-  await page.locator("#felt-telefon").fill("900 00 000");
-  await page.locator("#felt-motormerke").fill("Mercury");
-  await page.locator("#felt-motormodell").fill("60 hk");
-  await page.locator("#felt-starter").selectOption("nei");
-  await page.locator('button[type="submit"]').click();
-
-  await page.waitForSelector("text=Takk — vi har fått den", { timeout: 5000 }).catch(() => {
-    fail(R, "390", "lead-form", "Success state did not render");
-  });
-
-  const body = await page.locator("body").innerText();
-  if (!/MM-\d{8}-/.test(body)) fail(R, "390", "lead-form", "No reference number in success state");
-  if (!body.includes("Akutt")) {
-    fail(R, "390", "lead-form", "Triage did not derive 'Akutt' for a non-starting engine");
-  }
-
-  const heading = await page.evaluate(() => document.activeElement?.tagName);
-  if (heading !== "H2") {
-    fail(R, "390", "lead-form", `Focus after submit went to ${heading}, expected H2`);
-  }
-
-  await ctx.close();
-}
 
 async function testMobileNav(browser) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -789,7 +649,7 @@ async function testDemoLayer(browser) {
   // Every client shares one registry, so each one has to resolve its own ids — a note that
   // silently fails to load renders null and would otherwise look identical to "off".
   for (const [route, off] of [
-    ["/marine-max", "/marine-max?demo=false"],
+    ["/classic-frisor", "/classic-frisor?demo=false"],
     ["/stabukk", "/stabukk?demo=false"],
   ]) {
     await page.goto(`${BASE}${route}?demo=true`, { waitUntil: "networkidle" });
@@ -912,12 +772,6 @@ process.stdout.write(`· ${allInternalLinks.size} internal links checked\n`);
 for (const route of ROUTES) await auditRawHtml(route);
 process.stdout.write(`· ${ROUTES.length} routes audited as served HTML\n`);
 
-await testMarineNav(browser);
-process.stdout.write("· marine nav done\n");
-await testCallLinks(browser);
-process.stdout.write("· call bar done\n");
-await testLeadForm(browser);
-process.stdout.write("· lead form done\n");
 await testMobileNav(browser);
 process.stdout.write("· mobile nav done\n");
 await testGallery(browser);

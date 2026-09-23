@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LIVE_ENGAGEMENTS, proposalPath } from "@/data/engagements";
+import { LIVE_ENGAGEMENTS, hasProposal, proposalPath } from "@/data/engagements";
 import { pageMetadata } from "@/lib/seo";
 
 /**
@@ -19,7 +19,7 @@ export const metadata = pageMetadata({
 });
 
 /** Derived from the engagement registry — see src/data/engagements.ts. */
-const PROPOSALS = LIVE_ENGAGEMENTS.map((engagement) => ({
+const PROPOSALS = LIVE_ENGAGEMENTS.filter(hasProposal).map((engagement) => ({
   href: proposalPath(engagement),
   label: engagement.label,
   note: engagement.proposalNote,

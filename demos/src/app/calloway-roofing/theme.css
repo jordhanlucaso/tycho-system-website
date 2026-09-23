@@ -1,0 +1,28 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════
+   CALLOWAY ROOFING — Tailwind theme tokens
+
+   Imported from app/globals.css rather than from the client layout, because Tailwind v4
+   only reads `@theme` from the stylesheet that imports Tailwind itself. A copy in a file
+   loaded from a TSX layout is inert: the tokens register, no utility is generated, and
+   the classes silently do nothing.
+
+   Every token is `cr-`-prefixed. `@theme` registers on `:root`, so an unprefixed
+   `--color-ink` here would hand this client's navy to all four concepts on the host.
+   The rules that use them are scoped under `.cr` in ./calloway-roofing.css.
+
+   The `-face` suffix on the font sources matters: next/font declares the family under
+   that name in ./fonts.ts, and a token defined as `var(--font-cr-text)` pointing at
+   itself is a circular reference that resolves to nothing.
+
+   Retiring this concept: delete this file and its import in globals.css.
+   ═══════════════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  --color-cr-ink: #101c2e;
+  --color-cr-ink-deep: #0a1120;
+  --color-cr-paper: #f6f4f1;
+  --color-cr-hairline: rgba(16, 28, 46, 0.08);
+
+  --font-cr-display: var(--font-cr-display-face), ui-sans-serif, system-ui, sans-serif;
+  --font-cr-text: var(--font-cr-text-face), ui-sans-serif, system-ui, sans-serif;
+}

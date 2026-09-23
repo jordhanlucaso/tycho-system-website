@@ -1,4 +1,3 @@
-import { business } from "@/data/marine";
 import { confirmed, isConfirmed, pruneUnconfirmed, type FaqItem, type StudioProfile } from "@/data/types";
 import { absoluteUrl } from "./site";
 
@@ -101,85 +100,44 @@ export function serviceJsonLd(input: {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════════════
-   MARINE MAX
+   CALLOWAY ROOFING
 
-   Same rules as above, plus two the marine engagement adds because so little about the
-   business is verified:
-     - Never emit `openingHoursSpecification`. Hours are TO_CONFIRM, and a wrong hour sends
-       a customer to a closed workshop.
-     - Never emit `hasCredential` or `brand`. Authorised-dealer status and supported engine
-       brands are exactly the claims a competitor would check first.
+   Built from the template's config so the structured data cannot drift from the page.
+
+   Deliberately missing: `aggregateRating` and `address`. A rating invented in a template
+   is a structured-data violation, and a street address that is not the client's real one
+   is worse than none — both arrive in a client build, once they are real.
    ═══════════════════════════════════════════════════════════════════════════════════════ */
 
-export const MM_ID = `${absoluteUrl("/marine-max")}#business`;
-
-/**
- * `ProfessionalService`, not `Store` (no verified retail premises) and not `AutoRepair`
- * (that type is for road vehicles). It is the honest supertype for a boat workshop.
- */
-export function businessJsonLd() {
-  return pruneUnconfirmed({
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": MM_ID,
-    /**
-     * The trading name, not the registered one. For an enkeltpersonforetak the registered
-     * name is the owner's personal name, and emitting it here would publish it in
-     * view-source on every page even though it appears nowhere in the design.
-     *
-     * Nothing is lost for entity matching: `identifier` below is the organisasjonsnummer,
-     * which resolves to the same registry record and is the stronger signal anyway.
-     */
-    name: `${business.displayName} ${business.descriptor}`,
-    url: absoluteUrl("/marine-max"),
-    telephone: business.phoneE164,
-    // Organisasjonsnummer: a uniquely Norwegian, machine-checkable entity signal.
-    identifier: business.orgNumber.replace(/\s/g, ""),
-    // Verified against Enhetsregisteret and stated visibly on the page.
-    foundingDate: business.registeredSince,
-    knowsLanguage: "no",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: business.address.street,
-      postalCode: business.address.postalCode,
-      addressLocality: business.address.locality,
-      addressRegion: business.address.municipality,
-      addressCountry: business.address.country,
-    },
-    areaServed: business.areaServed.map((name) => ({ "@type": "Place", name })),
-  });
-}
-
-export function websiteJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": `${absoluteUrl("/marine-max")}#website`,
-    url: absoluteUrl("/marine-max"),
-    name: `${business.displayName} ${business.descriptor}`,
-    inLanguage: "nb-NO",
-    publisher: { "@id": MM_ID },
-  };
-}
-
-/** Distinct from the studio `serviceJsonLd` above: the provider is a person, not a studio. */
-export function mmServiceJsonLd({
-  name,
-  description,
-  path,
-}: {
-  name: string;
-  description: string;
-  path: string;
+export function roofingContractorJsonLd(config: {
+  businessName: string;
+  city: string;
+  phone: string;
+  email: string;
+  tagline: string;
+  licenseNumber: string;
+  yearsInBusiness: number;
+  hero: { image: string };
+  services: readonly { title: string }[];
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Service",
-    name,
-    description,
-    url: absoluteUrl(path),
-    serviceType: name,
-    provider: { "@id": MM_ID },
-    areaServed: business.areaServed.map((n) => ({ "@type": "Place", name: n })),
+    "@type": "RoofingContractor",
+    "@id": `${absoluteUrl("/calloway-roofing")}#business`,
+    name: config.businessName,
+    description: `Roof replacement, repair, storm damage and metal roofing in ${config.city}.`,
+    url: absoluteUrl("/calloway-roofing"),
+    telephone: config.phone,
+    email: config.email,
+    image: absoluteUrl(config.hero.image),
+    areaServed: { "@type": "City", name: config.city },
+    foundingDate: String(new Date().getFullYear() - config.yearsInBusiness),
+    knowsAbout: config.services.map((service) => service.title),
+    slogan: config.tagline,
+    identifier: {
+      "@type": "PropertyValue",
+      propertyID: "Contractor license",
+      value: config.licenseNumber,
+    },
   };
 }
