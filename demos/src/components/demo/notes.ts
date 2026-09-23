@@ -13,7 +13,7 @@
  * fetched as a separate chunk that a normal visitor never requests. `scripts/qa.mjs`
  * asserts it against the raw served HTML, not against the DOM — the DOM is what missed it.
  *
- * Ids are namespaced per client (`cr.`, `eik.`, `sbk.`, `cf.`) so several concepts share one
+ * Ids are namespaced per client (`cr.`, `eik.`, `sbk.`, `cf.`, `hr.`) so several concepts share one
  * registry without one client's annotation ever surfacing on another's page.
  *
  * They are deliberately opaque rather than slugified titles. The id is the one part of an
@@ -297,5 +297,114 @@ export const DEMO_NOTES: Record<string, DemoNoteContent> = {
     title: "NAP før strukturerte data",
     body:
       "Navn, adresse og telefon må være tegn for tegn like på nettsiden, Google-profilen og i katalogene. Vi publiserer ingen HairSalon-markup før den juridiske enheten er avklart — feil data i strukturerte data er verre enn ingen.",
+  },
+  /* ── Heritage Roofing · Montgomery, Alabama ──────────────────────────────────── */
+  "hr.01": {
+    category: "lokal-seo",
+    title: "Place and tenure in the first line",
+    body:
+      "Market and founding year sit above the headline, not below. Someone searching \u201croofer Montgomery AL\u201d decides in under two seconds whether this is a local business or a national lead broker \u2014 and the brokers own much of the first page here. \u201cSince 2010\u201d rather than \u201c16 years\u201d: a computed age is wrong every January.",
+  },
+  "hr.02": {
+    category: "tillit",
+    title: "Three claims, all in the public record",
+    body:
+      "The founding year, the two markets served, and the three capabilities. No completed-roof counter, no manufacturer badge, and no accreditation claim \u2014 the BBB rating is A+, but the business is not accredited by them, and a badge saying otherwise would be contradicted by the BBB\u2019s own profile.",
+  },
+  "hr.03": {
+    category: "konvertering",
+    title: "Symptom, not service name",
+    body:
+      "The visitor has a stain on a ceiling, not a service category in mind. Sorting the entry by problem lets someone self-select in one tap without knowing whether what they have is a repair or a replacement \u2014 and the commercial card catches the property manager whose need is different again.",
+  },
+  "hr.04": {
+    category: "lead",
+    title: "Six services, all verified",
+    body:
+      "Residential and commercial roofing, repair, replacement, gutters and siding are all in the public record for Heritage Roofing and Construction. What stays unverified is the detail inside each one, which is why no material, brand, warranty or turnaround time is claimed anywhere on the site.",
+  },
+  "hr.05": {
+    category: "tillit",
+    title: "Tenure and capability instead of invented differentiators",
+    body:
+      "Four trust points, each anchored in something checkable: trading since 2010, both markets served, roofing and exteriors under one company, and local to the River Region. Nothing about crew size, certifications or awards \u2014 none of it is verified.",
+  },
+  "hr.06": {
+    category: "konvertering",
+    title: "No timing promises",
+    body:
+      "No \u201csame day\u201d, no \u201cinspection within 24 hours\u201d, no instant quote. Those are the standard lines in this trade and every one of them is a commitment Heritage has not made to us.",
+  },
+  "hr.07": {
+    category: "portefolje",
+    title: "A shot list, not a portfolio",
+    body:
+      "There are no verified photographs of this company\u2019s work. Each frame states the photograph that belongs in it and is chipped \u201cPlaceholder\u201d. It is also the better sales artefact: the owner sees a concrete brief he can act on rather than three stock roofs he will correctly assume are someone else\u2019s.",
+  },
+  "hr.08": {
+    category: "lokal-seo",
+    title: "The listing outranks the website",
+    body:
+      "The Montgomery listing carries very few reviews. For a roofer that profile is what a property owner sees before the website exists at all, and it is free. For a business trading since 2010 it is the cheapest single improvement in this whole proposal \u2014 and no review is reproduced here, because we cannot attribute individual quotes to this exact business.",
+  },
+  "hr.09": {
+    category: "lokal-seo",
+    title: "Local without keyword stuffing",
+    body:
+      "The terms this page needs \u2014 roofing Montgomery AL, roof repair Montgomery, commercial roofing Montgomery \u2014 appear where they would appear anyway in a paragraph about roofs in Central Alabama. No town list, and no rainfall figures: we have checked none, and invented climate data is as untrue as invented history.",
+  },
+  "hr.10": {
+    category: "lokal-seo",
+    title: "Service area is a configuration",
+    body:
+      "\u201cMontgomery and the surrounding River Region\u201d is the honest generality. Named towns are what actually rank locally \u2014 they go in as a list the day Heritage confirms the range, and no town is guessed at in the meantime.",
+  },
+  "hr.11": {
+    category: "tillit",
+    title: "Answers about roofs, not about the company",
+    body:
+      "The answers are general guidance for property owners. Only one \u2014 whether commercial work is done \u2014 says anything about Heritage, and that is in the public record. An FAQ is exactly where unverified claims about hours, pricing and warranties usually slip onto a site, phrased as answers.",
+  },
+  "hr.12": {
+    category: "konvertering",
+    title: "\u201cNot sure\u201d is the most common answer",
+    body:
+      "Most people contacting a roofer do not know what they need. The headline says so out loud instead of requiring the visitor to self-diagnose before they are allowed to get in touch.",
+  },
+  "hr.13": {
+    category: "konvertering",
+    title: "Symptom lists catch long-tail search",
+    body:
+      "Each line is phrased the way an owner would describe it themselves \u2014 \u201cponding water\u201d, \u201cgranules in gutter\u201d, \u201cceiling stain after rain\u201d. That is also what they type into a search box, and those queries have almost no competition locally.",
+  },
+  "hr.14": {
+    category: "tillit",
+    title: "A fact sheet is not a story",
+    body:
+      "Founding year, owner\u2019s name, licence number, services. That is all that is verified, and it is not a story \u2014 so none is invented. The three empty frames are the question, not a hole: they show Justin exactly where his own account goes. No portrait either, because there is no verified photograph of him.",
+  },
+  "hr.15": {
+    category: "lead",
+    title: "The form is in demo mode",
+    body:
+      "No fetch, no endpoint, no storage. This is a speculative site for a business that has not hired us \u2014 a real property owner\u2019s phone number and address must not be captured by it. Wiring it up is one function, once Heritage supplies an email address.",
+  },
+  "hr.16": {
+    category: "lead",
+    title: "One channel, because one is verified",
+    body:
+      "The phone number is the verified way in. No email address is published: we do not have one, and an invented address is both a falsehood and a dead end for whoever writes to it.",
+  },
+  "hr.17": {
+    category: "tillit",
+    title: "No address, on purpose",
+    body:
+      "One listing gives an address on Brevard Ave in Montgomery; other public records point at Millbrook and a PO box. Until Justin says which one customers should use, the site shows a city and a region, places no map pin, and keeps the address out of structured data. Publishing the wrong address for a contractor is not a small mistake.",
+  },
+  "hr.18": {
+    category: "konvertering",
+    title: "Deliberately the quietest band on the page",
+    body:
+      "Remodeling, improvements and additions are genuinely part of the business, so leaving them off would be its own inaccuracy. But roofing is what the phone should ring about \u2014 so this band has no icons, no cards, no accent colour and no call to action of its own. If it starts competing with the services grid above it, it has failed.",
   },
 };

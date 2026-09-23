@@ -174,6 +174,37 @@ export const ENGAGEMENTS: readonly Engagement[] = [
       },
     ],
   },
+  {
+    slug: "heritage-roofing",
+    label: "Heritage Roofing",
+    place: "Roofing contractor · Montgomery, Alabama",
+    status: "draft",
+    started: "2026-09-22",
+    concepts: [
+      {
+        slug: "heritage-roofing",
+        scope: "hr",
+        name: "Heritage Roofing",
+        blurb:
+          "Slate / Brass / Home — problem-led entry for property owners with a leak, and the estimate request one tap from every screen. Residential and commercial.",
+        componentDir: "src/components/heritage-roofing",
+        dataModule: "src/data/heritage-roofing.ts",
+        stylesheet: "src/app/heritage-roofing/heritage-roofing.css",
+        routes: [
+          { path: "/heritage-roofing", priority: 1.0 },
+          { path: "/heritage-roofing/roofing", priority: 0.9 },
+          { path: "/heritage-roofing/commercial-roofing", priority: 0.9 },
+          { path: "/heritage-roofing/roof-repair", priority: 0.9 },
+          { path: "/heritage-roofing/roof-replacement", priority: 0.9 },
+          { path: "/heritage-roofing/gutters", priority: 0.9 },
+          { path: "/heritage-roofing/siding", priority: 0.8 },
+          { path: "/heritage-roofing/about", priority: 0.7 },
+          { path: "/heritage-roofing/contact", priority: 0.8 },
+          { path: "/heritage-roofing/estimate", priority: 0.9 },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ── Derived views. Nothing below should ever be hand-maintained. ───────────────────── */

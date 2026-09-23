@@ -1,0 +1,47 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════
+   HERITAGE ROOFING — Tailwind theme tokens
+
+   Imported from app/globals.css, not from the client layout: Tailwind v4 reads `@theme`
+   only from the stylesheet that imports Tailwind itself, so a copy loaded from a TSX
+   layout registers the tokens and generates no utilities.
+
+   Every token is `hr-`-prefixed. `@theme` registers on `:root`, so an unprefixed
+   `--color-ink` here would hand this client's slate to all five concepts on the host.
+
+   Palette. Deep slate and warm paper carry the page; heritage green is the one band
+   colour; brass is the only accent and is split into three values because a single hex
+   cannot be legible as text on warm paper *and* on slate — each was checked against
+   WCAG AA before it was written down (see the design direction).
+
+     slate        #232a2b   headers, dark bands, body ink at --hr-ink
+     green        #2c463a   the conversion bands, and nothing else
+     brass        #b5872f   NON-TEXT ONLY — rules, the roofline mark, chip fills
+     brass-ink    #7d5a12   accent text on paper        5.62:1
+     brass-glow   #dcaf5c   accent text on slate/green  7.19:1 / 5.05:1
+     brass-solid  #8a6212   solid CTA fill, white label 5.47:1
+
+   Retiring this concept: delete this file and its import in globals.css.
+   ═══════════════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  --color-hr-slate: #232a2b;
+  --color-hr-slate-deep: #171d1e;
+  --color-hr-green: #2c463a;
+  --color-hr-green-deep: #1e3128;
+  --color-hr-paper: #f5f2ec;
+  --color-hr-paper-alt: #eae5db;
+  --color-hr-ink: #1c2224;
+  --color-hr-ink-soft: #4a5457;
+  --color-hr-muted: #c3ccc9;
+  --color-hr-muted-green: #c8d4ce;
+  --color-hr-brass: #b5872f;
+  --color-hr-brass-ink: #7d5a12;
+  --color-hr-brass-glow: #dcaf5c;
+  --color-hr-brass-solid: #8a6212;
+  --color-hr-brass-hover: #74510d;
+  --color-hr-hairline: rgba(35, 42, 43, 0.12);
+  --color-hr-hairline-dark: rgba(245, 242, 236, 0.16);
+
+  --font-hr-display: var(--font-hr-display-face), Georgia, serif;
+  --font-hr-text: var(--font-hr-text-face), ui-sans-serif, system-ui, sans-serif;
+}

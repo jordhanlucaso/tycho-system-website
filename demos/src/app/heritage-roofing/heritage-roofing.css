@@ -1,0 +1,190 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════
+   HERITAGE ROOFING — Montgomery, Alabama
+
+   Built from Tailwind utilities against the `hr-` theme tokens. What lives here is only
+   the part utilities cannot express: the scope base, the roofline motif, and the two
+   components with real state.
+
+   Scoped under `.hr`. Five brand systems share this app — a bare `html`, `body`, `a` or
+   `:focus-visible` rule here would reach into all of them.
+
+   The `@theme` block registering this client's tokens is in ./theme.css, because Tailwind
+   reads `@theme` only from the entry that imports it. See the note there.
+   ═══════════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Scope base ──────────────────────────────────────────────────────────────────────
+   In a cascade layer, and this is not optional. Tailwind v4 emits utilities into
+   `@layer utilities`, and an unlayered rule beats every layered one however weak its
+   selector — an unlayered `.hr a { color: inherit }` would silently override
+   `text-hr-brass-glow` on every link in the footer.                                    */
+
+@layer base {
+  .hr {
+    background: var(--color-hr-paper);
+    color: var(--color-hr-ink);
+
+    /* The font tokens are redeclared here, and they have to be. `@theme` declares them on
+       `:root`; next/font declares the faces it loads on *this* element, via the class list
+       in ./fonts.ts. `var()` resolves where a custom property is declared, not where it is
+       used — so `--font-hr-display: var(--font-hr-display-face)` sitting on `:root`
+       references a variable that does not exist there. The token computes to nothing,
+       inherits that nothing all the way down, and every heading silently falls back to
+       system sans. Redeclared on the element that carries the faces, it resolves; the
+       `@theme` copy is still what generates the utilities. */
+    --font-hr-display: var(--font-hr-display-face), Georgia, serif;
+    --font-hr-text: var(--font-hr-text-face), ui-sans-serif, system-ui, sans-serif;
+
+    font-family: var(--font-hr-text);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+
+    /* Sticky header height plus air, so an in-page anchor does not land under it. */
+    scroll-padding-top: 6rem;
+  }
+
+  .hr h1,
+  .hr h2,
+  .hr h3,
+  .hr h4 {
+    font-family: var(--font-hr-display);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  /* Tabular figures wherever a phone number is set, so the digits do not shimmy between
+     the header, the mobile bar and the footer. */
+  .hr .hr-tel {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ── Focus ───────────────────────────────────────────────────────────────────────────
+   Scoped, never global. Brass on paper and brass-glow on slate, so the ring is visible
+   on both grounds rather than vanishing into the dark bands.                           */
+
+.hr :focus-visible {
+  outline: 2px solid var(--color-hr-brass-ink);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.hr .hr-dark :focus-visible,
+.hr-dark :focus-visible {
+  outline-color: var(--color-hr-brass-glow);
+}
+
+/* ── The roofline rule ───────────────────────────────────────────────────────────────
+   The brand's one motif: a shallow pitched line, used as a section divider and inside
+   the logo mark. Drawn rather than imported so it inherits currentColor and costs no
+   request. The angle matches a 4:12 pitch, which is the common low slope on the ranch
+   and split-level housing stock this business works on.                                */
+
+.hr-roofline {
+  display: block;
+  width: 100%;
+  height: 10px;
+  color: var(--color-hr-brass);
+}
+
+/* ── Eyebrow ─────────────────────────────────────────────────────────────────────────
+   Used above most section headings. A utility class only because the letter-spacing and
+   the rule together are three declarations repeated a dozen times.                     */
+
+.hr-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-hr-brass-ink);
+}
+
+.hr-eyebrow::before {
+  content: "";
+  width: 1.75rem;
+  height: 2px;
+  background: var(--color-hr-brass);
+  flex: none;
+}
+
+.hr-dark .hr-eyebrow {
+  color: var(--color-hr-brass-glow);
+}
+
+/* ── Shingle texture ─────────────────────────────────────────────────────────────────
+   A staggered course of shingle courses, in CSS rather than an image. Used at very low
+   opacity behind the dark bands so they read as a surface instead of a flat fill. No
+   request, no licence, and it cannot be mistaken for a photograph of anyone's work.    */
+
+.hr-shingles {
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(245, 242, 236, 0.05) 0 1px,
+      transparent 1px 34px
+    ),
+    repeating-linear-gradient(
+      to right,
+      rgba(245, 242, 236, 0.05) 0 1px,
+      transparent 1px 56px
+    );
+  background-position: 0 0, 28px 0;
+}
+
+/* ── Accordion ───────────────────────────────────────────────────────────────────────
+   Native <details>. The marker is replaced by a drawn chevron so it can be animated and
+   coloured; `list-style: none` plus the WebKit pseudo-element covers every engine.      */
+
+.hr-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.hr-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.hr-faq summary .hr-faq__chev {
+  transition: transform 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.hr-faq details[open] summary .hr-faq__chev {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hr-faq summary .hr-faq__chev {
+    transition: none;
+  }
+}
+
+/* ── Sticky header ───────────────────────────────────────────────────────────────────
+   The transition is on background and border only. Transitioning `height` or `padding`
+   here would move the page under the reader's thumb mid-scroll on a phone.             */
+
+.hr-header {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hr-header {
+    transition: none;
+  }
+}
+
+/* ── Mobile action bar ───────────────────────────────────────────────────────────────
+   Fixed to the bottom on phones. The body gets bottom padding from the layout so the
+   footer cannot end up underneath it; `env(safe-area-inset-bottom)` keeps the buttons
+   clear of the iOS home indicator.                                                     */
+
+.hr-actionbar {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

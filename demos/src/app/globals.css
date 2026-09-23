@@ -4,6 +4,7 @@
    reads `@theme` only from the file that imports Tailwind — so the import lives here
    while every rule that uses them stays inside its client's own scoped stylesheet. */
 @import "./calloway-roofing/theme.css";
+@import "./heritage-roofing/theme.css";
 
 /* ==========================================================================
    Global base — deliberately minimal.
