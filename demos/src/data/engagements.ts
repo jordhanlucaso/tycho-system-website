@@ -64,42 +64,17 @@ export interface Engagement {
   presented?: string;
   /** Set when the client decides, either way. */
   decided?: string;
-  proposalNote: string;
+  /**
+   * One line for the proposal index. Its absence is the fact that there is no sales
+   * document for this engagement — the hub hides the link, the index skips the row, the
+   * QA sweep does not expect the route and `status` does not ask for the docs folder.
+   * A concept can be on the host before anyone has written the pitch.
+   */
+  proposalNote?: string;
   concepts: readonly Concept[];
 }
 
 export const ENGAGEMENTS: readonly Engagement[] = [
-  {
-    slug: "marine-max",
-    label: "Marine Max",
-    place: "Båtverksted · Nøtterøy",
-    status: "draft",
-    started: "2026-08-23",
-    proposalNote:
-      "Ti seksjoner: situasjon, søk, konkurranse, kundereise, nettsted, automatisering, neste steg.",
-    concepts: [
-      {
-        slug: "marine-max",
-        scope: "mm",
-        name: "Marine Max",
-        blurb:
-          "Verksted / Sjø / Én mann — symptomstyrt reparasjonsside og strukturert serviceforespørsel.",
-        componentDir: "src/components/marine",
-        dataModule: "src/data/marine.ts",
-        stylesheet: "src/app/marine-max/marine-max.css",
-        routes: [
-          { path: "/marine-max", priority: 1.0 },
-          { path: "/marine-max/tjenester", priority: 0.9 },
-          { path: "/marine-max/batmotor-service", priority: 0.9 },
-          { path: "/marine-max/batreparasjon", priority: 0.9 },
-          { path: "/marine-max/tidligere-arbeid", priority: 0.6 },
-          { path: "/marine-max/om-marine-max", priority: 0.7 },
-          { path: "/marine-max/bestill-service", priority: 0.9 },
-          { path: "/marine-max/kontakt", priority: 0.8 },
-        ],
-      },
-    ],
-  },
   {
     slug: "tatovering-tonsberg",
     label: "Tatovering i Tønsberg",
@@ -176,6 +151,29 @@ export const ENGAGEMENTS: readonly Engagement[] = [
       },
     ],
   },
+  {
+    slug: "calloway-roofing",
+    label: "Calloway Roofing",
+    place: "Takentreprenør-mal · demo",
+    status: "draft",
+    started: "2026-09-14",
+    concepts: [
+      {
+        slug: "calloway-roofing",
+        scope: "cr",
+        name: "Calloway Roofing",
+        blurb:
+          "Hvitmerket mal for takentreprenører — én konfigfil bytter navn, by, kontaktinfo og aksentfarge. Engelsk demoinnhold, fiktiv bedrift.",
+        componentDir: "src/components/calloway-roofing",
+        dataModule: "src/data/calloway-roofing.ts",
+        stylesheet: "src/app/calloway-roofing/calloway-roofing.css",
+        routes: [
+          { path: "/calloway-roofing", priority: 1.0 },
+          { path: "/calloway-roofing/contact", priority: 0.9 },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ── Derived views. Nothing below should ever be hand-maintained. ───────────────────── */
@@ -191,6 +189,11 @@ export function proposalPath(engagement: Engagement | string): string {
   return `/proposal/${typeof engagement === "string" ? engagement : engagement.slug}`;
 }
 
+/** An engagement has a proposal exactly when it has a line to put in the index. */
+export function hasProposal(engagement: Engagement): boolean {
+  return Boolean(engagement.proposalNote);
+}
+
 export function engagementOf(conceptSlug: string): Engagement | undefined {
   return ENGAGEMENTS.find((e) => e.concepts.some((c) => c.slug === conceptSlug));
 }
@@ -202,7 +205,7 @@ export const CLIENT_ROUTES: readonly ConceptRoute[] = CONCEPTS.flatMap((c) => c.
 export const ALL_ROUTES: readonly string[] = [
   "/",
   "/proposal",
-  ...ENGAGEMENTS.map((e) => proposalPath(e)),
+  ...ENGAGEMENTS.filter((e) => e.proposalNote).map((e) => proposalPath(e)),
   ...CLIENT_ROUTES.map((r) => r.path),
 ];
 
